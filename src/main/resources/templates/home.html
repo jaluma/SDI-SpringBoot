@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head">
+	<title>MyWallapop</title>
+</head>
+<body>
+	<nav th:replace="fragments/nav"></nav>
+	<div class="card" style="width: 18rem; margin: 15px;">
+		<div class="card-body" style="text-align: center">
+			<img class="card-img-top rounded-circle z-depth-0" src="https://mdbootstrap.com/img/Photos/Avatars/avatar-5.jpg" alt="Card image cap">
+			<h2 class="card-title" th:text="#{welcome.message(${#httpServletRequest.remoteUser})}"></h2>
+	    	<a href="#" class="btn btn-primary">Ir a zona personal</a>
+		</div>
+	</div>
+	<footer th:replace="fragments/footer"></footer>
+</body>
+</html>

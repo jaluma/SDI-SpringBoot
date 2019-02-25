@@ -1,0 +1,69 @@
+<nav class="navbar navbar-expand-lg navbar-dark indigo" xmlns:th="http://www.thymeleaf.org"
+	 xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	<!-- Navbar brand -->
+	<a class="navbar-brand" href="/">MyWallapop</a>
+	
+	<!-- Collapse button -->
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav" aria-controls="basicExampleNav"
+			aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	
+	<!-- Collapsible content -->
+	<div class="collapse navbar-collapse" id="basicExampleNav">
+
+		<!-- Links -->
+		<ul class="navbar-nav mr-auto">
+		    <li class="nav-item active">
+				<a class="nav-link" href="/user/details" sec:authorize="isAuthenticated()" th:text="#{nav.sells}">
+					Compras
+				</a>
+		    </li>
+			<li class="nav-item">
+				<a class="nav-link" href="/user/details" sec:authorize="isAuthenticated()" th:text="#{nav.chats}">
+					Chats
+				</a>
+		    </li>
+		</ul>
+		
+		
+		<ul class="navbar-nav ml-auto nav-flex-icons navbar-right">
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<img src="/img/language-solid.png" alt="language image" height="35">
+		        </a>
+				<div class="dropdown-menu dropdown-menu-right dropdown-info" id="languageDropdownMenuButton" aria-labelledby="navbarDropdownMenuLink">
+					<a id="btnEnglish" value="EN" class="dropdown-item">
+						<img th:src="@{/img/if_uk_flag.png}" style="border: 0; float: left; margin-right: 15px" alt="EN" src=""/>
+						<span th:text="#{language.en}">Inglés</span>
+					</a>
+					<a id="btnSpanish" value="ES" class="dropdown-item">
+						<img th:src="@{/img/if_spain_flag.png}" style="border: 0; float: left; margin-right: 15px" alt="ES" src=""/>
+						<span th:text="#{language.es}">Español</span>
+					</a>
+				</div>
+			</li>
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<!-- <i class="fas fa-user"></i> -->
+					<img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-5.jpg" class="rounded-circle z-depth-0" alt="avatar image"
+						 height="35">
+				</a>
+				<div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-333">
+					<a sec:authorize="!isAuthenticated()" class="dropdown-item" href="/signup" th:text="#{nav.signup}">
+						Registrate
+					</a>
+					<a sec:authorize="!isAuthenticated()" class="dropdown-item" href="/login" th:text="#{nav.login}">
+						Identifícate
+					</a>
+					<a sec:authorize="isAuthenticated()" class="dropdown-item" href="#" th:text="#{nav.user.details}">
+						Detalles
+					</a>
+					<a sec:authorize="isAuthenticated()" class="dropdown-item" href="/logout">
+						Desconectar
+					</a>
+				</div>
+			</li>
+		</ul>
+	</div>
+</nav>

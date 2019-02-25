@@ -1,0 +1,30 @@
+<nav aria-label="..." xmlns:th="http://www.thymeleaf.org">
+   <ul class="pagination justify-content-center">
+      <li class="page-item">
+          <a class="page-link" th:href="@{'?page=0'}">Primera</a>
+      </li>
+      <li class="page-item disabled">
+          <span aria-hidden="true">&laquo;</span>
+          <span class="sr-only">Anterior</span>
+      </li>
+	   <!-- Anterior (si la hay ) -->
+	   <!--/*@thymesVar id="page" type="org.springframework.data.domain.Page<com.uniovi.entities.Mark>"*/-->
+      <li class="page-item" th:if="${page.getNumber()-1 >= 0}">
+          <a class="page-link" th:href="@{'?page='+${page.getNumber()-1} }" th:text="${page.getNumber()}">1</a></li>
+      <li class="page-item active">
+          <span class="page-link" th:href="@{'?page='+${page.getNumber()} }" th:text="${page.getNumber()+1}"></span>
+          <span class="sr-only">(current)</span>
+      </li>
+      <li class="page-item" th:if="${page.getNumber()+1 <= page.getTotalPages()-1}">
+          <a class="page-link" th:href="@{'?page='+${page.getNumber()+1} }" th:text="${page.getNumber()+2}">3</a>
+      </li>
+      <li class="page-item">
+          <span aria-hidden="true">&raquo;</span>
+          <span class="sr-only">Siguiente</span>
+      </li>
+	   <!-- Última -->
+      <li class="page-item">
+         <a class="page-link" th:href="@{'?page='+${page.getTotalPages()-1}}"> Última</a>
+      </li>
+   </ul>
+</nav>
