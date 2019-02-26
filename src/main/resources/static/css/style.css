@@ -18,6 +18,51 @@
     color: white !important;
 }
 
+table {
+    width: 100%;
+}
+
+.check-box-column {
+    width: 5%;
+}
+
+.bmd-form-group {
+    margin-bottom: 25px;
+}
+
+.btn-group .btn-fab {
+    position: fixed !important;
+    right: 20px;
+}
+
+.fab {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    box-shadow: 0 6px 10px 0 #666;
+    transition: all 0.1s ease-in-out;
+
+    text-align: center;
+    line-height: 70px;
+
+    position: fixed;
+    right: 20px;
+    bottom: 80px;
+}
+
+.fab:hover {
+    box-shadow: 0 6px 14px 0 #666;
+    transform: scale(1.05);
+}
+
+.table-static-height {
+    height: 536px;
+}
+
+.tr-static-height {
+    max-height: 49px;
+}
+
 /*
 
 NAV
