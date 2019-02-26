@@ -45,10 +45,10 @@ public class UsersController {
 		if(result.hasErrors()) {
 			return "signup";
 		}
-		Error errors;
+
 		user.setRole(rolesService.getRoles()[0]);
 		usersService.addUser(user);
-		securityService.autoLogin(user.getUsername(), user.getPasswordConfirm());
+		securityService.autoLogin(user.getEmail(), user.getPasswordConfirm());
 		return "redirect:home";
 	}
 
@@ -60,8 +60,8 @@ public class UsersController {
 	@RequestMapping(value = {"/home"}, method = RequestMethod.GET)
 	public String home(Model model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String dni = auth.getName();
-		User activeUser = usersService.getUserByDni(dni);
+		String email = auth.getName();
+		User activeUser = usersService.getUserByEmail(email);
 		return "home";
 	}
 

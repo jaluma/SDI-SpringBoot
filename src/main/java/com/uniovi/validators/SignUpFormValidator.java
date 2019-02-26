@@ -25,15 +25,18 @@ public class SignUpFormValidator implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) {
 		User user = (User) target;
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "Error.empty");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "Error.empty");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "Error.empty");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "Error.empty");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "Error.empty");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "passwordConfirm", "Error.empty");
 
 		// comprobar si el usuario ya existe
-		if(user.getUsername().length() < 6 || user.getUsername().length() > 24) {
-			errors.rejectValue("username", "Error.signup.username.length");
+		if(user.getEmail().length() < 6) {
+			errors.rejectValue("email", "Error.signup.email.length");
+		}
+		if(usersService.getUserByEmail(user.getEmail()) != null) {
+			errors.rejectValue("email", "Error.signup.email.duplicate");
 		}
 		if(user.getPassword().length() < 6 || user.getPassword().length() > 24) {
 			errors.rejectValue("password", "Error.signup.password.length");

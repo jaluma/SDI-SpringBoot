@@ -29,12 +29,9 @@ public class UserValidator implements Validator {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "Error.empty");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "Error.empty");
 
-		// editamos el user
-		if(user.getUsername() != null) {
-			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "Error.empty");
-			if(usersService.getUserByDni(user.getUsername()) != null) {
-				errors.rejectValue("username", "Error.signup.username.duplicate");
-			}
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "Error.empty");
+		if(usersService.getUserByEmail(user.getEmail()) != null) {
+			errors.rejectValue("email", "Error.signup.email.duplicate");
 		}
 
 	}

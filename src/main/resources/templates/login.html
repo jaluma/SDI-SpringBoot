@@ -9,18 +9,18 @@
     <h2 th:text="#{nav.login}">Idéntificate</h2>
     <form class="form-horizontal" method="post" action="/login">
         <div class="form-group">
-            <label class="control-label col-sm-2" for="username" th:text="#{user.username}">Nombre de usuario:</label>
-            <input id="username" type="text" class="form-control" name="username"/>
+            <label class="control-label col-sm-2" for="email" th:text="#{user.email}">Email:</label>
+            <input id="email" type="text" class="form-control" name="username" required/>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="password" th:text="#{user.password}">Password:</label>
-            <input id="password" type="password" class="form-control" name="password"/>
+            <input id="password" type="password" class="form-control" name="password" required/>
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-outline-success waves-effect" th:text="#{nav.login}">Login</button>
+            <button id="login-button" type="submit" class="btn btn-outline-success waves-effect" th:text="#{nav.login}">Login</button>
         </div>
         
-        <div th:if="${param.error}" class="text-danger" th:text="#{Error.login.error}">
+        <div th:if="${param.error}" id="login-error" class="text-danger" th:text="#{Error.login.error}">
             Invalid username and password.
         </div>
 

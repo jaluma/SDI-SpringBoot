@@ -8,7 +8,7 @@ public class User {
 	@GeneratedValue
 	private long id;
 	@Column(unique = true)
-	private String username;
+	private String email;
 	private String name;
 	private String lastName;
 
@@ -18,9 +18,9 @@ public class User {
 
 	private String role;
 
-	public User(String username, String name, String lastName) {
+	public User(String email, String name, String lastName) {
 		super();
-		this.username = username;
+		this.email = email;
 		this.name = name;
 		this.lastName = lastName;
 	}
@@ -36,12 +36,12 @@ public class User {
 		this.id = id;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getName() {
