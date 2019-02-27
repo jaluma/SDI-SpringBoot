@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head">
+	<title>MyWallpop: Vender</title>
+</head>
+<body>
+
+<!-- Barra de Navegación superior -->
+<nav th:replace="fragments/nav"></nav>
+
+<div class="container">
+	<h2 th:text="#{item.header.add}">Vender algo</h2>
+	<form class="form-horizontal" method="post" action="/sell/add" th:object="${item}">
+		<div class="form-group">
+			<label class="bmd-label-floating" for="title" th:text="#{item.title}">Título</label>
+			<input type="text" id="title" class="form-control" name="title" aria-describedby="basic-addon1" required/>
+			<span id="title-error" class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+		</div>
+		<div class="form-group">
+			<label class="bmd-label-floating" for="description" th:text="#{item.description}">Descripción</label>
+			<textarea id="description" class="form-control" name="description" aria-describedby="basic-addon1" required></textarea>
+			<span id="description-error" class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+		</div>
+		<div class="form-group">
+			<label class="bmd-label-floating" for="dateFormat" th:text="#{item.date}">Fecha</label>
+			<input type="date" id="dateFormat" class="form-control" th:min="${now}" th:value="${now}" name="dateFormat"
+				   aria-describedby="basic-addon1" required/>
+			<span id="date-error" class="text-danger" th:if="${#fields.hasErrors('dateFormat')}" th:errors="*{dateFormat}"></span>
+		</div>
+		<div class="form-group">
+			<label class="bmd-label-floating" for="price" th:text="#{item.price}">Precio</label>
+			<input type="number" id="price" class="form-control" name="price" aria-describedby="basic-addon1" required/>
+			<span id="price-error" class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
+		</div>
+		
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<button type="submit" class="btn btn-outline-success waves-effects" th:text="#{util.send}">Enviar</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+<footer th:replace="fragments/footer"></footer>
+
+</body>
+</html>

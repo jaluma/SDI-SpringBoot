@@ -20,6 +20,11 @@
 				</a>
 		    </li>
 			<li class="nav-item">
+				<a class="nav-link" href="/sell/add" sec:authorize="hasRole('ROLE_STANDARD')" th:text="#{nav.sales}">
+					Ofertas
+				</a>
+		    </li>
+			<li class="nav-item">
 				<a class="nav-link" href="/user/details" sec:authorize="hasRole('ROLE_STANDARD')" th:text="#{nav.chats}">
 					Chats
 				</a>

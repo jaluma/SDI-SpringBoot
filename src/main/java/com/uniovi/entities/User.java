@@ -1,6 +1,7 @@
 package com.uniovi.entities;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -17,6 +18,9 @@ public class User {
 	private String passwordConfirm;
 
 	private String role;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private Set<Item> items;
 
 	public User(String email, String name, String lastName) {
 		super();
