@@ -15,12 +15,12 @@
 		<!-- Links -->
 		<ul class="navbar-nav mr-auto">
 		    <li class="nav-item active">
-				<a class="nav-link" href="/admin/list" sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{nav.users}">
+				<a class="nav-link" id="adminListMenu" href="/admin/list" sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{nav.users}">
 					Listado de usuarios
 				</a>
 		    </li>
 			<li class="nav-item">
-				<a class="nav-link" href="/user/details" sec:authorize="isAuthenticated()" th:text="#{nav.chats}">
+				<a class="nav-link" href="/user/details" sec:authorize="hasRole('ROLE_STANDARD')" th:text="#{nav.chats}">
 					Chats
 				</a>
 		    </li>

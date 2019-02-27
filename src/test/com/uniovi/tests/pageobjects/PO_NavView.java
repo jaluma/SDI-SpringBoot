@@ -16,21 +16,14 @@ public class PO_NavView extends PO_View {
 	 *
 	 * @param driver:       apuntando al navegador abierto actualmente.
 	 * @param textOption:   Texto de la opción principal.
-	 * @param criterio:     "id" or "class" or "text" or "@attribute" or "free". Si el valor de
-	 *                      criterio es free es una expresion xpath completa.
-	 * @param textoDestino: texto correspondiente a la búsqueda de la página destino.
 	 */
-	public static void clickOption(WebDriver driver, String textOption, String criterio, String textoDestino) {
+	public static void clickOption(WebDriver driver, String textOption) {
 		//CLickamos en la opción de registro y esperamos a que se cargue el enlace de Registro.
 		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver, "@href", textOption, getTimeout());
 		//Tiene que haber un sólo elemento.
 		assertEquals(1, elementos.size());
 		//Ahora lo clickamos
 		elementos.get(0).click();
-		//Esperamos a que sea visible un elemento concreto
-		elementos = SeleniumUtils.EsperaCargaPagina(driver, criterio, textoDestino, getTimeout());
-		//Tiene que haber un sólo elemento.
-		assertEquals(1, elementos.size());
 	}
 
 	/**
@@ -86,4 +79,5 @@ public class PO_NavView extends PO_View {
 
 		return SeleniumUtils.EsperaCargaPagina(driver, "id", "dropdownMenuAccount", getTimeout()).size() == 2;  //solo login y registrarse
 	}
+
 }

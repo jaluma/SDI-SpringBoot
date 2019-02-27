@@ -6,7 +6,8 @@ import org.junit.runners.MethodSorters;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MyWallapopTests {
@@ -90,8 +91,7 @@ public class MyWallapopTests {
 		String password = "admin";
 		PO_NavView.login(driver);
 		PO_LoginView.fillForm(driver, email, password);
-		//PO_HomeView.checkWelcome(driver, PO_Properties.getSPANISH());
-		fail();
+		PO_NavView.checkElement(driver, "id", "adminListMenu");
 	}
 
 	//PR06.  Inicio de sesión con datos válidos (usuario estándar).
@@ -151,5 +151,58 @@ public class MyWallapopTests {
 	@Test
 	public void PR11() {
 		assertFalse(PO_NavView.checkButtonLogout(driver));
+	}
+
+	//PR12. Mostrar el listado de usuarios y comprobar que se muestran todos los que existen en el
+	//sistema.
+	@Test
+	public void PR12() {
+		PO_AdminListView.goAdminList(driver);
+		assertEquals(10, PO_AdminListView.checkNumberList(driver));
+		PO_AdminListView.changePage(driver, 2);
+		assertEquals(10, PO_AdminListView.checkNumberList(driver));
+	}
+
+	//PR13. Ir a la lista de usuarios, borrar el primer usuario de la lista, comprobar que la lista se actualiza
+	//y dicho usuario desaparece.
+	@Test
+	public void PR13() {
+		PO_AdminListView.goAdminList(driver);
+		assertEquals(10, PO_AdminListView.checkNumberList(driver));
+		PO_AdminListView.changePage(driver, 2);
+		assertEquals(10, PO_AdminListView.checkNumberList(driver));
+		PO_AdminListView.changePage(driver, 1);
+		PO_AdminListView.deleteElements(driver, 2);//borramos el 1 debido a que el primero es el admin
+		assertEquals(10, PO_AdminListView.checkNumberList(driver));
+		PO_AdminListView.changePage(driver, 2);
+		assertEquals(9, PO_AdminListView.checkNumberList(driver));
+	}
+
+	//PR14. Ir a la lista de usuarios, borrar el último usuario de la lista, comprobar que la lista se actualiza
+	//y dicho usuario desaparece
+	@Test
+	public void PR14() {
+		PO_AdminListView.goAdminList(driver);
+		assertEquals(10, PO_AdminListView.checkNumberList(driver));
+		PO_AdminListView.changePage(driver, 2);
+		assertEquals(10, PO_AdminListView.checkNumberList(driver));
+		PO_AdminListView.deleteElements(driver, 9);
+		assertEquals(8, PO_AdminListView.checkNumberList(driver));
+	}
+
+	//PR14. Ir a la lista de usuarios, borrar el último usuario de la lista, comprobar que la lista se actualiza
+	//y dicho usuario desaparece
+	@Test
+	public void PR15() {
+		PO_AdminListView.goAdminList(driver);
+		assertEquals(10, PO_AdminListView.checkNumberList(driver));
+		PO_AdminListView.changePage(driver, 2);
+		assertEquals(10, PO_AdminListView.checkNumberList(driver));
+		PO_AdminListView.deleteElements(driver, 9);
+		assertEquals(8, PO_AdminListView.checkNumberList(driver));
+		PO_AdminListView.deleteElements(driver, 8);
+		assertEquals(7, PO_AdminListView.checkNumberList(driver));
+		PO_AdminListView.deleteElements(driver, 7);
+		assertEquals(6, PO_AdminListView.checkNumberList(driver));
 	}
 }
