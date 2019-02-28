@@ -9,13 +9,14 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.uniovi</groupId>
-    <artifactId>notaneitor</artifactId>
+    <artifactId>mywallapop</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Notaneitor</name>
-    <description>Aplicación para gestión de notas</description>
+    <name>MyWallapop</name>
+    <description>Aplicación para compra/venta de objetos</description>
 
     <properties>
         <java.version>1.8</java.version>
+        <tomcat.version>8.5.37</tomcat.version>
     </properties>
 
     <dependencies>
@@ -72,6 +73,11 @@
             <groupId>com.github.mifmif</groupId>
             <artifactId>generex</artifactId>
             <version>1.0.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>nz.net.ultraq.thymeleaf</groupId>
+            <artifactId>thymeleaf-layout-dialect</artifactId>
         </dependency>
 
     </dependencies>

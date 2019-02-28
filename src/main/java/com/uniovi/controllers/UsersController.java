@@ -7,17 +7,18 @@ import com.uniovi.services.UsersService;
 import com.uniovi.validators.SignUpFormValidator;
 import com.uniovi.validators.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class UsersController {
+	private static final double DEFUALT_MONEY = 100.0;
+
 	private final UsersService usersService;
 	private final SecurityService securityService;
 	private final SignUpFormValidator signUpFormValidator;
@@ -47,6 +48,7 @@ public class UsersController {
 		}
 
 		user.setRole(rolesService.getRoles()[0]);
+		user.setMoney(DEFUALT_MONEY);
 		usersService.addUser(user);
 		securityService.autoLogin(user.getEmail(), user.getPasswordConfirm());
 		return "redirect:home";
@@ -57,12 +59,10 @@ public class UsersController {
 		return "login";
 	}
 
-	@RequestMapping(value = {"/home"}, method = RequestMethod.GET)
-	public String home(Model model) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String email = auth.getName();
-		User activeUser = usersService.getUserByEmail(email);
-		return "home";
+	@RequestMapping(value = "/user/details/{id}", method = RequestMethod.GET)
+	public String getDetailsByUser(Model model, @PathVariable Long id) {
+		model.addAttribute("user", usersService.getUser(id));
+		return "user/details";
 	}
 
 }

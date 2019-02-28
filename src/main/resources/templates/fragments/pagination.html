@@ -1,14 +1,14 @@
 <nav aria-label="..." xmlns:th="http://www.thymeleaf.org">
-   <ul class="pagination justify-content-center">
-       <!--/*@thymesVar id="page" type="org.springframework.data.domain.Page<com.uniovi.entities.Mark>"*/-->
+    <!--/*@thymesVar id="page" type="org.springframework.data.domain.Page<com.uniovi.entities.Mark>"*/-->
+   <ul class="pagination justify-content-center" th:if="${page != null}">
       <li class="page-item">
-          <a class="page-link indigo" th:href="@{'?page=0'}"><span aria-hidden="true">&laquo;</span></a>
+          <a class="page-link indigo" th:href="@{'?page=0'}"><span aria-hidden="true">&#171;</span></a>
       </li>
        <!-- Anterior (si la hay ) -->
       <li class="page-item" th:if="${page.getNumber()-1 >= 0}">
           <a class="page-link indigo" th:href="@{'?page='+${page.getNumber()-1} }" th:text="${page.getNumber()}"></a>
       </li>
-      <li class="page-item active">
+      <li class="page-item">
           <span class="page-link indigo_dark" th:href="@{'?page='+${page.getNumber()} }" th:text="${page.getNumber()+1}"></span>
       </li>
       <li class="page-item" th:if="${page.getNumber()+1 <= page.getTotalPages()-1}">
@@ -16,7 +16,7 @@
       </li>
        <!-- Última -->
       <li class="page-item">
-         <a class="page-link indigo" th:href="@{'?page='+${page.getTotalPages()-1}}"><span aria-hidden="true">&raquo;</span></a>
+         <a class="page-link indigo" th:href="@{'?page='+${page.getTotalPages()-1}}"><span aria-hidden="true">&#187;</span></a>
       </li>
    </ul>
 </nav>

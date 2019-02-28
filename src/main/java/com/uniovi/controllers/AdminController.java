@@ -41,11 +41,12 @@ public class AdminController {
 	}
 
 	@RequestMapping(value = "/admin/remove", method = RequestMethod.POST)
-	public String remove(@RequestParam("idChecked") List<String> removeList) {
-		for(String id : removeList) {
-			usersService.deleteUser(Long.parseLong(id));
+	public String remove(@RequestParam(value = "idChecked", required = false) List<String> removeList) {
+		if(removeList != null) {
+			for(String id : removeList) {
+				usersService.deleteUser(Long.parseLong(id));
+			}
 		}
-
 		return "redirect:/admin/list";
 	}
 }

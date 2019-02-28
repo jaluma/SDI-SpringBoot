@@ -1,6 +1,7 @@
 package com.uniovi.repositories;
 
 import com.uniovi.entities.Item;
+import com.uniovi.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -12,4 +13,7 @@ public interface ItemsRepository extends CrudRepository<Item, Long> {
 	Page<Item> searchByTitleDescriptionAndUser(Pageable pageable, String seachtext);
 
 	Page<Item> findAll(Pageable pageable);
+
+	@Query("SELECT r FROM Item r WHERE r.user = ?1 ORDER BY r.id ASC")
+	Page<Item> findItemsbyEmail(Pageable pageable, User user);
 }

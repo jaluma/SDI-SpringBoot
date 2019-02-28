@@ -53,6 +53,6 @@ public class SellController {
 		item.setUser(user);
 
 		itemsService.addItem(item);
-		return "redirect:/sell/list";
+		return "redirect:/home";
 	}
 }

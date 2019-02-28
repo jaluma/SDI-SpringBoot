@@ -1,16 +1,15 @@
 package com.uniovi.services;
 
 import com.uniovi.entities.Item;
+import com.uniovi.entities.User;
 import com.uniovi.repositories.ItemsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Set;
 
@@ -41,6 +40,10 @@ public class ItemsService {
 		return null;
 	}
 
+	public Page<Item> getItemsbyUser(Pageable pageable, User user) {
+		return itemsRepository.findItemsbyEmail(pageable, user);
+	}
+
 	public void addItem(Item item) {
 		itemsRepository.save(item);
 	}
@@ -51,10 +54,8 @@ public class ItemsService {
 
 
 	public Page<Item> searchItemsByTitleDescriptionAndUsername(Pageable pageable, String searchText) {
-		Page<Item> items = new PageImpl<>(new LinkedList<>());
 		searchText = "%" + searchText + "%";
-		items = itemsRepository.searchByTitleDescriptionAndUser(pageable, searchText);
-		return items;
+		return itemsRepository.searchByTitleDescriptionAndUser(pageable, searchText);
 	}
 
 	/* AUXILIARES */

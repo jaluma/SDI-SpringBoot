@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="en">
+<head>
+	<title>MyWallapop</title>
+	<th:block th:replace="fragments/head.html :: head"/>
+</head>
+<body>
+    <th:block th:replace="fragments/nav :: nav"/>
+	<th:block layout:fragment="content"/>
+    <th:block th:replace="fragments/footer :: footer"/>
+</body>
+</html>

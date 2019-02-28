@@ -22,6 +22,8 @@ public class User {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private Set<Item> items;
 
+	private double money;
+
 	public User(String email, String name, String lastName) {
 		super();
 		this.email = email;
@@ -90,5 +92,21 @@ public class User {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public Set<Item> getItems() {
+		return items;
+	}
+
+	public void setItems(Set<Item> items) {
+		this.items = items;
+	}
+
+	public double getMoney() {
+		return money;
+	}
+
+	public void setMoney(double money) {
+		this.money = money;
 	}
 }
