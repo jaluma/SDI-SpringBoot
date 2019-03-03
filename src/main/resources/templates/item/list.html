@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/layout}">
 	<head>
-		<title>Lista de usuarios</title>
+		<title th:text="#{sell.list.title}"></title>
 	</head>
 	<body>
 		<div class="container" layout:fragment="content">
-			<h2 th:text="#{user.list.header}">Usuarios</h2>
+			<h2 th:text="#{sell.list.header}"></h2>
 			
 			<div class="bmd-form-group bmd-collapse-inline pull-xs-right">
 				<label for="searchText"></label>
@@ -34,41 +34,34 @@
                  })
                  /*]]>*/
 			 </script>
-			<form class="form-horizontal" method="post" action="/admin/remove">
-				<div class="table-responsive" th:fragment="tableUsers">
-					<table id="tableUsers" class="table table-hover">
-						<thead>
-						<tr>
-							<th class="check-box-table-cell"></th>
-							<th th:text="#{user.email}">Email</th>
-							<th th:text="#{user.name}">Nombre</th>
-							<th th:text="#{user.lastName}">Apellidos</th>
-						</tr>
-						</thead>
-						<tbody>
-						<tr class="tr-static-height" th:each="user : ${usersList}">
-							<td class="check-box-column">
-								<label>
-									<input type="checkbox" th:name="idChecked" th:value="${user.getId()}"/>
-								</label>
-							</td>
-							<td th:text="${user.email}"></td>
-							<td th:text="${user.name}"></td>
-							<td th:text="${user.lastName}"></td>
-						</tr>
-						</tbody>
-					</table>
-					<footer th:replace="fragments/pagination"></footer>
-					<script th:inline="javascript">
-					 /*<![CDATA[*/
-                     var rows = $('#tableUsers tr').length - 1;
-                     var value = 460 - (rows * 46) + 15;
-                     document.getElementById('tableUsers').style.marginBottom = value + ".px";
-                     /*]]>*/
-					</script>
-					<button type="submit" id="delete" class="btn btn-primary bmd-btn-fab fab indigo"><i class="material-icons">delete</i></button>
-				</div>
-			</form>
+			<div class="table-responsive" th:fragment="tableItems">
+				<table id="tableItems" class="table table-hover">
+					<thead>
+					<tr>
+						<th th:text="#{item.title}"></th>
+						<th th:text="#{item.description}"></th>
+						<th th:text="#{item.price}"></th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr class="tr-static-height" th:each="item : ${itemsList}">
+						<td th:text="${item.title}"></td>
+						<td th:text="${item.description}"></td>
+						<td th:text="${item.price}"></td>
+                        <td th:if="${item.buyerUser == null}"><a th:href="${'/item/buy/' + item.id}" th:text="#{item.buy}"></a></td>
+						<td th:if="${item.buyerUser != null}"><span th:text="#{item.buyed}"></span></td>
+					</tr>
+					</tbody>
+				</table>
+				<footer th:replace="fragments/pagination"></footer>
+				<script th:inline="javascript">
+				 /*<![CDATA[*/
+                 var rows = $('#tableItems tr').length - 1;
+                 var value = 230 - (rows * 46) + 15;
+                 document.getElementById('tableItems').style.marginBottom = value + ".px";
+                 /*]]>*/
+				</script>
+			</div>
 		</div>
 	</body>
 </html>

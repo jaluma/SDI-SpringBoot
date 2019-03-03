@@ -5,7 +5,10 @@
 		<nav class="navbar navbar-expand-lg navbar-dark indigo" xmlns:th="http://www.thymeleaf.org"
 		     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 			<!-- Navbar brand -->
-			<a class="navbar-brand" href="/">MyWallapop</a>
+			<a class="navbar-brand" href="/">
+				<img th:src="@{/img/logo.png}" width="30" height="30" class="d-inline-block align-top" alt="logo" src="">
+				<!--<span th:text="#{nav.title}"></span>-->
+			</a>
 			
 			<!-- Collapse button -->
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav" aria-controls="basicExampleNav"
@@ -18,37 +21,41 @@
 		
 				<!-- Links -->
 				<ul class="navbar-nav mr-auto">
-					<li class="nav-item active">
-						<a class="nav-link" id="homeMenu" href="/home" sec:authorize="isAuthenticated()" th:text="#{nav.home}">
-							Inicio
-						</a>
+					<li class="nav-item active" sec:authorize="isAuthenticated()">
+						<a class="nav-link" id="homeMenu" href="/home" th:text="#{nav.home}"></a>
 					</li>
-					<li class="nav-item active">
-						<a class="nav-link" id="adminListMenu" href="/admin/list" sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{nav.users}">
-							Listado de usuarios
+					<li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+						<a class="nav-link" id="adminListMenu" href="/admin/list" th:text="#{nav.users}"></a>
+					</li>
+					<li class="nav-item dropdown" sec:authorize="hasRole('ROLE_STANDARD')">
+						<a class="nav-link dropdown-toggle" id="mySellsDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+						   aria-expanded="false">
+							<span th:text="#{nav.sales.mySales}"></span>
 						</a>
+						<div class="dropdown-menu dropdown-menu-right dropdown-info" id="mySellsDropdownMenuButton"
+						     aria-labelledby="mySellsDropdownMenuLink">
+							<a class="dropdown-item" href="/item/add" th:text="#{nav.sells.add}"></a>
+							<a class="dropdown-item" href="/item/mylist" th:text="#{nav.sells.myList}"></a>
+						</div>
+						
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="/sell/add" sec:authorize="hasRole('ROLE_STANDARD')" th:text="#{nav.sales}">
-							Ofertas
-						</a>
+						<a class="nav-link" href="/item/list" sec:authorize="hasRole('ROLE_STANDARD')" th:text="#{nav.sales.other}"></a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#" sec:authorize="hasRole('ROLE_STANDARD')" th:text="#{nav.chats}">
-							Chats
-						</a>
+						<a class="nav-link" href="#" sec:authorize="hasRole('ROLE_STANDARD')" th:text="#{nav.chats}"></a>
 					</li>
 				</ul>
 				
 				<ul class="navbar-nav ml-auto nav-flex-icons navbar-right">
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+						<a class="nav-link dropdown-toggle" id="languajeDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
 						   aria-expanded="false">
 							<!--<img src="/img/language-solid.png" alt="language image" height="35">-->
 							<i class="material-icons">language</i>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right dropdown-info" id="languageDropdownMenuButton"
-						     aria-labelledby="navbarDropdownMenuLink">
+						     aria-labelledby="languajeDropdownMenuLink">
 							<a id="btnEnglish" value="EN" class="dropdown-item">
 								<img th:src="@{/img/if_uk_flag.png}" style="border: 0; float: left; margin-right: 15px" alt="EN" src=""/>
 								<span th:text="#{language.en}">Inglés</span>

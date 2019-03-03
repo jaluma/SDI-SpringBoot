@@ -1,11 +1,28 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/layout}" lang="en">
 	<head>
 		<title>Detalles de usuario</title>
 	</head>
 	<body>
-		<div class="container" layout:fragment="content" style="text-align: center">
-		
-		</div>
+		<div class="container" layout:fragment="content">
+	        <div class="card block mb-3 w-100">
+		        <div class="card-body">
+			        <h2 class="card-title" th:text="#{user.email}"></h2>
+	                <p class="card-text" th:text="${user.email}"></p>
+		        </div>
+	        </div>
+		    <div class="card block mb-3 w-100">
+			    <div class="card-body">
+		            <h2 class="card-title" th:text="#{user.name}"></h2>
+		            <p class="card-text" th:text="${user.getFullName()}"></p>
+			    </div>
+	        </div>
+	        <div class="card block mb-3 w-100">
+		        <div class="card-body">
+		            <h2 class="card-title" th:text="#{user.money}"></h2>
+		            <p class="card-text" th:text="${user.money}"></p>
+		        </div>
+	        </div>
+        </div>
 	</body>
 </html>

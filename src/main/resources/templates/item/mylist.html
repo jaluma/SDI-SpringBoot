@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="en" layout:decorate="~{fragments/layout}">
+	<head>
+		<title th:text="#{sell.mylist.title}"></title>
+	</head>
+	<body>
+		<div class="container" layout:fragment="content">
+			<h2 th:text="#{sell.mylist.header}"></h2>
+			
+			<div class="bmd-form-group bmd-collapse-inline pull-xs-right">
+				<label for="searchText"></label>
+				<input class="form-control" type="text" id="searchText" th:placeholder="#{placeholder.search}" th:value="${searchText}"/>
+				<button class="btn bmd-btn-icon" id="search">
+					<i class="material-icons">search</i>
+				</button>
+				<button class="btn bmd-btn-icon" id="clearButton">
+					<i class="material-icons">clear</i>
+				</button>
+			</div>
+			
+			<script th:inline="javascript">
+				 /*<![CDATA[*/
+                 $("#search").click(function () {
+                     var searchParams = new URLSearchParams(window.location.search);
+                     var value = $("#searchText").val();
+                     searchParams.set("searchText", value);
+                     window.location.search = searchParams.toString();
+                     $().load(url);
+                 });
+                 $('#clearButton').click(function () {
+                     var searchParams = new URLSearchParams(window.location.search);
+                     searchParams.delete("searchText");
+                     window.location.search = searchParams.toString();
+                 })
+                 /*]]>*/
+			 </script>
+			<div class="table-responsive card-body" th:fragment="tableItems">
+				<table id="tableItems" class="table table-hover">
+					<thead>
+					<tr>
+						<th th:text="#{item.title}">Titulo</th>
+						<th th:text="#{item.description}">Titulo</th>
+						<th th:text="#{item.price}">Titulo</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr class="tr-static-height clickable-row" th:data-href="${'/item/details/' + item.id}" style="cursor: pointer;"
+					    th:each="item : ${itemsList}">
+						<td th:text="${item.title}"></td>
+						<td th:text="${item.description}"></td>
+						<td th:text="${item.price}"></td>
+						<td><a th:href="${'/item/delete/' + item.id}" th:text="#{sell.remove}">eliminar</a></td>
+					</tr>
+					</tbody>
+				</table>
+				<footer th:replace="fragments/pagination"></footer>
+				<script th:inline="javascript">
+				 /*<![CDATA[*/
+                 var rows = $("#tableItems tr").length - 1;
+                 var value = 460 - (rows * 46);
+                 document.getElementById('tableItems').style.marginBottom = value + ".px";
+                 /*]]>*/
+				</script>
+			</div>
+		</div>
+	</body>
+</html>

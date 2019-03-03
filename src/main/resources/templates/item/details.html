@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/layout}">
+	<head>
+		<title>Detalles del producto</title>
+	</head>
+	<body>
+        <div class="container" layout:fragment="content">
+	        <div class="card block mb-3 w-100">
+		        <div class="card-body">
+			        <h2 class="card-title" th:text="#{item.title}"></h2>
+	                <p class="card-text" th:text="${item.title}"></p>
+		        </div>
+	        </div>
+		    <div class="card block mb-3 w-100">
+			    <div class="card-body">
+		            <h2 class="card-title" th:text="#{item.description}"></h2>
+		            <p class="card-text" th:text="${item.description}"></p>
+			    </div>
+	        </div>
+	        <div class="card block mb-3 w-100">
+		        <div class="card-body">
+		            <h2 class="card-title" th:text="#{item.price}"></h2>
+		            <p class="card-text" th:text="${item.price}"></p>
+		        </div>
+	        </div>
+	        <div class="card block mb-3 w-100">
+		        <div class="card-body">
+		            <h2 class="card-title" th:text="#{item.seller}"></h2>
+		            <p class="card-text" th:text="${item.sellerUser.getFullName()}"></p>
+		        </div>
+	        </div>
+        </div>
+    </body>
+</html>

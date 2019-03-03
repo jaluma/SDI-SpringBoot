@@ -1,15 +1,23 @@
 package com.uniovi.tests;
 
+import com.uniovi.repositories.UsersRepository;
+import com.uniovi.services.InsertSampleDataService;
 import com.uniovi.tests.pageobjects.*;
 import org.junit.*;
+import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class MyWallapopTests {
 
 	//En Windows (Debe ser la versión 65.0.1 y desactivar las actualizacioens automáticas)):
@@ -21,6 +29,11 @@ public class MyWallapopTests {
 	//Común a Windows y a MACOSX
 	private static WebDriver driver = getDriver(PathFirefox65, Geckdriver024);
 	private static final String URL = "http://localhost:8090";
+
+	@Autowired
+	private InsertSampleDataService insertSampleDataService;
+	@Autowired
+	private UsersRepository usersRepository;
 
 	private static WebDriver getDriver(String PathFirefox, String Geckdriver) {
 		System.setProperty("webdriver.firefox.bin", PathFirefox);
@@ -39,7 +52,14 @@ public class MyWallapopTests {
 
 	@Before
 	public void setUp() {
+		initdb();
 		driver.navigate().to(URL);
+	}
+
+	private void initdb() {
+		usersRepository.deleteAll();
+
+		insertSampleDataService.init();
 	}
 
 	@After

@@ -8,31 +8,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UsersService {
 	private final UsersRepository usersRepository;
-
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Autowired
 	public UsersService(UsersRepository usersRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
 		this.usersRepository = usersRepository;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-	}
-
-	@PostConstruct
-	public void init() {
-	}
-
-	public List<User> getUsers() {
-		List<User> users = new ArrayList<>();
-		usersRepository.findAll().forEach(users::add);
-		return users;
 	}
 
 	public User getUser(Long id) {
@@ -62,4 +48,5 @@ public class UsersService {
 	public Page<User> searchUsers(Pageable pageable, String searchText) {
 		return usersRepository.findAllByUsernameAndFullName(pageable, searchText);
 	}
+
 }

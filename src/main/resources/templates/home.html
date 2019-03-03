@@ -6,43 +6,17 @@
 </head>
 <body>
 	<!--/*@thymesVar id="currentUser" type="com.uniovi.entities.User"*/-->
-	<div class="row center" layout:fragment="content" style="text-align: center">
+	<div class="row center " layout:fragment="content">
 		<div class="card block card-home">
-			<div class="card-body" style="text-align: center">
+			<div class="card-body text-center">
 				<img class="card-img-top rounded-circle z-depth-0" th:src="#{url.defaut.ico}" alt="Card image cap" src="">
 				<h2 class="card-title" th:text="#{welcome.message}"></h2>
 				<h3 th:text="${currentUser.getFullName()}"></h3>
 				<a th:href="${'/user/details/' + currentUser.getId()}" class="btn btn-primary">Ir a zona personal</a>
 			</div>
 		</div>
-		<div sec:authorize="hasRole('ROLE_STANDARD')" class="card block card-home" style="width: 80%;" th:fragment="tableSells" id="tableSells">
-			<div class="card-body">
-				<table id="tableItems" class="table table-hover">
-					<thead>
-					<tr>
-						<th th:text="#{item.title}">Titulo</th>
-						<th th:text="#{item.description}">Titulo</th>
-						<th th:text="#{item.price}">Titulo</th>
-					</tr>
-					</thead>
-					<tbody>
-					<tr class="tr-static-height clickable-row" th:data-href="${'/sell/details/' + item.id}" style="cursor: pointer;"
-					    th:each="item : ${itemsList}">
-						<td th:text="${item.title}"></td>
-						<td th:text="${item.description}"></td>
-						<td th:text="${item.price}"></td>
-					</tr>
-					</tbody>
-				</table>
-				<footer th:replace="fragments/pagination"></footer>
-				<script th:inline="javascript">
-				 /*<![CDATA[*/
-                 var rows = $("#tableItems tr").length - 1;
-                 var value = 460 - (rows * 46);
-                 document.getElementById('tableItems').style.marginBottom = value + ".px";
-                 /*]]>*/
-				</script>
-			</div>
+		<div class="card block card-home w-75">
+			<div th:replace="item/mylist :: tableItems" sec:authorize="hasRole('ROLE_STANDARD')" class="card block card-home"></div>
 		</div>
 	</div>
 	

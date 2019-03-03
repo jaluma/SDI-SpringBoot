@@ -85,10 +85,18 @@
     padding: 10px;
 }
 
+.nav-span-subtitle {
+    padding-left: 15px;
+}
+
 body {
     overflow: auto;
     position: relative;
     margin-bottom: 80px;
+}
+
+textarea {
+    height: 150px;
 }
 
 /*

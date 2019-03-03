@@ -40,7 +40,7 @@ public class ItemsService {
 		return null;
 	}
 
-	public Page<Item> getItemsbyUser(Pageable pageable, User user) {
+	public Page<Item> getItemsByUser(Pageable pageable, User user) {
 		return itemsRepository.findItemsbyEmail(pageable, user);
 	}
 
@@ -53,13 +53,21 @@ public class ItemsService {
 	}
 
 
-	public Page<Item> searchItemsByTitleDescriptionAndUsername(Pageable pageable, String searchText) {
+	public Page<Item> searchItemsByTitleDescriptionAndUsername(Pageable pageable, String searchText, User user) {
 		searchText = "%" + searchText + "%";
-		return itemsRepository.searchByTitleDescriptionAndUser(pageable, searchText);
+		return itemsRepository.searchByTitleDescriptionAndUserDistintUser(pageable, searchText, user);
 	}
 
-	/* AUXILIARES */
-	private Page<Item> getItems(Pageable pageable) {
+	public Page<Item> getItems(Pageable pageable, User user) {
+		return itemsRepository.findAllDistintUser(pageable, user);
+	}
+
+	public Page<Item> searchItemsByTitleDescriptionAndUsernameByUser(Pageable pageable, String searchText, User user) {
+		searchText = "%" + searchText + "%";
+		return itemsRepository.searchByTitleDescriptionAndUserByEmail(pageable, searchText, user);
+	}
+
+	public Page<Item> getItems(Pageable pageable) {
 		return itemsRepository.findAll(pageable);
 	}
 }

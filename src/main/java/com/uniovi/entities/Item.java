@@ -1,5 +1,6 @@
 package com.uniovi.entities;
 
+import org.apache.commons.math3.util.Precision;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -7,6 +8,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class Item {
@@ -27,8 +29,12 @@ public class Item {
 	private double price;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private User user;
+	//	@JoinColumn(name = "user_id")
+	private User sellerUser;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	//	@JoinColumn(name = "user_id")
+	private User buyerUser;
 
 	public Item(String title, String description, Date date, double price) {
 		setTitle(title);
@@ -68,7 +74,7 @@ public class Item {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	private void setDate(Date date) {
 		this.date = date;
 	}
 
@@ -76,16 +82,24 @@ public class Item {
 		return price;
 	}
 
-	public void setPrice(double price) {
-		this.price = price;
+	private void setPrice(double price) {
+		this.price = Precision.round(price, 2);
 	}
 
-	public User getUser() {
-		return user;
+	public User getSellerUser() {
+		return sellerUser;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	void setSellerUser(User user) {
+		this.sellerUser = user;
+	}
+
+	public User getBuyerUser() {
+		return buyerUser;
+	}
+
+	void setBuyerUser(User buyerUser) {
+		this.buyerUser = buyerUser;
 	}
 
 	public String getDateFormat() {
@@ -99,5 +113,20 @@ public class Item {
 
 	private Date asDate(LocalDate localDate) {
 		return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if(this == o)
+			return true;
+		if(o == null || getClass() != o.getClass())
+			return false;
+		Item item = (Item) o;
+		return Double.compare(item.price, price) == 0 && title.equals(item.title) && description.equals(item.description);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(title, description, date);
 	}
 }

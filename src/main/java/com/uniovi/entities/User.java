@@ -1,6 +1,8 @@
 package com.uniovi.entities;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -19,8 +21,11 @@ public class User {
 
 	private String role;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private Set<Item> items;
+	@OneToMany(mappedBy = "buyerUser", cascade = CascadeType.ALL)
+	private Set<Item> buyerItems = new HashSet<>();
+
+	@OneToMany(mappedBy = "sellerUser", cascade = CascadeType.ALL)
+	private Set<Item> sellerItems = new HashSet<>();
 
 	private double money;
 
@@ -94,12 +99,20 @@ public class User {
 		this.role = role;
 	}
 
-	public Set<Item> getItems() {
-		return items;
+	Set<Item> _getSellerItems() {
+		return sellerItems;
 	}
 
-	public void setItems(Set<Item> items) {
-		this.items = items;
+	Set<Item> _getBuyerItems() {
+		return buyerItems;
+	}
+
+	public Set<Item> getSellerItems() {
+		return new HashSet<>(sellerItems);
+	}
+
+	public Set<Item> getBuyerItems() {
+		return new HashSet<>(buyerItems);
 	}
 
 	public double getMoney() {
@@ -108,5 +121,20 @@ public class User {
 
 	public void setMoney(double money) {
 		this.money = money;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if(this == o)
+			return true;
+		if(o == null || getClass() != o.getClass())
+			return false;
+		User user = (User) o;
+		return email.equals(user.email) && name.equals(user.name) && lastName.equals(user.lastName) && role.equals(user.role);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(email, name, lastName, role);
 	}
 }

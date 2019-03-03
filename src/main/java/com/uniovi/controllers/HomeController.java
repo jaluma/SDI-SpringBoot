@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class HomeController {
+	private final ItemsService itemsService;
 	private final UsersService usersService;
-	private ItemsService itemsService;
 
 	@Autowired
 	public HomeController(ItemsService itemsService, UsersService usersService) {
@@ -40,7 +40,7 @@ public class HomeController {
 		String email = auth.getName();
 		User user = usersService.getUserByEmail(email);
 
-		Page<Item> items = itemsService.getItemsbyUser(pageable, user);
+		Page<Item> items = itemsService.getItemsByUser(pageable, user);
 
 		model.addAttribute("page", items);
 		model.addAttribute("itemsList", items.getContent());
