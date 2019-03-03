@@ -1,27 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/layout}">
 <head>
-	<title>Inicio de sesión</title>
+	<title th:text="#{login.header}"></title>
 </head>
 <body>
 <div class="container" layout:fragment="content">
-    <h2 th:text="#{nav.login}">Idéntificate</h2>
+    <h2 th:text="#{nav.login}"></h2>
     <form class="form-horizontal" method="post" action="/login">
         <div class="form-group">
-            <label class="control-label col-sm-2" for="email" th:text="#{user.email}">Email:</label>
+            <label class="control-label col-sm-2" for="email" th:text="#{user.email}"></label>
             <input id="email" type="text" class="form-control" name="username" required/>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="password" th:text="#{user.password}">Password:</label>
+            <label class="control-label col-sm-2" for="password" th:text="#{user.password}"></label>
             <input id="password" type="password" class="form-control" name="password" required/>
         </div>
         <div class="form-group">
-            <button id="login-button" type="submit" class="btn btn-outline-success waves-effect" th:text="#{nav.login}">Login</button>
+            <button id="login-button" type="submit" class="btn btn-outline-success waves-effect" th:text="#{nav.login}"></button>
         </div>
         
-        <div th:if="${param.error}" id="login-error" class="alert alert-danger" th:text="#{Error.login.error}">
-            Invalid username and password.
-        </div>
+        <div th:if="${param.error}" id="login-error" class="alert alert-danger" th:text="#{Error.login.error}"></div>
 
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </form>

@@ -1,36 +1,36 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/layout}">
 	<head>
-		<title>Vender</title>
+		<title th:text="#{item.add.header}"></title>
 	</head>
 	<body>
 		<div class="container" layout:fragment="content">
-			<h2 th:text="#{item.header.add}">Vender algo</h2>
+			<h2 th:text="#{item.header.add}"></h2>
 			<form class="form-horizontal" method="post" action="/item/add" th:object="${item}">
 				<div class="form-group">
-					<label class="bmd-label-floating" for="title" th:text="#{item.title}">Título</label>
+					<label class="bmd-label-floating" for="title" th:text="#{item.title}"></label>
 					<input type="text" id="title" class="form-control" name="title" required/>
 					<span id="title-error" class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
 				</div>
 				<div class="form-group">
-					<label class="bmd-label-floating" for="description" th:text="#{item.description}">Descripción</label>
+					<label class="bmd-label-floating" for="description" th:text="#{item.description}"></label>
 					<textarea id="description" class="form-control" name="description" required></textarea>
 					<span id="description-error" class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
 				</div>
 				<div class="form-group">
-					<label class="bmd-label-floating" for="dateFormat" th:text="#{item.date}">Fecha</label>
+					<label class="bmd-label-floating" for="dateFormat" th:text="#{item.date}"></label>
 					<input type="date" id="dateFormat" class="form-control" th:min="${now}" th:value="${now}" name="dateFormat" required/>
 					<span id="date-error" class="text-danger" th:if="${#fields.hasErrors('dateFormat')}" th:errors="*{dateFormat}"></span>
 				</div>
 				<div class="form-group">
-					<label class="bmd-label-floating" for="price" th:text="#{item.price}">Precio</label>
+					<label class="bmd-label-floating" for="price" th:text="#{item.price}"></label>
 					<input type="number" id="price" class="form-control" name="price" required/>
 					<span id="price-error" class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
 				</div>
 				
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-outline-success waves-effects" th:text="#{util.send}">Enviar</button>
+						<button type="submit" class="btn btn-outline-success waves-effects" th:text="#{util.send}"></button>
 					</div>
 				</div>
 			</form>

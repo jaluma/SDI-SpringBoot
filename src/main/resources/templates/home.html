@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/layout}">
 <head>
-	<title>Home</title>
+	<title th:text="#{nav.home}"></title>
 </head>
 <body>
 	<!--/*@thymesVar id="currentUser" type="com.uniovi.entities.User"*/-->
@@ -12,7 +12,7 @@
 				<img class="card-img-top rounded-circle z-depth-0" th:src="#{url.defaut.ico}" alt="Card image cap" src="">
 				<h2 class="card-title" th:text="#{welcome.message}"></h2>
 				<h3 th:text="${currentUser.getFullName()}"></h3>
-				<a th:href="${'/user/details/' + currentUser.getId()}" class="btn btn-primary">Ir a zona personal</a>
+				<a th:href="${'/user/details/' + currentUser.getId()}" class="btn btn-primary" th:text="#{home.user.personal}"></a>
 			</div>
 		</div>
 		<div class="card block card-home" style="width: 80%; min-width: 400px;" sec:authorize="hasRole('ROLE_STANDARD')">

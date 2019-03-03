@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="en">
 <head>
-	<title>MyWallapop</title>
+	<title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE" th:text="#{nav.title}"></title>
 	<th:block th:replace="fragments/head.html :: head"/>
 </head>
 <body>

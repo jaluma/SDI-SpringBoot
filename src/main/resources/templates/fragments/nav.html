@@ -51,18 +51,17 @@
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" id="languajeDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
 						   aria-expanded="false">
-							<!--<img src="/img/language-solid.png" alt="language image" height="35">-->
 							<i class="material-icons">language</i>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right dropdown-info" id="languageDropdownMenuButton"
 						     aria-labelledby="languajeDropdownMenuLink">
 							<a id="btnEnglish" value="EN" class="dropdown-item">
 								<img th:src="@{/img/if_uk_flag.png}" style="border: 0; float: left; margin-right: 15px" alt="EN" src=""/>
-								<span th:text="#{language.en}">Inglés</span>
+								<span th:text="#{language.en}"></span>
 							</a>
 							<a id="btnSpanish" value="ES" class="dropdown-item">
 								<img th:src="@{/img/if_spain_flag.png}" style="border: 0; float: left; margin-right: 15px" alt="ES" src=""/>
-								<span th:text="#{language.es}">Español</span>
+								<span th:text="#{language.es}"></span>
 							</a>
 						</div>
 					</li>
@@ -71,25 +70,17 @@
 						   aria-expanded="false">
 							 <i class="fas fa-user"></i>
 							<i class="material-icons">person</i>
-							<!--<img th:src="#{url.defaut.ico}" class="rounded-circle z-depth-0" alt="avatar image"-->
-							<!--height="35">-->
 						</a>
 						<div id="dropdownMenuAccount" class="dropdown-menu dropdown-menu-right dropdown-info"
 						     aria-labelledby="navbarDropdownMenuLink-333">
-							<a sec:authorize="!isAuthenticated()" class="dropdown-item signup" href="/signup" th:text="#{nav.signup}">
-								Registrate
-							</a>
-							<a sec:authorize="!isAuthenticated()" class="dropdown-item login" href="/login" th:text="#{nav.login}">
-								Identifícate
-							</a>
+							<a sec:authorize="!isAuthenticated()" class="dropdown-item signup" href="/signup" th:text="#{nav.signup}"></a>
+							<a sec:authorize="!isAuthenticated()" class="dropdown-item login" href="/login" th:text="#{nav.login}"></a>
 							<!--/*@thymesVar id="currentUser" type="com.uniovi.entities.User"*/-->
 							<a sec:authorize="isAuthenticated()" class="dropdown-item login" th:href="${'/user/details/' + currentUser.getId()}">
 								<p th:text="#{nav.user.name(${currentUser.getFullName()})}"></p>
 								<p th:text="#{nav.user.money(${currentUser.getMoney()})}"></p>
 							</a>
-							<a sec:authorize="isAuthenticated()" class="dropdown-item logout" href="/logout">
-								Desconectar
-							</a>
+							<a sec:authorize="isAuthenticated()" class="dropdown-item logout" href="/logout" th:text="#{user.signout}"></a>
 						</div>
 					</li>
 				</ul>

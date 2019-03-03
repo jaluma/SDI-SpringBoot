@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/layout}">
 	<head>
-		<title>Lista de usuarios</title>
+		<title th:text="#{admin.list.header}"></title>
 	</head>
 	<body>
 		<div class="container" layout:fragment="content">
-			<h2 th:text="#{user.list.header}">Usuarios</h2>
+			<h2 th:text="#{user.list.header}"></h2>
 			
 			<div class="bmd-form-group bmd-collapse-inline pull-xs-right">
 				<label for="searchText"></label>
@@ -40,9 +40,9 @@
 						<thead>
 						<tr>
 							<th class="check-box-table-cell"></th>
-							<th th:text="#{user.email}">Email</th>
-							<th th:text="#{user.name}">Nombre</th>
-							<th th:text="#{user.lastName}">Apellidos</th>
+							<th th:text="#{user.email}"></th>
+							<th th:text="#{user.name}"></th>
+							<th th:text="#{user.lastName}"></th>
 						</tr>
 						</thead>
 						<tbody>

@@ -44,7 +44,8 @@
 					</tr>
 					</thead>
 					<tbody>
-					<tr class="tr-static-height" th:each="item : ${itemsList}">
+					<tr class="tr-static-height clickable-row" th:data-href="${'/item/details/' + item.id}" style="cursor: pointer;"
+					    th:each="item : ${itemsList}">
 						<td th:text="${item.title}"></td>
 						<td th:text="${item.description}"></td>
 						<td th:text="${item.price}"></td>

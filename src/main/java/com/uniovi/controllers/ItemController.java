@@ -54,7 +54,7 @@ public class ItemController {
 		User user = getCurrentUser(principal);
 
 		Association.Sell.link(user, item);
-
+		usersService.addUser(user);
 		itemsService.addItem(item);
 
 		return "redirect:/item/mylist";
@@ -65,7 +65,16 @@ public class ItemController {
 		User buyerUser = getCurrentUser(principal);
 		Item item = itemsService.getItem(id);
 
+		if(item.getSellerUser().equals(buyerUser) || item.getBuyerUser() != null || buyerUser.getMoney() < item.getPrice()) {
+			return "redirect:/item/list";
+		}
+
 		Association.Buy.link(buyerUser, item);
+
+		buyerUser.setMoney(buyerUser.getMoney() - item.getPrice());
+		itemsService.addItem(item);
+		usersService.addUser(buyerUser);
+
 		return "redirect:/item/list";
 	}
 
