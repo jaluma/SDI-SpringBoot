@@ -1,10 +1,12 @@
 package com.uniovi.controllers;
 
+import com.uniovi.controllers.util.Utilities;
 import com.uniovi.entities.Association;
 import com.uniovi.entities.Item;
 import com.uniovi.entities.User;
 import com.uniovi.services.ItemsService;
 import com.uniovi.services.UsersService;
+import com.uniovi.validators.BuyItemValidator;
 import com.uniovi.validators.ItemValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,14 +29,16 @@ import java.util.Date;
 @Controller
 public class ItemController {
 	private final UsersService usersService;
-	private ItemValidator itemValidator;
-	private ItemsService itemsService;
+	private final BuyItemValidator buyItemValidator;
+	private final ItemsService itemsService;
+	private final ItemValidator itemValidator;
 
 	@Autowired
-	public ItemController(ItemValidator itemValidator, ItemsService itemsService, UsersService usersService) {
-		this.itemValidator = itemValidator;
+	public ItemController(BuyItemValidator buyItemValidator, ItemsService itemsService, UsersService usersService, ItemValidator buyedItemValidator) {
+		this.buyItemValidator = buyItemValidator;
 		this.itemsService = itemsService;
 		this.usersService = usersService;
+		this.itemValidator = buyedItemValidator;
 	}
 
 	@RequestMapping(value = "/item/add", method = RequestMethod.GET)
@@ -51,7 +56,7 @@ public class ItemController {
 			return getAddItem(model);
 		}
 
-		User user = getCurrentUser(principal);
+		User user = Utilities.getCurrentUser(principal, usersService);
 
 		Association.Sell.link(user, item);
 		usersService.addUser(user);
@@ -60,12 +65,13 @@ public class ItemController {
 		return "redirect:/item/mylist";
 	}
 
-	@RequestMapping("/item/buy/{id}")
-	public String buy(@PathVariable Long id, Principal principal) {
-		User buyerUser = getCurrentUser(principal);
+	@RequestMapping(value = "/item/buy/{id}")
+	public String buy(@PathVariable Long id, Principal principal, HttpSession session) {
 		Item item = itemsService.getItem(id);
+		User buyerUser = Utilities.getCurrentUser(principal, usersService);
 
 		if(item.getSellerUser().equals(buyerUser) || item.getBuyerUser() != null || buyerUser.getMoney() < item.getPrice()) {
+			session.setAttribute("buy", "Error.buy.insuficient");
 			return "redirect:/item/list";
 		}
 
@@ -93,14 +99,19 @@ public class ItemController {
 	}
 
 	@RequestMapping("/item/list")
-	public String getList(Model model, @PageableDefault(size = 5) Pageable pageable, @RequestParam(required = false) String searchText, Principal principal) {
-		User user = getCurrentUser(principal);
+	public String getList(Model model, @PageableDefault(size = 5) Pageable pageable, @RequestParam(required = false) String searchText, Principal principal, HttpSession session) {
+		User user = Utilities.getCurrentUser(principal, usersService);
+		if(session.getAttribute("buy") != null) {
+			model.addAttribute("buy", session.getAttribute("buy"));
+			session.removeAttribute("buy");
+		}
+
 		Page<Item> items;
 		if(searchText != null && !searchText.isEmpty()) {
-			items = itemsService.searchItemsByTitleDescriptionAndUsername(pageable, searchText, user);
+			items = itemsService.searchItemsByTitleDescriptionAndUsernameBySellerUser(pageable, searchText, user);
 			model.addAttribute("searchText", searchText);
 		} else {
-			items = itemsService.getItems(pageable, user);
+			items = itemsService.getItemsBySellerUser(pageable, user);
 			model.addAttribute("searchText", "");
 		}
 
@@ -111,7 +122,7 @@ public class ItemController {
 
 	@RequestMapping("/item/mylist")
 	public String getMyList(Model model, @PageableDefault(size = 5) Pageable pageable, @RequestParam(required = false) String searchText, Principal principal) {
-		User user = getCurrentUser(principal);
+		User user = Utilities.getCurrentUser(principal, usersService);
 
 		Page<Item> items;
 		if(searchText != null && !searchText.isEmpty()) {
@@ -131,8 +142,5 @@ public class ItemController {
 		AUXILIARES
 	 */
 
-	private User getCurrentUser(Principal principal) {
-		String email = principal.getName();
-		return usersService.getUserByEmail(email);
-	}
+
 }

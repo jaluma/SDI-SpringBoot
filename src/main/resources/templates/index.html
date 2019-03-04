@@ -8,16 +8,16 @@
 	<!--/*@thymesVar id="currentUser" type="com.uniovi.entities.User"*/-->
 		<div class="container" layout:fragment="content" style="text-align: center">
 			<h2 th:text="#{welcome.message}"></h2>
-			<div sec:authorize="!isAuthenticated()" class="card block card-index jumbotron">
+			<div sec:authorize="!isAuthenticated()" class="card block card-index jumbotron jumbotron_flex">
 				<div class="card-body" style="text-align: center">
 					<h4 th:text="#{index.signup}"></h4>
-					<a href="/login" class="btn btn-primary">Login</a>
+					<a href="/login" class="btn btn-primary link">Login</a>
 				</div>
 			</div>
-			<div sec:authorize="!isAuthenticated()" class="card block card-index jumbotron">
+			<div sec:authorize="!isAuthenticated()" class="card block card-index jumbotron jumbotron_flex">
 				<div class="card-body" style="text-align: center">
 					<h4 th:text="#{index.new}"></h4>
-					<a href="/signup" class="btn btn-primary" th:text="#{nav.signup}"></a>
+					<a href="/signup" class="btn btn-primary link" th:text="#{nav.signup}"></a>
 				</div>
 			</div>
 			<div sec:authorize="isAuthenticated()" class="card jumbotron">
@@ -25,7 +25,7 @@
 					<h2 th:text="#{index.searching}"></h2>
 					<hr class="my-4">
 					<a href="/home" class="btn btn-primary" th:text="#{nav.home}">Página de inicio</a>
-					<a th:href="${'/user/details/' + currentUser.getId()}" class="btn btn-primary" th:text="#{index.user.details}"></a>
+					<a th:href="${'/user/details/' + currentUser.getId()}" class="btn btn-primary link" th:text="#{index.user.details}"></a>
 				</div>
 			</div>
 		</div>

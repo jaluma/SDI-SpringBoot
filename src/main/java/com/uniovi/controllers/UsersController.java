@@ -1,12 +1,18 @@
 package com.uniovi.controllers;
 
+import com.uniovi.controllers.util.Utilities;
+import com.uniovi.entities.Item;
 import com.uniovi.entities.User;
+import com.uniovi.services.ItemsService;
 import com.uniovi.services.RolesService;
 import com.uniovi.services.SecurityService;
 import com.uniovi.services.UsersService;
 import com.uniovi.validators.SignUpFormValidator;
 import com.uniovi.validators.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +20,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.security.Principal;
 
 @Controller
 public class UsersController {
@@ -24,14 +33,16 @@ public class UsersController {
 	private final SignUpFormValidator signUpFormValidator;
 	private final UserValidator userValidator;
 	private final RolesService rolesService;
+	private final ItemsService itemsService;
 
 	@Autowired
-	public UsersController(UsersService usersService, SecurityService securityService, SignUpFormValidator signUpFormValidator, UserValidator userValidator, RolesService rolesService) {
+	public UsersController(UsersService usersService, SecurityService securityService, SignUpFormValidator signUpFormValidator, UserValidator userValidator, RolesService rolesService, ItemsService itemsService) {
 		this.usersService = usersService;
 		this.securityService = securityService;
 		this.signUpFormValidator = signUpFormValidator;
 		this.userValidator = userValidator;
 		this.rolesService = rolesService;
+		this.itemsService = itemsService;
 	}
 
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
@@ -63,6 +74,24 @@ public class UsersController {
 	public String getDetailsByUser(Model model, @PathVariable Long id) {
 		model.addAttribute("user", usersService.getUser(id));
 		return "user/details";
+	}
+
+	@RequestMapping("/user/bought")
+	public String getList(Model model, @PageableDefault(size = 5) Pageable pageable, @RequestParam(required = false) String searchText, Principal principal) {
+		User user = Utilities.getCurrentUser(principal, usersService);
+		Page<Item> items;
+		if(searchText != null && !searchText.isEmpty()) {
+			items = itemsService.searchItemsByTitleDescriptionAndUsernameByBuyerUser(pageable, searchText, user);
+			model.addAttribute("searchText", searchText);
+		} else {
+			items = itemsService.getItemsByBuyerUser(pageable, user);
+			model.addAttribute("searchText", "");
+		}
+
+		model.addAttribute("currentUser", user);
+		model.addAttribute("page", items);
+		model.addAttribute("itemsList", items.getContent());
+		return "/user/bought";
 	}
 
 }

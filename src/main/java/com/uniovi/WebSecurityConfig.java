@@ -1,5 +1,6 @@
 package com.uniovi;
 
+import com.uniovi.services.RolesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,10 +17,12 @@ import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private final UserDetailsService userDetailsService;
+	private final RolesService rolesService;
 
 	@Autowired
-	public WebSecurityConfig(UserDetailsService userDetailsService) {
+	public WebSecurityConfig(UserDetailsService userDetailsService, RolesService rolesService) {
 		this.userDetailsService = userDetailsService;
+		this.rolesService = rolesService;
 	}
 
 	@Bean
@@ -32,12 +35,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf()
 				.disable()
 				.authorizeRequests()
-				.antMatchers("/css/**", "/img/**", "/script/**", "/", "/signup", "/login/**").permitAll().antMatchers("/admin/**")
-				.hasAnyAuthority("ROLE_ADMIN")
+				.antMatchers("/css/**", "/img/**", "/script/**", "/", "/signup", "/login/**")
+				.permitAll()
+				.antMatchers("/admin/**")
+				.hasAnyAuthority(rolesService.getRoles()[1])
+				.antMatchers("/item/**")
+				.hasAnyAuthority(rolesService.getRoles()[0])
 				.anyRequest()
 				.authenticated()
 				.and()
-				.formLogin().loginPage("/login").permitAll().defaultSuccessUrl("/loginSuccess")
+				.formLogin()
+				.loginPage("/login")
+				.permitAll()
+				.defaultSuccessUrl("/loginSuccess")
 				.and()
 				.logout()
 				.permitAll();

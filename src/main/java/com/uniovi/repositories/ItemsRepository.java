@@ -9,6 +9,12 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ItemsRepository extends CrudRepository<Item, Long> {
 
+	@Query("SELECT r FROM Item r WHERE LOWER(r.title) LIKE LOWER(?1) OR LOWER(r.description) LIKE LOWER(?1) OR LOWER(r.buyerUser.name) LIKE LOWER(?1) and r.buyerUser = ?2")
+	Page<Item> searchByTitleDescriptionAndUserBuyerUser(Pageable pageable, String seachtext, User user);
+
+	@Query("SELECT r FROM Item r WHERE r.buyerUser = ?1")
+	Page<Item> findAllBuyerUser(Pageable pageable, User user);
+
 	@Query("SELECT r FROM Item r WHERE LOWER(r.title) LIKE LOWER(?1) OR LOWER(r.description) LIKE LOWER(?1) OR LOWER(r.sellerUser.name) LIKE LOWER(?1) and r.sellerUser <> ?2")
 	Page<Item> searchByTitleDescriptionAndUserDistintUser(Pageable pageable, String seachtext, User user);
 

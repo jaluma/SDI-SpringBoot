@@ -72,7 +72,7 @@
 .card-home {
     width: 15%;
     margin: 15px;
-    min-width: 200px;
+    min-width: 250px;
 }
 
 .card-index {
@@ -90,6 +90,13 @@
     padding-left: 15px;
 }
 
+.jumbotron_flex {
+    min-width: 300px;
+    min-height: 210px;
+    max-height: 245px;
+    max-width: 420px;
+}
+
 body {
     overflow: auto;
     position: relative;
@@ -98,6 +105,11 @@ body {
 
 textarea {
     height: 150px;
+}
+
+.link {
+    color: #3f51b5 !important;
+    background-color: transparent;
 }
 
 /*

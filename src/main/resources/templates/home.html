@@ -6,13 +6,13 @@
 </head>
 <body>
 	<!--/*@thymesVar id="currentUser" type="com.uniovi.entities.User"*/-->
-	<div class="mx-auto" layout:fragment="content">
-		<div class="card block card-home" style="padding-left: 15px;">
+	<div class="mx-auto" layout:fragment="content" style="padding-left: 15px;">
+		<div class="card block card-home">
 			<div class="card-body text-center">
 				<img class="card-img-top rounded-circle z-depth-0" th:src="#{url.defaut.ico}" alt="Card image cap" src="">
 				<h2 class="card-title" th:text="#{welcome.message}"></h2>
 				<h3 th:text="${currentUser.getFullName()}"></h3>
-				<a th:href="${'/user/details/' + currentUser.getId()}" class="btn btn-primary" th:text="#{home.user.personal}"></a>
+				<a th:href="${'/user/details/' + currentUser.getId()}" class="btn btn-primary link" th:text="#{home.user.personal}"></a>
 			</div>
 		</div>
 		<div class="card block card-home" style="width: 80%; min-width: 400px;" sec:authorize="hasRole('ROLE_STANDARD')">

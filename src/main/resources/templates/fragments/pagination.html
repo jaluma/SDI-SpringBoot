@@ -4,7 +4,7 @@
       <li class="page-item">
           <a class="page-link indigo" th:href="@{'?page=0'}"><span aria-hidden="true">&#171;</span></a>
       </li>
-       <!-- Anterior (si la hay ) -->
+	   <!-- Anterior (si la hay ) -->
       <li class="page-item" th:if="${page.getNumber()-1 >= 0}">
           <a class="page-link indigo" th:href="@{'?page='+${page.getNumber()-1} }" th:text="${page.getNumber()}"></a>
       </li>
@@ -14,7 +14,7 @@
       <li class="page-item" th:if="${page.getNumber()+1 <= page.getTotalPages()-1}">
           <a class="page-link indigo" th:href="@{'?page='+${page.getNumber()+1} }" th:text="${page.getNumber()+2}"></a>
       </li>
-       <!-- Última -->
+	   <!-- Última -->
       <li class="page-item">
          <a class="page-link indigo" th:href="@{'?page='+${page.getTotalPages()-1}}"><span aria-hidden="true">&#187;</span></a>
       </li>

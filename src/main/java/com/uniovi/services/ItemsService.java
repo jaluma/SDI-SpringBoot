@@ -52,13 +52,21 @@ public class ItemsService {
 		itemsRepository.deleteById(id);
 	}
 
+	public Page<Item> searchItemsByTitleDescriptionAndUsernameByBuyerUser(Pageable pageable, String searchText, User user) {
+		searchText = "%" + searchText + "%";
+		return itemsRepository.searchByTitleDescriptionAndUserBuyerUser(pageable, searchText, user);
+	}
 
-	public Page<Item> searchItemsByTitleDescriptionAndUsername(Pageable pageable, String searchText, User user) {
+	public Page<Item> getItemsByBuyerUser(Pageable pageable, User user) {
+		return itemsRepository.findAllBuyerUser(pageable, user);
+	}
+
+	public Page<Item> searchItemsByTitleDescriptionAndUsernameBySellerUser(Pageable pageable, String searchText, User user) {
 		searchText = "%" + searchText + "%";
 		return itemsRepository.searchByTitleDescriptionAndUserDistintUser(pageable, searchText, user);
 	}
 
-	public Page<Item> getItems(Pageable pageable, User user) {
+	public Page<Item> getItemsBySellerUser(Pageable pageable, User user) {
 		return itemsRepository.findAllDistintUser(pageable, user);
 	}
 
@@ -67,7 +75,7 @@ public class ItemsService {
 		return itemsRepository.searchByTitleDescriptionAndUserByEmail(pageable, searchText, user);
 	}
 
-	public Page<Item> getItems(Pageable pageable) {
+	public Page<Item> getItemsBySellerUser(Pageable pageable) {
 		return itemsRepository.findAll(pageable);
 	}
 }

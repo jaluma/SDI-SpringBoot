@@ -14,8 +14,8 @@ public class PO_NavView extends PO_View {
 	 * CLicka una de las opciones principales (a href) y comprueba que se vaya a la vista
 	 * con el elemento de tipo type con el texto Destino
 	 *
-	 * @param driver:       apuntando al navegador abierto actualmente.
-	 * @param textOption:   Texto de la opción principal.
+	 * @param driver:     apuntando al navegador abierto actualmente.
+	 * @param textOption: Texto de la opción principal.
 	 */
 	public static void clickOption(WebDriver driver, String textOption) {
 		//CLickamos en la opción de registro y esperamos a que se cargue el enlace de Registro.
