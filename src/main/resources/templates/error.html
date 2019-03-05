@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title th:text="#{page.error}"></title>
+		<th:block th:replace="fragments/head.html :: head"/>
+	</head>
+	<body>
+		<div class="container">
+			<h1 class="alert alert-danger text-center">
+				<i class="material-icons">error</i>
+				<span th:text="${status + ' ' + error}"></span>
+			</h1>
+			
+			<p class="text-center align-middle">
+				<a class="btn btn-outline-danger btn-lg" href="/">
+					<i class="material-icons align-middle">home</i>
+                    <span class="align-middle" th:text="#{error.go_home}"></span>
+				</a>
+			</p>
+		</div>
+		<th:block th:replace="fragments/footer :: footer"/>
+	</body>
+</html>

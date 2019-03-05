@@ -22,16 +22,16 @@ public class User {
 	private String role;
 	private double money;
 
-	@OneToMany(mappedBy = "buyerUser", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "buyerUser", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Item> buyerItems = new HashSet<>();
 
-	@OneToMany(mappedBy = "sellerUser", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "sellerUser", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Item> sellerItems = new HashSet<>();
 
-	@OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Message> senderMessages = new HashSet<>();
 
-	@OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Message> receiverMessages = new HashSet<>();
 
 	public User(String email, String name, String lastName) {

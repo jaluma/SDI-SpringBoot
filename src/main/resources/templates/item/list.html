@@ -59,7 +59,7 @@
 					</tr>
 					</tbody>
 				</table>
-				
+				<footer th:replace="fragments/pagination"></footer>
 				<div th:if="${buy != null}" id="login-error" class="alert alert-danger" th:text="#{${buy}}"></div>
 				
 				<script th:inline="javascript">

@@ -13,14 +13,14 @@ public class Chat {
 	@GeneratedValue
 	private long id;
 
-	@OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OrderBy("time ASC")
 	private Set<Message> messages = new HashSet<>();
 
 	@ManyToOne
 	private Item item;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	private Set<User> users = new HashSet<>();
 
 	Chat() {
@@ -60,7 +60,7 @@ public class Chat {
 		return messages;
 	}
 
-	private ArrayList<User> getUsers() {
+	public ArrayList<User> getUsers() {
 		return new ArrayList<>(users);
 	}
 

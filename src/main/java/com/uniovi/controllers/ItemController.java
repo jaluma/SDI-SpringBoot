@@ -59,7 +59,6 @@ public class ItemController {
 		User user = Utilities.getCurrentUser(principal, usersService);
 
 		Association.Sell.link(user, item);
-		usersService.addUser(user);
 		itemsService.addItem(item);
 
 		return "redirect:/item/mylist";
@@ -68,9 +67,18 @@ public class ItemController {
 	@RequestMapping(value = "/item/buy/{id}")
 	public String buy(@PathVariable Long id, Principal principal, HttpSession session) {
 		Item item = itemsService.getItem(id);
+		if(item == null) {
+			throw new IllegalStateException("Illegal");
+		}
+
 		User buyerUser = Utilities.getCurrentUser(principal, usersService);
 
-		if(item.getSellerUser().equals(buyerUser) || item.getBuyerUser() != null || buyerUser.getMoney() < item.getPrice()) {
+		if(item.getSellerUser().equals(buyerUser) || item.getBuyerUser() != null) {
+			session.setAttribute("buy", "Error.buy.id");
+			return "redirect:/item/list";
+		}
+
+		if(buyerUser.getMoney() < item.getPrice()) {
 			session.setAttribute("buy", "Error.buy.insuficient");
 			return "redirect:/item/list";
 		}
@@ -93,6 +101,10 @@ public class ItemController {
 	@RequestMapping("/item/details/{id}")
 	public String details(@PathVariable Long id, Model model) {
 		Item item = itemsService.getItem(id);
+
+		if(item == null) {
+			throw new IllegalStateException("Illegal");
+		}
 
 		model.addAttribute("item", item);
 		return "item/details";

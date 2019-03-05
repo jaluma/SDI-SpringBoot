@@ -20,10 +20,7 @@ import java.security.Principal;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 @RequestMapping("/chat/")
@@ -44,8 +41,16 @@ public class ChatController {
 	@RequestMapping("conversation/{id}")
 	public String getConversation(Model model, @PathVariable Long id) {
 		Chat chat = chatsService.getChat(id);
+		if(chat == null) {
+			throw new IllegalStateException("Illegal");
+		}
+
 		User sender = Utilities.getCurrentUser(usersService);
 		User receiver = chat.getUser(sender);
+
+		if(!chat.getUsers().contains(sender)) {
+			throw new IllegalStateException("Illegal");
+		}
 
 		model.addAttribute("sender", sender);
 		model.addAttribute("chat", chat);
@@ -55,7 +60,7 @@ public class ChatController {
 		DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
 		model.addAttribute("formatter", formatter);
 
-		ArrayList<Message> messages = new ArrayList<>(chat.getMessages());
+		List<Message> messages = new ArrayList<>(chat.getMessages());
 		messages.sort(Comparator.comparing(Message::getTime));
 
 		model.addAttribute("messagesList", messages);

@@ -46,19 +46,20 @@
 						</tr>
 						</thead>
 						<tbody>
-						<tr class="tr-static-height clickable-row" th:data-href="${'/user/details/' + user.id}" style="cursor: pointer;"
+						<tr class="tr-static-height" style="cursor: pointer;"
 						    th:each="user : ${usersList}">
 							<td class="check-box-column">
 								<label>
 									<input type="checkbox" th:name="idChecked" th:value="${user.getId()}"/>
 								</label>
 							</td>
-							<td th:text="${user.email}"></td>
-							<td th:text="${user.name}"></td>
-							<td th:text="${user.lastName}"></td>
+							<td class="clickable-row" th:text="${user.email}" th:data-href="${'/user/details/' + user.id}"></td>
+							<td class="clickable-row" th:text="${user.name}" th:data-href="${'/user/details/' + user.id}"></td>
+							<td class="clickable-row" th:text="${user.lastName}" th:data-href="${'/user/details/' + user.id}"></td>
 						</tr>
 						</tbody>
 					</table>
+					<footer th:replace="fragments/pagination"></footer>
 					<script th:inline="javascript">
 					 /*<![CDATA[*/
                      var rows = $('#tableUsers tr').length - 1;

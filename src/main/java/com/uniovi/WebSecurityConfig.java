@@ -41,6 +41,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.hasAnyAuthority(rolesService.getRoles()[1])
 				.antMatchers("/item/**")
 				.hasAnyAuthority(rolesService.getRoles()[0])
+				.antMatchers("/chat/**")
+				.hasAnyAuthority(rolesService.getRoles()[0])
 				.anyRequest()
 				.authenticated()
 				.and()
