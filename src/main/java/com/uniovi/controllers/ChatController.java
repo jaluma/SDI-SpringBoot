@@ -1,10 +1,7 @@
 package com.uniovi.controllers;
 
 import com.uniovi.controllers.util.Utilities;
-import com.uniovi.entities.Association;
-import com.uniovi.entities.Chat;
-import com.uniovi.entities.Message;
-import com.uniovi.entities.User;
+import com.uniovi.entities.*;
 import com.uniovi.services.ChatsService;
 import com.uniovi.services.ItemsService;
 import com.uniovi.services.MessagesService;
@@ -25,6 +22,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/chat/")
@@ -86,6 +85,24 @@ public class ChatController {
 		model.addAttribute("chatsList", chats.getContent());
 
 		return "chat/list";
+	}
+
+	@RequestMapping(value = "create/{id}", method = RequestMethod.GET)
+	public String create(Model model, @PathVariable Long id) {
+		Item item = itemsService.getItem(id);
+
+		User sender = Utilities.getCurrentUser(usersService);
+
+		Chat chat = chatsService.findChatByUserAndItem(sender, item);
+		if(chat == null) {
+			Set<User> set = new HashSet<>();
+			set.add(sender);
+			set.add(item.getSellerUser());
+			chat = new Chat(item, set);
+		}
+		chatsService.addChat(chat);
+
+		return "redirect:/chat/conversation/" + chat.getId();
 	}
 }
 

@@ -7,10 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class InsertSampleDataService {
@@ -46,7 +43,11 @@ public class InsertSampleDataService {
 		usersService.addUser(user1);
 		usersService.addUser(user2);
 
-		Chat chat = new Chat(item1);
+		Set<User> set = new HashSet<>();
+		set.add(user1);
+		set.add(user2);
+
+		Chat chat = new Chat(item1, set);
 		chatsService.addChat(chat);
 
 		Message message1 = new Message("Hola", OffsetDateTime.now());

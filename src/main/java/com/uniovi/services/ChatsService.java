@@ -44,4 +44,9 @@ public class ChatsService {
 		Optional<Chat> chat = chatRepository.findById(id);
 		return chat.orElse(null);
 	}
+
+	public Chat findChatByUserAndItem(User sender, Item item) {
+		Optional<Chat> chat = chatRepository.findByUserAndItem(sender, item);
+		return chat.orElse(null);
+	}
 }

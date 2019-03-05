@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ChatRepository extends CrudRepository<Chat, Long> {
 
@@ -17,4 +18,7 @@ public interface ChatRepository extends CrudRepository<Chat, Long> {
 
 	@Query("SELECT c FROM Chat c join c.users u WHERE u = ?1")
 	Page<Chat> findAll(Pageable pageable, User currentUser);
+
+	@Query("SELECT c FROM Chat c join c.users u WHERE u = ?1 and c.item = ?2")
+	Optional<Chat> findByUserAndItem(User sender, Item item);
 }

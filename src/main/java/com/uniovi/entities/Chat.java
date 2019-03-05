@@ -26,8 +26,10 @@ public class Chat {
 	Chat() {
 	}
 
-	public Chat(Item item) {
+	public Chat(Item item, Set<User> users) {
 		this.item = item;
+		this.users = users;
+		Association.Chats.createChat(this, item, users);
 	}
 
 	public long getId() {
@@ -46,12 +48,12 @@ public class Chat {
 		this.item = item;
 	}
 
-	public void setMessages(Set<Message> messages) {
-		this.messages = messages;
-	}
-
 	public Set<Message> getMessages() {
 		return new HashSet<>(messages);
+	}
+
+	public void setMessages(Set<Message> messages) {
+		this.messages = messages;
 	}
 
 	Set<Message> _getMessages() {
@@ -62,14 +64,13 @@ public class Chat {
 		return new ArrayList<>(users);
 	}
 
-	public void setUsers(Set<User> users) {
+	void setUsers(Set<User> users) {
 		this.users = users;
 	}
 
 	Set<User> _getUsers() {
 		return users;
 	}
-
 
 	@Override
 	public boolean equals(Object o) {
