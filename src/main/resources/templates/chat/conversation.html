@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/layout}" lang="en">
+	<head>
+		<title th:text="#{chat.header}"></title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+        <script th:src="@{/script/chat.js}"></script>
+		<link rel="stylesheet" th:href="@{/css/chat.css}">
+	</head>
+	<body>
+		<div class="container" layout:fragment="content">
+	        <div id="chat" class="card">
+		        <ul id="messages">
+			        <li th:each="message : ${messagesList}" style="list-style: none;">
+				        <div class="message-data" th:classappend="${message.getSender().equals(sender)} ? 'my-message-data' : 'other-message-data'">
+					        <span class="message-data-name" th:text="${message.getSender().getFullName()}"> </span>
+					        <span class="message-data-time" th:text="${message.getTime().format(formatter)}"></span>
+					    </div>
+				     
+						<div class="text_wrapper message" th:classappend="${message.getSender().equals(sender)} ? 'my-message' : 'other-message'">
+							<div class="text" th:text="${message.message}"></div>
+						</div>
+					</li>
+		        </ul>
+		        <form class="form-horizontal" method="post" th:action="${'/chat/' + receiver.getId()}">
+		            <div class="input-group align-middle">
+		                <label for="messageInput"></label>
+			            <input class="ml-1" name="message" autocomplete="off" id="messageInput" th:placeholder="#{placeholder.chat}"/>
+			            <div class="input-group-append">
+		                    <button type="submit" class="btn" id="sendButton">
+			                    <i class="material-icons">send</i>
+		                    </button>
+			            </div>
+		            </div>
+		        </form>
+		    </div>
+        </div>
+	
+	</body>
+</html>

@@ -27,6 +27,12 @@ public class User {
 	@OneToMany(mappedBy = "sellerUser", cascade = CascadeType.ALL)
 	private Set<Item> sellerItems = new HashSet<>();
 
+	@OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+	private Set<Message> senderMessages = new HashSet<>();
+
+	@OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
+	private Set<Message> receiverMesages = new HashSet<>();
+
 	private double money;
 
 	public User(String email, String name, String lastName) {
