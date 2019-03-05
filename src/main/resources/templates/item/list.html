@@ -50,7 +50,11 @@
 						<td class="align-middle" th:text="${item.description}"></td>
 						<td class="align-middle" th:text="${item.price}"></td>
                         <td class="align-middle" th:if="${item.buyerUser == null}">
-	                        <a class="btn btn-secondary link" th:href="${'/item/buy/' + item.id}" th:text="#{item.buy}"></a></td>
+	                        <a class="btn btn-secondary link" th:href="${'/item/buy/' + item.id}" th:text="#{item.buy}"></a>
+                        </td>
+						<td class="align-middle" th:if="${item.buyerUser == null}">
+	                        <a class="btn btn-secondary link" th:href="${'/chat/conversation/' + item.id}" th:text="#{item.buy}"></a>
+                        </td>
 						<td class="align-middle" th:if="${item.buyerUser != null}">
 							<span class="btn btn-secondary link disabled" th:text="#{item.buyed}"></span>
 						</td>
@@ -60,7 +64,6 @@
 				
 				<div th:if="${buy != null}" id="login-error" class="alert alert-danger" th:text="#{${buy}}"></div>
 				
-				<footer th:replace="fragments/pagination"></footer>
 				<script th:inline="javascript">
 				 /*<![CDATA[*/
                  var rows = $('#tableItems tr').length - 1;

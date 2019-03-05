@@ -25,4 +25,38 @@ public class Association {
 			item.setSellerUser(null);
 		}
 	}
+
+	public static class Chats {
+		public static void createChat(Chat chat, Item item) {
+			chat.setItem(item);
+			item._getItemChats().add(chat);
+		}
+
+		public static void deleteChat(Chat chat, Item item) {
+			item._getItemChats().remove(chat);
+			chat.setItem(null);
+		}
+
+		public static void sendMessage(User sender, User receiver, Chat chat, Message message) {
+			message.setChat(chat);
+			message.setSender(sender);
+			message.setReceiver(receiver);
+			sender._getSenderMessages().add(message);
+			receiver._getReceiverMessages().add(message);
+			chat._getMessages().add(message);
+			chat._getUsers().add(sender);
+			chat._getUsers().add(receiver);
+		}
+
+		public static void removeMessage(User sender, User receiver, Chat chat, Message message) {
+			chat._getUsers().remove(sender);
+			chat._getUsers().remove(receiver);
+			chat._getMessages().remove(message);
+			sender._getSenderMessages().remove(message);
+			receiver._getReceiverMessages().remove(message);
+			message.setSender(null);
+			message.setReceiver(null);
+			message.setChat(null);
+		}
+	}
 }

@@ -8,14 +8,16 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Item {
 
 	@Id
 	@GeneratedValue
-	private Long id;
+	private long id;
 
 	private String title;
 	private String description;
@@ -36,6 +38,9 @@ public class Item {
 	//	@JoinColumn(name = "user_id")
 	private User buyerUser;
 
+	@OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+	private Set<Chat> itemChats = new HashSet<>();
+
 	public Item(String title, String description, Date date, double price) {
 		setTitle(title);
 		setDescription(description);
@@ -46,11 +51,11 @@ public class Item {
 	public Item() {
 	}
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -109,6 +114,18 @@ public class Item {
 	public void setDateFormat(String dateFormat) {
 		this.dateFormat = dateFormat;
 		this.date = asDate(LocalDate.parse(dateFormat, DateTimeFormatter.ISO_DATE));
+	}
+
+	Set<Chat> _getItemChats() {
+		return itemChats;
+	}
+
+	public Set<Chat> getItemChats() {
+		return new HashSet<>(itemChats);
+	}
+
+	public void setItemChats(Set<Chat> itemChats) {
+		this.itemChats = itemChats;
 	}
 
 	private Date asDate(LocalDate localDate) {

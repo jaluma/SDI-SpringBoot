@@ -1,12 +1,17 @@
 package com.uniovi.controllers;
 
 import com.uniovi.controllers.util.Utilities;
+import com.uniovi.entities.Association;
+import com.uniovi.entities.Chat;
 import com.uniovi.entities.Message;
 import com.uniovi.entities.User;
 import com.uniovi.services.ChatsService;
 import com.uniovi.services.ItemsService;
+import com.uniovi.services.MessagesService;
 import com.uniovi.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +23,8 @@ import java.security.Principal;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 @Controller
 @RequestMapping("/chat/")
@@ -25,43 +32,60 @@ public class ChatController {
 	private final ItemsService itemsService;
 	private final UsersService usersService;
 	private final ChatsService chatsService;
+	private final MessagesService messagesService;
 
 	@Autowired
-	public ChatController(ItemsService itemsService, UsersService usersService, ChatsService chatsService) {
+	public ChatController(ItemsService itemsService, UsersService usersService, ChatsService chatsService, MessagesService messagesService) {
 		this.itemsService = itemsService;
 		this.usersService = usersService;
 		this.chatsService = chatsService;
+		this.messagesService = messagesService;
 	}
 
 	@RequestMapping("conversation/{id}")
-	public String indexStandard(Model model, @PathVariable Long id) {
+	public String getConversation(Model model, @PathVariable Long id) {
+		Chat chat = chatsService.getChat(id);
 		User sender = Utilities.getCurrentUser(usersService);
-		User receiver = usersService.getUser(id);
+		User receiver = chat.getUser(sender);
+
 		model.addAttribute("sender", sender);
+		model.addAttribute("chat", chat);
 		model.addAttribute("receiver", receiver);
 
 		//format time
 		DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
 		model.addAttribute("formatter", formatter);
 
-		model.addAttribute("messagesList", chatsService.getMessages(sender, receiver));
+		ArrayList<Message> messages = new ArrayList<>(chat.getMessages());
+		messages.sort(Comparator.comparing(Message::getTime));
+
+		model.addAttribute("messagesList", messages);
 		return "chat/conversation";
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.POST)
-	public String postMessage(@RequestParam("message") String message, @PathVariable Long id, Principal principal) {
-		User sender = Utilities.getCurrentUser(principal, usersService);
-		User receiver = usersService.getUser(id);
+	public String postMessage(@RequestParam("message") String message, @PathVariable Long id) {
+		Chat chat = chatsService.getChat(id);
+		User sender = Utilities.getCurrentUser(usersService);
+		User receiver = chat.getUser(sender);
 
-		Message chatMessage = new Message();
-		chatMessage.setMessage(message.replace("message=", ""));
-		chatMessage.setTime(OffsetDateTime.now());
-		chatMessage.setSender(sender);
-		chatMessage.setReceiver(receiver);
-
-		chatsService.addMessage(chatMessage);
+		Message chatMessage = new Message(message, OffsetDateTime.now());
+		messagesService.addMessage(chatMessage);
+		Association.Chats.sendMessage(sender, receiver, chat, chatMessage);
+		chatsService.addChat(chat);
 
 		return "redirect:/chat/conversation/" + id;
+	}
+
+	@RequestMapping(value = "list", method = RequestMethod.GET)
+	public String getList(Model model, Pageable pageable, Principal principal) {
+		Page<Chat> chats = chatsService.getChats(pageable, Utilities.getCurrentUser(principal, usersService));
+		User sender = Utilities.getCurrentUser(usersService);
+		model.addAttribute("sender", sender);
+		model.addAttribute("page", chats);
+		model.addAttribute("chatsList", chats.getContent());
+
+		return "chat/list";
 	}
 }
 

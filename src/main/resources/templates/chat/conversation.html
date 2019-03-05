@@ -9,20 +9,21 @@
 	</head>
 	<body>
 		<div class="container" layout:fragment="content">
+			<h2 th:text="#{chat.conversacion(${receiver.getFullName()})}"></h2>
 	        <div id="chat" class="card">
 		        <ul id="messages">
 			        <li th:each="message : ${messagesList}" style="list-style: none;">
-				        <div class="message-data" th:classappend="${message.getSender().equals(sender)} ? 'my-message-data' : 'other-message-data'">
-					        <span class="message-data-name" th:text="${message.getSender().getFullName()}"> </span>
+				        <div class="message-data" th:classappend="${message.sender.equals(sender)} ? 'my-message-data' : 'other-message-data'">
+					        <span class="message-data-name" th:text="${message.sender.getFullName()}"> </span>
 					        <span class="message-data-time" th:text="${message.getTime().format(formatter)}"></span>
 					    </div>
 				     
-						<div class="text_wrapper message" th:classappend="${message.getSender().equals(sender)} ? 'my-message' : 'other-message'">
+						<div class="text_wrapper message" th:classappend="${message.sender.equals(sender)} ? 'my-message' : 'other-message'">
 							<div class="text" th:text="${message.message}"></div>
 						</div>
 					</li>
 		        </ul>
-		        <form class="form-horizontal" method="post" th:action="${'/chat/' + receiver.getId()}">
+		        <form class="form-horizontal" method="post" th:action="${'/chat/' + chat.getId()}">
 		            <div class="input-group align-middle">
 		                <label for="messageInput"></label>
 			            <input class="ml-1" name="message" autocomplete="off" id="messageInput" th:placeholder="#{placeholder.chat}"/>

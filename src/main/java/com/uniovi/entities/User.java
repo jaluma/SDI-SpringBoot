@@ -20,6 +20,7 @@ public class User {
 	private String passwordConfirm;
 
 	private String role;
+	private double money;
 
 	@OneToMany(mappedBy = "buyerUser", cascade = CascadeType.ALL)
 	private Set<Item> buyerItems = new HashSet<>();
@@ -31,9 +32,7 @@ public class User {
 	private Set<Message> senderMessages = new HashSet<>();
 
 	@OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
-	private Set<Message> receiverMesages = new HashSet<>();
-
-	private double money;
+	private Set<Message> receiverMessages = new HashSet<>();
 
 	public User(String email, String name, String lastName) {
 		super();
@@ -127,6 +126,22 @@ public class User {
 
 	public void setMoney(double money) {
 		this.money = money;
+	}
+
+	Set<Message> _getSenderMessages() {
+		return senderMessages;
+	}
+
+	Set<Message> _getReceiverMessages() {
+		return receiverMessages;
+	}
+
+	public void setBuyerItems(Set<Item> buyerItems) {
+		this.buyerItems = buyerItems;
+	}
+
+	public void setSellerItems(Set<Item> sellerItems) {
+		this.sellerItems = sellerItems;
 	}
 
 	@Override
