@@ -7,7 +7,7 @@ JDK 1.8
 ```
 
 ## Construido con
-* Java 1.9.1
+* Java 1.8.1
 * SpringBoot v2
 * JQuery, BootStrap
 * Material Design for Bootstrap
