@@ -5,9 +5,13 @@
 		<nav class="navbar navbar-expand-lg navbar-dark indigo" xmlns:th="http://www.thymeleaf.org"
 		     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 			<!-- Navbar brand -->
-			<a class="navbar-brand" href="/">
-				<img th:src="@{/img/logo.png}" width="30" height="30" class="d-inline-block align-top" alt="logo" src="">
-				<!--<span th:text="#{nav.title}"></span>-->
+			<a class="navbar-brand" href="/" sec:authorize="!isAuthenticated()">
+				<img th:src="@{/img/logo.png}" width="30" height="30" class="d-inline-block align-center" alt="logo" src="">
+				<span th:text="#{nav.title}"></span>
+			</a>
+			<a class="navbar-brand" href="/home" sec:authorize="isAuthenticated()">
+				<img th:src="@{/img/logo.png}" width="30" height="30" class="d-inline-block align-center" alt="logo" src="">
+				<span th:text="#{nav.title}"></span>
 			</a>
 			
 			<!-- Collapse button -->
@@ -21,9 +25,6 @@
 		
 				<!-- Links -->
 				<ul class="navbar-nav mr-auto">
-					<li class="nav-item active" sec:authorize="isAuthenticated()">
-						<a class="nav-link" id="homeMenu" href="/home" th:text="#{nav.home}"></a>
-					</li>
 					<li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
 						<a class="nav-link" id="adminListMenu" href="/admin/list" th:text="#{nav.users}"></a>
 					</li>
@@ -43,7 +44,7 @@
 						   aria-expanded="false">
 							<span th:text="#{nav.sales.other}"></span>
 						</a>
-						<div class="dropdown-menu dropdown-menu-right dropdown-info" id="sellsDropdownMenuButton"
+						<div class="dropdown-menu dropdown-menu-left dropdown-info" id="sellsDropdownMenuButton"
 						     aria-labelledby="mySellsDropdownMenuLink">
 							<a class="dropdown-item" href="/user/bought" th:text="#{nav.sells.bought}"></a>
 							<a class="dropdown-item" href="/item/list" th:text="#{nav.sells.list}"></a>

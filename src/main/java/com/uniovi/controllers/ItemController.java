@@ -57,6 +57,10 @@ public class ItemController {
 		}
 
 		User user = Utilities.getCurrentUser(principal, usersService);
+		// restamos 20€ si el item esta destacado
+		if(item.isHighlighter()) {
+			user.setMoney(user.getMoney() - 20);
+		}
 
 		Association.Sell.link(user, item);
 		itemsService.addItem(item);
@@ -108,6 +112,30 @@ public class ItemController {
 
 		model.addAttribute("item", item);
 		return "item/details";
+	}
+
+	@RequestMapping("/item/highlighter/{id}")
+	public String highlighter(@PathVariable Long id, Model model, Principal principal) {
+		Item item = itemsService.getItem(id);
+		User user = Utilities.getCurrentUser(principal, usersService);
+
+		if(item == null || user == null) {
+			throw new IllegalStateException("Illegal");
+		}
+
+		if(!item.getSellerUser().equals(user)) {
+			throw new IllegalStateException("Illegal");
+		}
+
+		if(user.getMoney() < 20) {
+			throw new IllegalStateException("Illegal");
+		}
+
+		user.setMoney(user.getMoney() - 20);
+		item.setHighlighter(true);
+		itemsService.addItem(item);
+
+		return "redirect:/item/mylist";
 	}
 
 	@RequestMapping("/item/list")

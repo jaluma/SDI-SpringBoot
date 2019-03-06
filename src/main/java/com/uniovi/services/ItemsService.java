@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -77,5 +78,14 @@ public class ItemsService {
 
 	public Page<Item> getItemsBySellerUser(Pageable pageable) {
 		return itemsRepository.findAll(pageable);
+	}
+
+	public List<Item> getHighlighterItems(User user) {
+		return itemsRepository.findHighlighterItems(user);
+	}
+
+	public void setHighlighter(Item item) {
+		item.setHighlighter(true);
+		addItem(item);
 	}
 }

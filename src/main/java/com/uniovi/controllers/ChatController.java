@@ -109,5 +109,19 @@ public class ChatController {
 
 		return "redirect:/chat/conversation/" + chat.getId();
 	}
+
+
+	@RequestMapping(value = "delete/{id}", method = RequestMethod.GET)
+	public String remove(@PathVariable Long id) {
+		Chat chat = chatsService.getChat(id);
+		if(chat == null) {
+			throw new IllegalStateException("Illegal");
+		}
+
+		messagesService.deleteMessages(chat.getMessages());
+
+		chatsService.deleteChat(chat);
+		return "redirect:/chat/list";
+	}
 }
 

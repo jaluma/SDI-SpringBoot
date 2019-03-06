@@ -29,16 +29,15 @@ public class Item {
 	private Date date;
 
 	private double price;
+	private boolean highlighter = false;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	//	@JoinColumn(name = "user_id")
 	private User sellerUser;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	//	@JoinColumn(name = "user_id")
 	private User buyerUser;
 
-	@OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "item", fetch = FetchType.EAGER)
 	private Set<Chat> itemChats = new HashSet<>();
 
 	public Item(String title, String description, Date date, double price) {
@@ -114,6 +113,14 @@ public class Item {
 	public void setDateFormat(String dateFormat) {
 		this.dateFormat = dateFormat;
 		this.date = asDate(LocalDate.parse(dateFormat, DateTimeFormatter.ISO_DATE));
+	}
+
+	public boolean isHighlighter() {
+		return highlighter;
+	}
+
+	public void setHighlighter(boolean highlighter) {
+		this.highlighter = highlighter;
 	}
 
 	Set<Chat> _getItemChats() {

@@ -25,7 +25,17 @@
 				<div class="form-group">
 					<label class="bmd-label-floating" for="price" th:text="#{item.price}"></label>
 					<input type="number" id="price" class="form-control" name="price" required/>
-					<span id="price-error" class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
+				<span id="price-error" class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
+				</div>
+				<div class="form-group">
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<div class="input-group-text" style="padding-right: 10px;">
+							    <input type="checkbox" id="highlighter" class="form-control" style="width: auto;" name="highlighter" checked/>
+							</div>
+						</div>
+						<span th:text="#{item.highlighter.body}"></span>
+					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">

@@ -13,14 +13,14 @@ public class Chat {
 	@GeneratedValue
 	private long id;
 
-	@OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "chat", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	@OrderBy("time ASC")
 	private Set<Message> messages = new HashSet<>();
 
 	@ManyToOne
 	private Item item;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany
 	private Set<User> users = new HashSet<>();
 
 	Chat() {

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class MessagesService {
@@ -24,5 +25,11 @@ public class MessagesService {
 
 	public List<Message> getMessages(Chat chat) {
 		return messageRepository.getMessagesByChat(chat);
+	}
+
+	public void deleteMessages(Set<Message> list) {
+		for(Message message : list) {
+			messageRepository.deleteById(message.getId());
+		}
 	}
 }

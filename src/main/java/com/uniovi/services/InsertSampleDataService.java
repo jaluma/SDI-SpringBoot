@@ -15,13 +15,15 @@ public class InsertSampleDataService {
 	private final RolesService rolesService;
 	private final ChatsService chatsService;
 	private final MessagesService messagesService;
+	private final ItemsService itemsService;
 
 	@Autowired
-	public InsertSampleDataService(UsersService usersService, RolesService rolesService, ChatsService chatsService, MessagesService messagesService) {
+	public InsertSampleDataService(UsersService usersService, RolesService rolesService, ChatsService chatsService, MessagesService messagesService, ItemsService itemsService) {
 		this.usersService = usersService;
 		this.rolesService = rolesService;
 		this.chatsService = chatsService;
 		this.messagesService = messagesService;
+		this.itemsService = itemsService;
 	}
 
 	@PostConstruct
@@ -35,6 +37,9 @@ public class InsertSampleDataService {
 		Item item1 = new Item("Cadena de musica", "Reproductor de musica", new Date(), 150);
 		Item item2 = new Item("Gorra", "De FA.", new Date(), 0.5);
 		Item item3 = new Item("Silla", "Silla de estudio", new Date(), 35.99);
+
+		item1.setHighlighter(true);
+		item2.setHighlighter(true);
 
 		Association.Sell.link(user2, item1);
 		Association.Sell.link(user2, item2);
@@ -51,12 +56,12 @@ public class InsertSampleDataService {
 		chatsService.addChat(chat);
 
 		Message message1 = new Message("Hola", OffsetDateTime.now());
-		messagesService.addMessage(message1);
 		Association.Chats.sendMessage(user1, user2, chat, message1);
+		messagesService.addMessage(message1);
 
 		Message message2 = new Message("Buenas tardes :)", OffsetDateTime.now());
-		messagesService.addMessage(message2);
 		Association.Chats.sendMessage(user2, user1, chat, message2);
+		messagesService.addMessage(message2);
 
 		chatsService.addChat(chat);
 

@@ -97,6 +97,10 @@
     max-width: 420px;
 }
 
+.clickable-row {
+    cursor: pointer;
+}
+
 body {
     overflow: auto;
     position: relative;

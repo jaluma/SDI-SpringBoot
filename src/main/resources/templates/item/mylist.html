@@ -44,23 +44,59 @@
 					</tr>
 					</thead>
 					<tbody>
-					<tr class="tr-static-height clickable-row" th:data-href="${'/item/details/' + item.id}" style="cursor: pointer;"
-					    th:each="item : ${itemsList}">
-						<td th:text="${item.title}"></td>
-						<td th:text="${item.description}"></td>
-						<td th:text="${item.price}"></td>
+					<tr class="tr-static-height" th:each="item : ${itemsList}">
+						<td class="clickable-row" th:data-href="${'/item/details/' + item.id}" th:text="${item.title}"></td>
+						<td class="clickable-row" th:data-href="${'/item/details/' + item.id}" th:text="${item.description}"></td>
+						<td class="clickable-row" th:data-href="${'/item/details/' + item.id}" th:text="${item.price}"></td>
 						<td><a class="link" th:href="${'/item/delete/' + item.id}"><i class="material-icons">delete</i></a></td>
+						<td>
+							<a th:if="${item.highlighter != true}" class="hightlighter link" th:id="${'/item/highlighter/' + item.id}"
+							   data-toggle="modal" data-target="#modal" style="cursor: pointer">
+								<i class="material-icons">offline_bolt</i>
+							</a>
+							<a th:if="${item.highlighter == true}" class="hightlighter-disabled disabled">
+								<i class="material-icons">offline_bolt</i>
+							</a>
+						</td>
 					</tr>
 					</tbody>
 				</table>
 				<footer th:replace="fragments/pagination"></footer>
 				<script th:inline="javascript">
 				 /*<![CDATA[*/
+                 $('.hightlighter').click(function () {
+                     var id = $(this).attr('id');
+                     $("#modalHighlighter").attr("action", id);
+                 });
+
                  var rows = $("#tableItems tr").length - 1;
                  var value = 460 - (rows * 46);
                  document.getElementById('tableItems').style.marginBottom = value + ".px";
                  /*]]>*/
 				</script>
+				
+				<!-- Modal -->
+				<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel" th:text="#{modal.highlighter.title}"></h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<span th:text="#{modal.highlighter.body}"></span>
+							</div>
+							<div class="modal-footer">
+								<form id="modalHighlighter" class="form-horizontal" method="post" action="/">
+									<button type="submit" class="btn btn-primary link" th:text="#{modal.highlighter.button}"></button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				
 			</div>
 		</div>
 	</body>

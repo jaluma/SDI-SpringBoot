@@ -44,12 +44,11 @@
 					</tr>
 					</thead>
 					<tbody>
-					<tr class="tr-static-height clickable-row" th:data-href="${'/item/details/' + item.id}" style="cursor: pointer;"
-					    th:each="item : ${itemsList}" th:object="${item}">
-						<td class="align-middle" th:text="${item.title}"></td>
-						<td class="align-middle" th:text="${item.description}"></td>
-						<td class="align-middle" th:text="${item.price}"></td>
-                        <td class="align-middle" th:if="${item.buyerUser == null}">
+					<tr class="tr-static-height" th:each="item : ${itemsList}" th:object="${item}">
+						<td class="align-middle clickable-row" th:data-href="${'/item/details/' + item.id}" th:text="${item.title}"></td>
+						<td class="align-middle clickable-row" th:data-href="${'/item/details/' + item.id}" th:text="${item.description}"></td>
+						<td class="align-middle clickable-row" th:data-href="${'/item/details/' + item.id}" th:text="${item.price}"></td>
+                        <td class="align-middle clickable-row" th:data-href="${'/item/details/' + item.id}" th:if="${item.buyerUser == null}">
 	                        <a class="btn btn-secondary link" th:href="${'/item/buy/' + item.id}" th:text="#{item.buy}"></a>
 	                        <a class="btn btn-secondary link" th:href="${'/chat/create/' + item.id}" th:text="#{chat.contact}"></a>
                         </td>

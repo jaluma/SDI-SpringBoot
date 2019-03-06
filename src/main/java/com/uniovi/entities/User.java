@@ -28,10 +28,10 @@ public class User {
 	@OneToMany(mappedBy = "sellerUser", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Item> sellerItems = new HashSet<>();
 
-	@OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "sender", fetch = FetchType.EAGER)
 	private Set<Message> senderMessages = new HashSet<>();
 
-	@OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "receiver", fetch = FetchType.EAGER)
 	private Set<Message> receiverMessages = new HashSet<>();
 
 	public User(String email, String name, String lastName) {
@@ -116,8 +116,16 @@ public class User {
 		return new HashSet<>(sellerItems);
 	}
 
+	public void setSellerItems(Set<Item> sellerItems) {
+		this.sellerItems = sellerItems;
+	}
+
 	public Set<Item> getBuyerItems() {
 		return new HashSet<>(buyerItems);
+	}
+
+	public void setBuyerItems(Set<Item> buyerItems) {
+		this.buyerItems = buyerItems;
 	}
 
 	public double getMoney() {
@@ -134,14 +142,6 @@ public class User {
 
 	Set<Message> _getReceiverMessages() {
 		return receiverMessages;
-	}
-
-	public void setBuyerItems(Set<Item> buyerItems) {
-		this.buyerItems = buyerItems;
-	}
-
-	public void setSellerItems(Set<Item> sellerItems) {
-		this.sellerItems = sellerItems;
 	}
 
 	@Override
