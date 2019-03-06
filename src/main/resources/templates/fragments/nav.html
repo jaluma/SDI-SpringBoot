@@ -45,9 +45,9 @@
 							<span th:text="#{nav.sales.other}"></span>
 						</a>
 						<div class="dropdown-menu dropdown-menu-left dropdown-info" id="sellsDropdownMenuButton"
-						     aria-labelledby="mySellsDropdownMenuLink">
-							<a class="dropdown-item" href="/user/bought" th:text="#{nav.sells.bought}"></a>
-							<a class="dropdown-item" href="/item/list" th:text="#{nav.sells.list}"></a>
+						     aria-labelledby="sellsDropdownMenuLink">
+							<a id="buy" class="dropdown-item" href="/user/bought" th:text="#{nav.sells.bought}"></a>
+							<a id="list" class="dropdown-item" href="/item/list" th:text="#{nav.sells.list}"></a>
 						</div>
 					</li>
 					<li class="nav-item">
@@ -85,8 +85,8 @@
 							<a sec:authorize="!isAuthenticated()" class="dropdown-item login" href="/login" th:text="#{nav.login}"></a>
 							<!--/*@thymesVar id="currentUser" type="com.uniovi.entities.User"*/-->
 							<a sec:authorize="isAuthenticated()" class="dropdown-item login" th:href="${'/user/details/' + currentUser.getId()}">
-								<p th:text="#{nav.user.name(${currentUser.getEmail()})}"></p>
-								<p th:text="#{nav.user.money(${currentUser.getMoney()})}"></p>
+								<p id="email" th:text="#{nav.user.name(${currentUser.getEmail()})}"></p>
+								<p id="money" th:text="#{nav.user.money(${currentUser.getMoney()})}"></p>
 							</a>
 							<a sec:authorize="isAuthenticated()" class="dropdown-item logout" href="/logout" th:text="#{user.signout}"></a>
 						</div>

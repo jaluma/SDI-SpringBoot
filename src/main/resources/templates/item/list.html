@@ -10,7 +10,7 @@
 			<div class="bmd-form-group bmd-collapse-inline pull-xs-right">
 				<label for="searchText"></label>
 				<input class="form-control" type="text" id="searchText" th:placeholder="#{placeholder.search}" th:value="${searchText}"/>
-				<button class="btn bmd-btn-icon" id="search">
+				<button class="btn bmd-btn-icon" id="searchButton">
 					<i class="material-icons">search</i>
 				</button>
 				<button class="btn bmd-btn-icon" id="clearButton">
@@ -20,7 +20,7 @@
 			
 			<script th:inline="javascript">
 				 /*<![CDATA[*/
-                 $("#search").click(function () {
+                 $("#searchButton").click(function () {
                      var searchParams = new URLSearchParams(window.location.search);
                      var value = $("#searchText").val();
                      searchParams.set("searchText", value);
@@ -49,8 +49,8 @@
 						<td class="align-middle clickable-row" th:data-href="${'/item/details/' + item.id}" th:text="${item.description}"></td>
 						<td class="align-middle clickable-row" th:data-href="${'/item/details/' + item.id}" th:text="${item.price}"></td>
                         <td class="align-middle clickable-row" th:data-href="${'/item/details/' + item.id}" th:if="${item.buyerUser == null}">
-	                        <a class="btn btn-secondary link" th:href="${'/item/buy/' + item.id}" th:text="#{item.buy}"></a>
-	                        <a class="btn btn-secondary link" th:href="${'/chat/create/' + item.id}" th:text="#{chat.contact}"></a>
+	                        <a id="buyButton" class="btn btn-secondary link" th:href="${'/item/buy/' + item.id}" th:text="#{item.buy}"></a>
+	                        <a id="chatButton" class="btn btn-secondary link" th:href="${'/chat/create/' + item.id}" th:text="#{chat.contact}"></a>
                         </td>
 						<td class="align-middle" th:if="${item.buyerUser != null}">
 							<span class="btn btn-secondary link disabled" th:text="#{item.buyed}"></span>
@@ -59,7 +59,7 @@
 					</tbody>
 				</table>
 				<footer th:replace="fragments/pagination"></footer>
-				<div th:if="${buy != null}" id="login-error" class="alert alert-danger" th:text="#{${buy}}"></div>
+				<div th:if="${buy != null}" id="money-error" class="alert alert-danger" th:text="#{${buy}}"></div>
 				
 				<script th:inline="javascript">
 				 /*<![CDATA[*/

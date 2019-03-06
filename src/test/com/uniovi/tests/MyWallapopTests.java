@@ -312,21 +312,88 @@ public class MyWallapopTests {
 
 	//PR21. Hacer una búsqueda con el campo vacío y comprobar que se muestra la página que
 	//corresponde con el listado de las ofertas existentes en el sistema
+	@Test
+	public void PR21() {
+		String email = "javier@gmail.com";
+		String password = "123456";
+		PO_NavView.login(driver);
+		PO_LoginView.fillForm(driver, email, password);
+		PO_HomeView.checkWelcome(driver, PO_Properties.getSPANISH());
+		PO_NavView.navbar(driver, "sellsDropdownMenuLink", "list");
+		assertEquals(5, PO_ItemView.checkNumberList(driver));
+		PO_ItemView.searchText(driver, "");
+		assertEquals(5, PO_ItemView.checkNumberList(driver));
+	}
 
 	//PR22. Hacer una búsqueda escribiendo en el campo un texto que no exista y comprobar que se
 	//muestra la página que corresponde, con la lista de ofertas vacía
+	@Test
+	public void PR22() {
+		String email = "javier@gmail.com";
+		String password = "123456";
+		PO_NavView.login(driver);
+		PO_LoginView.fillForm(driver, email, password);
+		PO_HomeView.checkWelcome(driver, PO_Properties.getSPANISH());
+		PO_NavView.navbar(driver, "sellsDropdownMenuLink", "list");
+		assertEquals(5, PO_ItemView.checkNumberList(driver));
+		PO_ItemView.searchText(driver, "aasdasdassdaa");
+		assertEquals(0, PO_ItemView.checkNumberList(driver));
+	}
 
 	//PR23. Sobre una búsqueda determinada (a elección de desarrollador), comprar una oferta que deja
 	//un saldo positivo en el contador del comprobador. Y comprobar que el contador se actualiza
 	//correctamente en la vista del comprador.
+	@Test
+	public void PR23() {
+		String email = "javier@gmail.com";
+		String password = "123456";
+		PO_NavView.login(driver);
+		PO_LoginView.fillForm(driver, email, password);
+		PO_HomeView.checkWelcome(driver, PO_Properties.getSPANISH());
+		PO_NavView.navbar(driver, "sellsDropdownMenuLink", "list");
+		assertEquals(5, PO_ItemView.checkNumberList(driver));
+		String money = PO_NavView.money(driver);
+		PO_ItemView.searchText(driver, "User 1");
+		assertEquals(5, PO_ItemView.checkNumberList(driver));
+		PO_ItemView.buyItem(driver, 1, Double.parseDouble(money));
+	}
 
 	//PR24. Sobre una búsqueda determinada (a elección de desarrollador), comprar una oferta que deja
 	//un saldo 0 en el contador del comprobador. Y comprobar que el contador se actualiza correctamente en
 	//la vista del comprador.
+	@Test
+	public void PR24() {
+		String email = "juan@gmail.com";
+		String password = "123456";
+		PO_NavView.login(driver);
+		PO_LoginView.fillForm(driver, email, password);
+		PO_HomeView.checkWelcome(driver, PO_Properties.getSPANISH());
+		PO_NavView.navbar(driver, "sellsDropdownMenuLink", "list");
+		assertEquals(5, PO_ItemView.checkNumberList(driver));
+		String money = PO_NavView.money(driver);
+		PO_ItemView.searchText(driver, "Cadena de musica");
+		assertEquals(1, PO_ItemView.checkNumberList(driver));
+		PO_ItemView.buyItem(driver, 1, Double.parseDouble(money));
+	}
 
 	//PR25. Sobre una búsqueda determinada (a elección de desarrollador), intentar comprar una oferta
 	//que esté por encima de saldo disponible del comprador. Y comprobar que se muestra el mensaje de
 	//saldo no suficiente
+	@Test
+	public void PR25() {
+		String email = "juan@gmail.com";
+		String password = "123456";
+		PO_NavView.login(driver);
+		PO_LoginView.fillForm(driver, email, password);
+		PO_HomeView.checkWelcome(driver, PO_Properties.getSPANISH());
+		PO_NavView.navbar(driver, "sellsDropdownMenuLink", "list");
+		assertEquals(5, PO_ItemView.checkNumberList(driver));
+		String money = PO_NavView.money(driver);
+		PO_ItemView.searchText(driver, "Silla");
+		assertEquals(1, PO_ItemView.checkNumberList(driver));
+		PO_ItemView.buyItem(driver, 1, Double.parseDouble(money));
+		PO_ItemView.moneyError(driver);
+	}
 
 	//PR26. Ir a la opción de ofertas compradas del usuario y mostrar la lista. Comprobar que aparecen
 	//las ofertas que deben aparecer.

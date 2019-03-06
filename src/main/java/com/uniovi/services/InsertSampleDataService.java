@@ -34,9 +34,9 @@ public class InsertSampleDataService {
 		user1.setMoney(100);
 		User user2 = createUser("javier@gmail.com", "Javier", "Martinez");
 
-		Item item1 = new Item("Cadena de musica", "Reproductor de musica", new Date(), 150);
+		Item item1 = new Item("Cadena de musica", "Reproductor de musica", new Date(), 100);
 		Item item2 = new Item("Gorra", "De FA.", new Date(), 0.5);
-		Item item3 = new Item("Silla", "Silla de estudio", new Date(), 35.99);
+		Item item3 = new Item("Silla", "Silla de estudio", new Date(), 100.01);
 
 		item1.setHighlighter(true);
 		item2.setHighlighter(true);
@@ -73,7 +73,7 @@ public class InsertSampleDataService {
 
 		for(int i = 0; i < users.size(); i++) {
 			for(int j = 0; j < 5; j++) {
-				Item item = new Item("Producto " + (j + 1) + " de User " + (i + 1), "Descripcion de Producto " + (i + 1), new Date(), Math.random() * 100);
+				Item item = new Item("Producto " + (j + 1) + " de User " + (i + 1), "Descripcion de Producto " + (j + 1), new Date(), Math.random() * 100);
 				Association.Sell.link(users.get(i), item);
 			}
 			usersService.addUser(users.get(i));

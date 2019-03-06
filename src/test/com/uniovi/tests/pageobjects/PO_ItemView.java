@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+
 public class PO_ItemView extends PO_NavView {
 
 	static public void addFillForm(WebDriver driver, String titlep, String descriptionp, String pricep, boolean highlighterp) {
@@ -33,11 +35,45 @@ public class PO_ItemView extends PO_NavView {
 	}
 
 	static public int checkNumberList(WebDriver driver) {
-		return SeleniumUtils.EsperaCargaPagina(driver, "class", "tr-static-height", getTimeout()).size();
+		List<WebElement> list = driver.findElements(By.xpath("//table/tbody/tr"));
+		return list.size();
 	}
 
 	static public void remove(WebDriver driver, int index) {
 		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver, "id", "delete", getTimeout());
 		elementos.get(index).click();
 	}
+
+	static public void searchText(WebDriver driver, String searchText) {
+		WebElement search = driver.findElement(By.id("searchText"));
+		search.click();
+		search.clear();
+		search.sendKeys(searchText);
+		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver, "id", "searchButton", getTimeout());
+		elementos.get(0).click();
+	}
+
+	private static String buy(WebDriver driver, int index) {
+		By enlace = By.xpath("//table/tbody/tr[" + index + "]/td[3]");
+		String money = driver.findElement(enlace).getText();
+		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver, "id", "buyButton", getTimeout());
+		elementos.get(index - 1).click();
+		return money;
+	}
+
+	public static void buyItem(WebDriver driver, int index, double money) {
+		double moneyCost = Double.parseDouble(buy(driver, index).replace(",", "."));
+		double moneyActual = Double.parseDouble(PO_NavView.money(driver).replace(",", "."));
+		if(money - moneyCost >= 0) {
+			assertEquals(money - moneyCost, moneyActual, 0.1);
+		}
+
+	}
+
+	public static void moneyError(WebDriver driver) {
+		List<WebElement> search = driver.findElements(By.id("money-error"));
+		assertEquals(1, search.size());
+	}
+
+
 }

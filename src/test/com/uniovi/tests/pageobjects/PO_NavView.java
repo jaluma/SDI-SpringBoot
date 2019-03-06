@@ -1,6 +1,7 @@
 package com.uniovi.tests.pageobjects;
 
 import com.uniovi.tests.util.SeleniumUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -88,4 +89,12 @@ public class PO_NavView extends PO_View {
 		elementos.get(0).click();
 	}
 
+	public static String money(WebDriver driver) {
+		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver, "id", "accountDropdown", getTimeout());
+		elementos.get(0).click();
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "dropdownMenuAccount", getTimeout());
+
+		WebElement money = driver.findElement(By.id("money"));
+		return money.getText().replace("€", "");
+	}
 }
