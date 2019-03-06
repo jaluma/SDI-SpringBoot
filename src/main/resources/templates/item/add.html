@@ -31,7 +31,8 @@
 					<div class="input-group mb-3">
 						<div class="input-group-prepend">
 							<div class="input-group-text" style="padding-right: 10px;">
-							    <input type="checkbox" id="highlighter" class="form-control" style="width: auto;" name="highlighter" checked/>
+							    <label for="highlighter"></label>
+								<input type="checkbox" id="highlighter" class="form-control" style="width: auto;" name="highlighter" checked/>
 							</div>
 						</div>
 						<span th:text="#{item.highlighter.body}"></span>
@@ -39,7 +40,7 @@
 				</div>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-outline-success waves-effects" th:text="#{util.send}"></button>
+						<button id="addButton" type="submit" class="btn btn-outline-success waves-effects" th:text="#{util.send}"></button>
 					</div>
 				</div>
 			</form>

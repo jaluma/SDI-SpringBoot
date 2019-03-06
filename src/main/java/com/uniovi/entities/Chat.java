@@ -20,7 +20,7 @@ public class Chat {
 	@ManyToOne
 	private Item item;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	private Set<User> users = new HashSet<>();
 
 	Chat() {

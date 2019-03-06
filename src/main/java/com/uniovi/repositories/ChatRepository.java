@@ -21,4 +21,7 @@ public interface ChatRepository extends CrudRepository<Chat, Long> {
 
 	@Query("SELECT c FROM Chat c join c.users u WHERE u = ?1 and c.item = ?2")
 	Optional<Chat> findByUserAndItem(User sender, Item item);
+
+	@Query("SELECT c FROM Chat c WHERE c.item = ?1")
+	List<Chat> findAll(Item item);
 }

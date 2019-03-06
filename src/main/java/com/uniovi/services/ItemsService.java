@@ -1,5 +1,6 @@
 package com.uniovi.services;
 
+import com.uniovi.entities.Association;
 import com.uniovi.entities.Item;
 import com.uniovi.entities.User;
 import com.uniovi.repositories.ItemsRepository;
@@ -49,8 +50,9 @@ public class ItemsService {
 		itemsRepository.save(item);
 	}
 
-	public void deleteItem(Long id) {
-		itemsRepository.deleteById(id);
+	public void deleteItem(Item item) {
+		Association.Sell.unlink(item);
+		itemsRepository.deleteById(item.getId());
 	}
 
 	public Page<Item> searchItemsByTitleDescriptionAndUsernameByBuyerUser(Pageable pageable, String searchText, User user) {

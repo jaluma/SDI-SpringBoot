@@ -37,7 +37,7 @@ public class PO_AdminListView extends PO_NavView {
 	}
 
 	private static void selectUsers(WebDriver driver, int index) {
-		By enlace = By.xpath("//tr[" + index + "]/td[1]/input");
+		By enlace = By.xpath("//tr[" + index + "]/td[1]/label/input");
 		driver.findElement(enlace).click();
 	}
 

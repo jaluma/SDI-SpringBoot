@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller
 public class HomeController {
 	private final ItemsService itemsService;
@@ -41,9 +43,11 @@ public class HomeController {
 		User user = usersService.getUserByEmail(email);
 
 		Page<Item> items = itemsService.getItemsByUser(pageable, user);
+		List<Item> highlighterItems = itemsService.getHighlighterItems(user);
 
 		model.addAttribute("page", items);
 		model.addAttribute("itemsList", items.getContent());
+		model.addAttribute("highlighterItems", highlighterItems);
 
 		return "home";
 	}

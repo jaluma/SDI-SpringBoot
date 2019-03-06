@@ -2,8 +2,10 @@ package com.uniovi.controllers;
 
 import com.uniovi.controllers.util.Utilities;
 import com.uniovi.entities.Association;
+import com.uniovi.entities.Chat;
 import com.uniovi.entities.Item;
 import com.uniovi.entities.User;
+import com.uniovi.services.ChatsService;
 import com.uniovi.services.ItemsService;
 import com.uniovi.services.UsersService;
 import com.uniovi.validators.BuyItemValidator;
@@ -25,6 +27,7 @@ import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class ItemController {
@@ -32,13 +35,15 @@ public class ItemController {
 	private final BuyItemValidator buyItemValidator;
 	private final ItemsService itemsService;
 	private final ItemValidator itemValidator;
+	private final ChatsService chatsService;
 
 	@Autowired
-	public ItemController(BuyItemValidator buyItemValidator, ItemsService itemsService, UsersService usersService, ItemValidator buyedItemValidator) {
+	public ItemController(BuyItemValidator buyItemValidator, ItemsService itemsService, UsersService usersService, ItemValidator buyedItemValidator, ChatsService chatsService) {
 		this.buyItemValidator = buyItemValidator;
 		this.itemsService = itemsService;
 		this.usersService = usersService;
 		this.itemValidator = buyedItemValidator;
+		this.chatsService = chatsService;
 	}
 
 	@RequestMapping(value = "/item/add", method = RequestMethod.GET)
@@ -97,8 +102,19 @@ public class ItemController {
 	}
 
 	@RequestMapping("/item/delete/{id}")
-	public String delete(@PathVariable Long id) {
-		itemsService.deleteItem(id);
+	public String delete(@PathVariable Long id, Pageable pageable) {
+		Item item = itemsService.getItem(id);
+
+		if(item == null) {
+			throw new IllegalStateException("Illegal");
+		}
+		// conseguir los chats y borrarlos
+		List<Chat> chats = chatsService.getChats(item);
+		for(Chat chat : chats) {
+			chatsService.deleteChat(chat);
+		}
+
+		itemsService.deleteItem(item);
 		return "redirect:/item/mylist";
 	}
 

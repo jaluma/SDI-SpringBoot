@@ -1,5 +1,6 @@
 package com.uniovi.services;
 
+import com.uniovi.entities.Association;
 import com.uniovi.entities.Chat;
 import com.uniovi.entities.Item;
 import com.uniovi.entities.User;
@@ -25,10 +26,13 @@ public class ChatsService {
 		chatRepository.save(chat);
 	}
 
+	public List<Chat> getChats(Item item) {
+		return chatRepository.findAll(item);
+	}
+
 	public Page<Chat> getChats(Pageable pageable, User user) {
 		return chatRepository.findAll(pageable, user);
 	}
-
 
 	public List<Chat> getChat(User user, Item item) {
 		return chatRepository.getChat(user, item);
@@ -45,6 +49,8 @@ public class ChatsService {
 	}
 
 	public void deleteChat(Chat chat) {
+		Association.Chats.removeMessages(chat.getUsers().get(0), chat.getUsers().get(1), chat);
+		Association.Chats.removeChat(chat);
 		chatRepository.delete(chat);
 	}
 }

@@ -38,9 +38,9 @@
 				<table id="tableItems" class="table table-hover">
 					<thead>
 					<tr>
-						<th th:text="#{item.title}">Titulo</th>
-						<th th:text="#{item.description}">Titulo</th>
-						<th th:text="#{item.price}">Titulo</th>
+						<th th:text="#{item.title}"></th>
+						<th th:text="#{item.description}"></th>
+						<th th:text="#{item.price}"></th>
 					</tr>
 					</thead>
 					<tbody>
@@ -48,7 +48,7 @@
 						<td class="clickable-row" th:data-href="${'/item/details/' + item.id}" th:text="${item.title}"></td>
 						<td class="clickable-row" th:data-href="${'/item/details/' + item.id}" th:text="${item.description}"></td>
 						<td class="clickable-row" th:data-href="${'/item/details/' + item.id}" th:text="${item.price}"></td>
-						<td><a class="link" th:href="${'/item/delete/' + item.id}"><i class="material-icons">delete</i></a></td>
+						<td><a id="delete" class="link" th:href="${'/item/delete/' + item.id}"><i class="material-icons">delete</i></a></td>
 						<td>
 							<a th:if="${item.highlighter != true}" class="hightlighter link" th:id="${'/item/highlighter/' + item.id}"
 							   data-toggle="modal" data-target="#modal" style="cursor: pointer">

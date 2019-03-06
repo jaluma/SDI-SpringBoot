@@ -32,7 +32,7 @@ public class InsertSampleDataService {
 		user1.setPassword("admin");
 		user1.setRole(rolesService.getRoles()[1]);
 		user1.setMoney(100);
-		User user2 = createUser("javiermartinezalvarez98@gmail.com", "Javier", "Martinez");
+		User user2 = createUser("javier@gmail.com", "Javier", "Martinez");
 
 		Item item1 = new Item("Cadena de musica", "Reproductor de musica", new Date(), 150);
 		Item item2 = new Item("Gorra", "De FA.", new Date(), 0.5);

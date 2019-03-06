@@ -35,8 +35,8 @@
 						</a>
 						<div class="dropdown-menu dropdown-menu-right dropdown-info" id="mySellsDropdownMenuButton"
 						     aria-labelledby="mySellsDropdownMenuLink">
-							<a class="dropdown-item" href="/item/add" th:text="#{nav.sells.add}"></a>
-							<a class="dropdown-item" href="/item/mylist" th:text="#{nav.sells.myList}"></a>
+							<a id="add" class="dropdown-item" href="/item/add" th:text="#{nav.sells.add}"></a>
+							<a id="myList" class="dropdown-item" href="/item/mylist" th:text="#{nav.sells.myList}"></a>
 						</div>
 					</li>
 					<li class="nav-item dropdown" sec:authorize="hasRole('ROLE_STANDARD')">

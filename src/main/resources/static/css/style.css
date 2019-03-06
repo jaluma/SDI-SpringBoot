@@ -101,6 +101,12 @@
     cursor: pointer;
 }
 
+.card-title-pro {
+    text-align: center;
+    margin-top: 15px;
+    font-weight: inherit;
+}
+
 body {
     overflow: auto;
     position: relative;
