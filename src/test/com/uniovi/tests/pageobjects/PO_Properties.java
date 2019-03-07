@@ -24,8 +24,6 @@ public class PO_Properties {
 	String getString(String prop, int locale) {
 		ResourceBundle bundle = ResourceBundle.getBundle(Path, idioms[locale]);
 		String value = bundle.getString(prop);
-		String result;
-		result = new String(value.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-		return value;
+		return new String(value.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 	}
 }

@@ -108,8 +108,8 @@ public class ItemsService {
 
 	public void buy(User buyerUser, Item item) {
 		Association.Buy.link(buyerUser, item);
-
 		buyerUser.setMoney(buyerUser.getMoney() - item.getPrice());
+
 		add(item);
 	}
 }

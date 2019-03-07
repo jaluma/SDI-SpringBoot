@@ -12,7 +12,7 @@
 			<h2 th:text="#{chat.conversacion(${receiver.getFullName()})}"></h2>
 	        <div id="chat" class="card">
 		        <ul id="messages">
-			        <li th:each="message : ${messagesList}" style="list-style: none;">
+			        <li id="message" th:each="message : ${messagesList}" style="list-style: none;">
 				        <div class="message-data" th:classappend="${message.sender.equals(sender)} ? 'my-message-data' : 'other-message-data'">
 					        <span class="message-data-name" th:text="${message.sender.getFullName()}"> </span>
 					        <span class="message-data-time" th:text="${message.getTime().format(formatter)}"></span>
@@ -34,6 +34,12 @@
 			            </div>
 		            </div>
 		        </form>
+		        <script th:inline="javascript">
+				 /*<![CDATA[*/
+                 var objDiv = document.getElementById("chat");
+                 objDiv.scrollTop = objDiv.scrollHeight;
+                 /*]]>*/
+			 </script>
 		    </div>
         </div>
 	

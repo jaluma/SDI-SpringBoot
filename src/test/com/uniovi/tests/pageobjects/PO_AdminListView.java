@@ -22,15 +22,6 @@ public class PO_AdminListView extends PO_NavView {
 		checkElement(driver, "id", "tableUsers");
 	}
 
-	static public int checkNumberList(WebDriver driver) {
-		return SeleniumUtils.EsperaCargaPagina(driver, "class", "tr-static-height", getTimeout()).size();
-	}
-
-	static public void changePage(WebDriver driver, int page) {
-		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver, "class", "page-item", getTimeout());
-		elementos.get(page).click();
-	}
-
 	static public void deleteElements(WebDriver driver, int index) {
 		selectUsers(driver, index);
 		delete(driver, "id");

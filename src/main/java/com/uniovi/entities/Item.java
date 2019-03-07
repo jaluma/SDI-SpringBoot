@@ -86,7 +86,7 @@ public class Item {
 		return price;
 	}
 
-	private void setPrice(double price) {
+	public void setPrice(double price) {
 		this.price = Precision.round(price, 2);
 	}
 

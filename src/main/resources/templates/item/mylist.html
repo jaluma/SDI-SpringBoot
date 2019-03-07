@@ -58,12 +58,15 @@
 							<a th:if="${item.highlighter == true && item.getBuyerUser() == null}" class="hightlighter-disabled disabled">
 								<i class="material-icons">offline_bolt</i>
 							</a>
-							<span th:if="${item.getBuyerUser() != null}" class="btn btn-secondary link disabled" th:text="#{item.buyed}"></span>
+							<span th:if="${item.getBuyerUser() != null}" class="btn btn-secondary link disabled" style="padding: 0"
+							      th:text="#{item.buyed}"></span>
 						</td>
 					</tr>
 					</tbody>
 				</table>
 				<footer th:replace="fragments/pagination"></footer>
+				<div th:if="${highlighter != null}" id="money-error" class="alert alert-danger" th:text="#{error.highlighter}"></div>
+				
 				<script th:inline="javascript">
 				 /*<![CDATA[*/
                  $('.hightlighter').click(function () {
@@ -92,7 +95,8 @@
 							</div>
 							<div class="modal-footer">
 								<form id="modalHighlighter" class="form-horizontal" method="post" action="/">
-									<button type="submit" class="btn btn-primary link" th:text="#{modal.highlighter.button}"></button>
+									<button id="confirmButton" type="submit" class="btn btn-primary link"
+									        th:text="#{modal.highlighter.button}"></button>
 								</form>
 							</div>
 						</div>

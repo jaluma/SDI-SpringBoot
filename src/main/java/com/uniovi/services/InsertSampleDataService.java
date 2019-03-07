@@ -5,7 +5,6 @@ import com.uniovi.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.time.OffsetDateTime;
 import java.util.*;
 
@@ -26,10 +25,10 @@ public class InsertSampleDataService {
 		this.itemsService = itemsService;
 	}
 
-	@PostConstruct
+	//@PostConstruct
 	public void init() {
 		// admin
-		User admin = createUser("admin@email.com", "Admin", "Admin", "admin", rolesService.getRoles()[1]);
+		User admin = createUser("admin@email.com", "Admin", "Admin", "admin", rolesService.getRoles()[1], 100);
 
 		// user 1
 		User user1 = createUser("javier@email.com", "Javier", "Martinez");
@@ -41,7 +40,7 @@ public class InsertSampleDataService {
 		User user2 = createUser("juan@email.com", "Juán", "Mayo");
 		List<Item> items2 = generateItems(user2);
 		// user 3
-		User user3 = createUser("benjamin@email.com", "Benjamin", "Cuellas");
+		User user3 = createUser("benjamin@email.com", "Benjamin", "Cuellas", rolesService.getRoles()[0], 19.99);
 		List<Item> items3 = generateItems(user3);
 		// user 4
 		User user4 = createUser("pedro@email.com", "Pedro", "Manrrique");
@@ -133,20 +132,21 @@ public class InsertSampleDataService {
 		messagesService.addMessage(message2);
 	}
 
-	private User createUser(String email, String name, String lastname, String password, String role) {
+	private User createUser(String email, String name, String lastname, String password, String role, double money) {
 		User user = new User(email, name, lastname);
 		user.setPassword(password);
-		user.setMoney(100);
+		user.setMoney(money);
 		user.setRole(role);
-		usersService.addUser(user);
+		usersService.add(user);
 		return user;
 	}
 
-	private User createUser(String email, String name, String lastname, String role) {
-		return createUser(email, name, lastname, "123456", role);
+	private User createUser(String email, String name, String lastname, String role, double money) {
+		return createUser(email, name, lastname, "123456", role, money);
 	}
 
+
 	private User createUser(String email, String name, String lastname) {
-		return createUser(email, name, lastname, rolesService.getRoles()[0]);
+		return createUser(email, name, lastname, rolesService.getRoles()[0], 100);
 	}
 }

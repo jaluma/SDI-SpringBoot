@@ -34,11 +34,6 @@ public class PO_ItemView extends PO_NavView {
 		driver.findElement(boton).click();
 	}
 
-	static public int checkNumberList(WebDriver driver) {
-		List<WebElement> list = driver.findElements(By.xpath("//table/tbody/tr"));
-		return list.size();
-	}
-
 	static public void remove(WebDriver driver, int index) {
 		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver, "id", "delete", getTimeout());
 		elementos.get(index).click();
@@ -67,7 +62,6 @@ public class PO_ItemView extends PO_NavView {
 		if(money - moneyCost >= 0) {
 			assertEquals(money - moneyCost, moneyActual, 0.1);
 		}
-
 	}
 
 	public static void moneyError(WebDriver driver) {
@@ -75,5 +69,15 @@ public class PO_ItemView extends PO_NavView {
 		assertEquals(1, search.size());
 	}
 
+	public static void chatButton(WebDriver driver, int index) {
+		List<WebElement> search = driver.findElements(By.id("chatButton"));
+		search.get(index).click();
+	}
 
+	public static void clickHighlighter(WebDriver driver, int index) {
+		List<WebElement> search = driver.findElements(By.className("hightlighter"));
+		search.get(index).click();
+		List<WebElement> confirm = driver.findElements(By.id("confirmButton"));
+		confirm.get(0).click();
+	}
 }

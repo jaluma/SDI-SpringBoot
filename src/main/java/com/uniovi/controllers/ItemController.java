@@ -86,7 +86,6 @@ public class ItemController {
 		}
 
 		itemsService.buy(buyerUser, item);
-		usersService.addUser(buyerUser);
 
 		return "redirect:/item/list";
 	}
@@ -121,7 +120,7 @@ public class ItemController {
 	}
 
 	@RequestMapping("/item/highlighter/{id}")
-	public String highlighter(@PathVariable Long id, Model model, Principal principal) {
+	public String highlighter(@PathVariable Long id, Model model, Principal principal, HttpSession session) {
 		Item item = itemsService.getItem(id);
 		User user = Utilities.getCurrentUser(principal, usersService);
 
@@ -134,7 +133,8 @@ public class ItemController {
 		}
 
 		if(user.getMoney() < 20) {
-			throw new IllegalStateException("Illegal");
+			session.setAttribute("highlighter", "Error.buy.insuficient");
+			return "redirect:/item/mylist";
 		}
 
 		itemsService.highlighter(item, user);
@@ -166,8 +166,12 @@ public class ItemController {
 	}
 
 	@RequestMapping("/item/mylist")
-	public String getMyList(Model model, @PageableDefault(size = 5) Pageable pageable, @RequestParam(required = false) String searchText, Principal principal) {
+	public String getMyList(Model model, @PageableDefault(size = 5) Pageable pageable, @RequestParam(required = false) String searchText, Principal principal, HttpSession session) {
 		User user = Utilities.getCurrentUser(principal, usersService);
+		if(session.getAttribute("highlighter") != null) {
+			model.addAttribute("highlighter", session.getAttribute("highlighter"));
+			session.removeAttribute("highlighter");
+		}
 
 		Page<Item> items;
 		if(searchText != null && !searchText.isEmpty()) {

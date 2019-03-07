@@ -18,7 +18,7 @@ public class PO_NavView extends PO_View {
 	 * @param driver:     apuntando al navegador abierto actualmente.
 	 * @param textOption: Texto de la opción principal.
 	 */
-	static void clickOption(WebDriver driver, String textOption) {
+	public static void clickOption(WebDriver driver, String textOption) {
 		//CLickamos en la opción de registro y esperamos a que se cargue el enlace de Registro.
 		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver, "@href", textOption, getTimeout());
 		//Tiene que haber un sólo elemento.
@@ -34,12 +34,11 @@ public class PO_NavView extends PO_View {
 	 * @param textLanguage: el texto que aparece en el enlace de idioma ("English" o
 	 *                      "Spanish")
 	 */
-	static void changeIdiom(WebDriver driver, String textLanguage) {
+	public static void changeIdiom(WebDriver driver, String textLanguage) {
+
 		//clickamos la opción Idioma.
-		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver, "id", "btnLanguage", getTimeout());
+		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver, "id", "languajeDropdownMenuLink", getTimeout());
 		elementos.get(0).click();
-		//Esperamos a que aparezca el menú de opciones.
-		SeleniumUtils.EsperaCargaPagina(driver, "id", "languageDropdownMenuButton", getTimeout());
 		//SeleniumUtils.esperarSegundos(driver, 2);
 		//CLickamos la opción Inglés partiendo de la opción Español
 		elementos = SeleniumUtils.EsperaCargaPagina(driver, "id", textLanguage, getTimeout());
@@ -95,6 +94,6 @@ public class PO_NavView extends PO_View {
 		SeleniumUtils.EsperaCargaPagina(driver, "id", "dropdownMenuAccount", getTimeout());
 
 		WebElement money = driver.findElement(By.id("money"));
-		return money.getText().replace("€", "");
+		return money.getText().replace(" €", "").replace(",", ".");
 	}
 }

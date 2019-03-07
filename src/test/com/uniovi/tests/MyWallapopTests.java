@@ -31,7 +31,9 @@ public class MyWallapopTests {
 	//static String Geckdriver024 = "/Users/delacal/selenium/geckodriver024mac";
 	//Común a Windows y a MACOSX
 	private static WebDriver driver = getDriver(PathFirefox65, Geckdriver024);
-	private static final String URL = "http://localhost:8090";
+	static String URLlocal = "http://localhost:8090";
+	static String URLremota = "http://ec2-35-180-117-233.eu-west-3.compute.amazonaws.com:8090";
+	private static final String URL = URLremota;
 
 	@Autowired
 	private InsertSampleDataService insertSampleDataService;
@@ -67,11 +69,8 @@ public class MyWallapopTests {
 
 	private void initdb() {
 		messageRepository.deleteAll();
-
 		chatRepository.deleteAll();
-
 		itemsRepository.deleteAll();
-
 		usersRepository.deleteAll();
 
 		insertSampleDataService.init();
@@ -132,11 +131,7 @@ public class MyWallapopTests {
 	//PR06.  Inicio de sesión con datos válidos (usuario estándar).
 	@Test
 	public void PR06() {
-		String email = "javier@email.com";
-		String password = "123456";
-		PO_NavView.login(driver);
-		PO_LoginView.fillForm(driver, email, password);
-		PO_HomeView.checkWelcome(driver, PO_Properties.getSPANISH());
+		goHome("javier@email.com");
 	}
 
 	//PR07.  Inicio de sesión con datos inválidos (usuario estándar, campo email y contraseña vacíos).
@@ -173,11 +168,7 @@ public class MyWallapopTests {
 	//de sesión (Login).
 	@Test
 	public void PR10() {
-		String email = "javier@email.com";
-		String password = "123456";
-		PO_NavView.login(driver);
-		PO_LoginView.fillForm(driver, email, password);
-		PO_HomeView.checkWelcome(driver, PO_Properties.getSPANISH());
+		goHome("javier@email.com");
 		PO_NavView.logout(driver);
 		PO_RegisterView.checkElement(driver, "id", "login-button");
 	}
@@ -207,7 +198,7 @@ public class MyWallapopTests {
 		PO_AdminListView.changePage(driver, 2);
 		assertEquals(10, PO_AdminListView.checkNumberList(driver));
 		PO_AdminListView.changePage(driver, 1);
-		PO_AdminListView.deleteElements(driver, 3);//borramos el 1 debido a que el primero es el admin
+		PO_AdminListView.deleteElements(driver, 6);//borramos el 6 para que no de errores los siguientes tests
 		assertEquals(10, PO_AdminListView.checkNumberList(driver));
 		PO_AdminListView.changePage(driver, 2);
 		assertEquals(9, PO_AdminListView.checkNumberList(driver));
@@ -243,11 +234,7 @@ public class MyWallapopTests {
 	//Comprobar que la oferta sale en el listado de ofertas de dicho usuario.
 	@Test
 	public void PR16() {
-		String email = "javier@email.com";
-		String password = "123456";
-		PO_NavView.login(driver);
-		PO_LoginView.fillForm(driver, email, password);
-		PO_HomeView.checkWelcome(driver, PO_Properties.getSPANISH());
+		goHome("javier@email.com");
 		PO_NavView.navbar(driver, "mySellsDropdownMenuLink", "add");
 		PO_ItemView.addFillForm(driver, "Prueba 1", "Descripcion 1", "10", false);
 		PO_ItemView.checkElement(driver, "id", "tableItems");
@@ -257,11 +244,7 @@ public class MyWallapopTests {
 	//el botón Submit. Comprobar que se muestra el mensaje de campo obligatorio.
 	@Test
 	public void PR17() {
-		String email = "javier@email.com";
-		String password = "123456";
-		PO_NavView.login(driver);
-		PO_LoginView.fillForm(driver, email, password);
-		PO_HomeView.checkWelcome(driver, PO_Properties.getSPANISH());
+		goHome("javier@email.com");
 		PO_NavView.navbar(driver, "mySellsDropdownMenuLink", "add");
 		PO_ItemView.addFillForm(driver, "", "Descripcion 1", "10", false);
 		PO_ItemView.checkElement(driver, "class", "is-focused");
@@ -271,11 +254,7 @@ public class MyWallapopTests {
 	//existen para este usuario.
 	@Test
 	public void PR18() {
-		String email = "javier@email.com";
-		String password = "123456";
-		PO_NavView.login(driver);
-		PO_LoginView.fillForm(driver, email, password);
-		PO_HomeView.checkWelcome(driver, PO_Properties.getSPANISH());
+		goHome("javier@email.com");
 		PO_NavView.navbar(driver, "mySellsDropdownMenuLink", "myList");
 		assertEquals(3, PO_ItemView.checkNumberList(driver));
 	}
@@ -284,11 +263,7 @@ public class MyWallapopTests {
 	//que la oferta desaparece.
 	@Test
 	public void PR19() {
-		String email = "javier@email.com";
-		String password = "123456";
-		PO_NavView.login(driver);
-		PO_LoginView.fillForm(driver, email, password);
-		PO_HomeView.checkWelcome(driver, PO_Properties.getSPANISH());
+		goHome("javier@email.com");
 		PO_NavView.navbar(driver, "mySellsDropdownMenuLink", "myList");
 		assertEquals(3, PO_ItemView.checkNumberList(driver));
 		PO_ItemView.remove(driver, 0);
@@ -299,11 +274,7 @@ public class MyWallapopTests {
 	//que la oferta desaparece.
 	@Test
 	public void PR20() {
-		String email = "javier@email.com";
-		String password = "123456";
-		PO_NavView.login(driver);
-		PO_LoginView.fillForm(driver, email, password);
-		PO_HomeView.checkWelcome(driver, PO_Properties.getSPANISH());
+		goHome("javier@email.com");
 		PO_NavView.navbar(driver, "mySellsDropdownMenuLink", "myList");
 		assertEquals(3, PO_ItemView.checkNumberList(driver));
 		PO_ItemView.remove(driver, 2);
@@ -314,11 +285,7 @@ public class MyWallapopTests {
 	//corresponde con el listado de las ofertas existentes en el sistema
 	@Test
 	public void PR21() {
-		String email = "javier@email.com";
-		String password = "123456";
-		PO_NavView.login(driver);
-		PO_LoginView.fillForm(driver, email, password);
-		PO_HomeView.checkWelcome(driver, PO_Properties.getSPANISH());
+		goHome("javier@email.com");
 		PO_NavView.navbar(driver, "sellsDropdownMenuLink", "list");
 		assertEquals(5, PO_ItemView.checkNumberList(driver));
 		PO_ItemView.searchText(driver, "");
@@ -329,11 +296,7 @@ public class MyWallapopTests {
 	//muestra la página que corresponde, con la lista de ofertas vacía
 	@Test
 	public void PR22() {
-		String email = "javier@email.com";
-		String password = "123456";
-		PO_NavView.login(driver);
-		PO_LoginView.fillForm(driver, email, password);
-		PO_HomeView.checkWelcome(driver, PO_Properties.getSPANISH());
+		goHome("javier@email.com");
 		PO_NavView.navbar(driver, "sellsDropdownMenuLink", "list");
 		assertEquals(5, PO_ItemView.checkNumberList(driver));
 		PO_ItemView.searchText(driver, "aasdasdassdaa");
@@ -345,11 +308,7 @@ public class MyWallapopTests {
 	//correctamente en la vista del comprador.
 	@Test
 	public void PR23() {
-		String email = "javier@email.com";
-		String password = "123456";
-		PO_NavView.login(driver);
-		PO_LoginView.fillForm(driver, email, password);
-		PO_HomeView.checkWelcome(driver, PO_Properties.getSPANISH());
+		goHome("juan@email.com");
 		PO_NavView.navbar(driver, "sellsDropdownMenuLink", "list");
 		assertEquals(5, PO_ItemView.checkNumberList(driver));
 		String money = PO_NavView.money(driver);
@@ -363,11 +322,7 @@ public class MyWallapopTests {
 	//la vista del comprador.
 	@Test
 	public void PR24() {
-		String email = "juan@email.com";
-		String password = "123456";
-		PO_NavView.login(driver);
-		PO_LoginView.fillForm(driver, email, password);
-		PO_HomeView.checkWelcome(driver, PO_Properties.getSPANISH());
+		goHome("juan@email.com");
 		PO_NavView.navbar(driver, "sellsDropdownMenuLink", "list");
 		assertEquals(5, PO_ItemView.checkNumberList(driver));
 		String money = PO_NavView.money(driver);
@@ -381,11 +336,7 @@ public class MyWallapopTests {
 	//saldo no suficiente
 	@Test
 	public void PR25() {
-		String email = "juan@email.com";
-		String password = "123456";
-		PO_NavView.login(driver);
-		PO_LoginView.fillForm(driver, email, password);
-		PO_HomeView.checkWelcome(driver, PO_Properties.getSPANISH());
+		goHome("juan@email.com");
 		PO_NavView.navbar(driver, "sellsDropdownMenuLink", "list");
 		assertEquals(5, PO_ItemView.checkNumberList(driver));
 		String money = PO_NavView.money(driver);
@@ -399,11 +350,7 @@ public class MyWallapopTests {
 	//las ofertas que deben aparecer.
 	@Test
 	public void PR26() {
-		String email = "javier@email.com";
-		String password = "123456";
-		PO_NavView.login(driver);
-		PO_LoginView.fillForm(driver, email, password);
-		PO_HomeView.checkWelcome(driver, PO_Properties.getSPANISH());
+		goHome("javier@email.com");
 		PO_NavView.navbar(driver, "sellsDropdownMenuLink", "buy");
 		assertEquals(2, PO_ItemView.checkNumberList(driver));
 	}
@@ -411,41 +358,175 @@ public class MyWallapopTests {
 	//PR27. Visualizar al menos cuatro páginas en Español/Inglés/Español (comprobando que algunas
 	//de las etiquetas cambian al idioma correspondiente). Página principal/Opciones Principales de
 	//Usuario/Listado de Usuarios de Admin/Vista de alta de Oferta.
+	@Test
+	public void PR27() {
+		PO_HomeView.checkKey(driver, "index.signup", PO_Properties.getSPANISH());
+		PO_NavView.changeIdiom(driver, "btnEnglish");
+		PO_HomeView.checkKey(driver, "index.signup", PO_Properties.getENGLISH());
+		goHome("juan@email.com", PO_Properties.getENGLISH());
+		PO_HomeView.checkKey(driver, "home.highlighter", PO_Properties.getENGLISH());
+		PO_NavView.changeIdiom(driver, "btnSpanish");
+		PO_HomeView.checkKey(driver, "home.highlighter", PO_Properties.getSPANISH());
+		driver.get(URL + "/item/add");
+		PO_HomeView.checkKey(driver, "item.header.add", PO_Properties.getSPANISH());
+		PO_NavView.changeIdiom(driver, "btnEnglish");
+		PO_HomeView.checkKey(driver, "item.header.add", PO_Properties.getENGLISH());
+		PO_NavView.logout(driver);
+		String email = "admin@email.com";
+		String password = "admin";
+		PO_NavView.login(driver);
+		PO_LoginView.fillForm(driver, email, password);
+		driver.get(URL + "/admin/list");
+		PO_HomeView.checkKey(driver, "user.list.header", PO_Properties.getSPANISH());
+		PO_NavView.changeIdiom(driver, "btnEnglish");
+		PO_HomeView.checkKey(driver, "user.list.header", PO_Properties.getENGLISH());
+	}
 
 	//PR28. Intentar acceder sin estar autenticado a la opción de listado de usuarios del administrador. Se
 	//deberá volver al formulario de login.
+	@Test
+	public void PR28() {
+		driver.get(URL + "/admin/list");
+		PO_LoginView.checkLoginPage(driver);
+	}
 
 	//PR29. Intentar acceder sin estar autenticado a la opción de listado de ofertas propias de un usuario
 	//estándar. Se deberá volver al formulario de login.
+	@Test
+	public void PR29() {
+		driver.get(URL + "/user/mylist");
+		PO_LoginView.checkLoginPage(driver);
+	}
 
 	//PR30. Estando autenticado como usuario estándar intentar acceder a la opción de listado de
 	//usuarios del administrador. Se deberá indicar un mensaje de acción prohibida.
+	@Test
+	public void PR30() {
+		goHome("javier@email.com");
+		driver.get(URL + "/admin/list");
+		PO_ErrorView.checkError(driver, "403 Forbidden");
+	}
 
 	//PR31. Sobre una búsqueda determinada de ofertas (a elección de desarrollador), enviar un mensaje
 	//a una oferta concreta. Se abriría dicha conversación por primera vez. Comprobar que el mensaje aparece
 	//en el listado de mensajes.
+	@Test
+	public void PR31() {
+		goHome("juan@email.com");
+		PO_NavView.navbar(driver, "sellsDropdownMenuLink", "list");
+		assertEquals(5, PO_ItemView.checkNumberList(driver));
+		PO_ItemView.searchText(driver, "Cadena de musica");
+		assertEquals(1, PO_ItemView.checkNumberList(driver));
+		PO_ItemView.chatButton(driver, 0);
+		assertEquals(0, PO_ChatView.getNumberMessages(driver));
+		PO_ChatView.sendMessage(driver, "Hola buen amigo!");
+		assertEquals(1, PO_ChatView.getNumberMessages(driver));
+	}
 
 	//PR32. Sobre el listado de conversaciones enviar un mensaje a una conversación ya abierta.
 	//Comprobar que el mensaje aparece en la lista de mensajes.
+	@Test
+	public void PR32() {
+		goHome("juan@email.com");
+		PO_NavView.clickOption(driver, "/chat/list");
+		PO_ChatView.selectChatList(driver, 0);
+		int oldNumber = PO_ChatView.getNumberMessages(driver);
+		PO_ChatView.sendMessage(driver, "Hola buen amigo!");
+		assertEquals(oldNumber + 1, PO_ChatView.getNumberMessages(driver));
+	}
 
 	//PR33. Mostrar el listado de conversaciones ya abiertas. Comprobar que el listado contiene las
 	//conversaciones que deben ser
+	@Test
+	public void PR33() {
+		goHome("juan@email.com");
+		PO_NavView.clickOption(driver, "/chat/list");
+		assertEquals(10, PO_ChatView.checkNumberList(driver));
+		PO_ChatView.changePage(driver, 2);
+		assertEquals(10, PO_ChatView.checkNumberList(driver));
+	}
 
 	//PR34. Sobre el listado de conversaciones ya abiertas. Pinchar el enlace Eliminar de la primera y
 	//comprobar que el listado se actualiza correctamente.
+	@Test
+	public void PR34() {
+		goHome("juan@email.com");
+		PO_NavView.clickOption(driver, "/chat/list");
+		PO_ChatView.deleteCharList(driver, 0);
+		assertEquals(10, PO_ChatView.checkNumberList(driver));
+		PO_ChatView.changePage(driver, 2);
+		assertEquals(9, PO_ChatView.checkNumberList(driver));
+	}
 
 	//PR35. Sobre el listado de conversaciones ya abiertas. Pinchar el enlace Eliminar de la última y
 	//comprobar que el listado se actualiza correctamente.
+	@Test
+	public void PR35() {
+		goHome("juan@email.com");
+		PO_NavView.clickOption(driver, "/chat/list");
+		assertEquals(10, PO_ChatView.checkNumberList(driver));
+		PO_ChatView.changePage(driver, 2);
+		assertEquals(10, PO_ChatView.checkNumberList(driver));
+		PO_ChatView.deleteCharList(driver, 9);
+		assertEquals(10, PO_ChatView.checkNumberList(driver));
+		PO_ChatView.changePage(driver, 2);
+		assertEquals(9, PO_ChatView.checkNumberList(driver));
+	}
 
 	//PR36. Al crear una oferta marcar dicha oferta como destacada y a continuación comprobar: i) que
 	//aparece en el listado de ofertas destacadas para los usuarios y que el saldo del usuario se actualiza
 	//adecuadamente en la vista del ofertante (-20).
+	@Test
+	public void PR36() {
+		goHome("juan@email.com");
+		String money = PO_NavView.money(driver);
+		PO_NavView.navbar(driver, "mySellsDropdownMenuLink", "add");
+		PO_ItemView.addFillForm(driver, "Prueba 1", "Descripcion 1", "10", true);
+		String newMoney = PO_NavView.money(driver);
+		assertEquals(Double.parseDouble(money) - 20, Double.parseDouble(newMoney), 0.1);
+		driver.get(URL + "/home");
+		PO_NavView.logout(driver);
+		goHome("javier@email.com");
+		PO_HomeView.checkElement(driver, "text", "Prueba 1");
+	}
 
-	//PR37. Sobre el listado de ofertas de un usuario con menos de 20 euros de saldo, pinchar en el
+	//PR37. Sobre el listado de ofertas de un usuario con más de 20 euros de saldo, pinchar en el
 	//enlace Destacada y a continuación comprobar: i) que aparece en el listado de ofertas destacadas para los
 	//usuarios y que el saldo del usuario se actualiza adecuadamente en la vista del ofertante (-20).
+	@Test
+	public void PR37() {
+		goHome("javier@email.com");
+		String money = PO_NavView.money(driver);
+		driver.get(URL + "/home");
+		PO_NavView.navbar(driver, "mySellsDropdownMenuLink", "myList");
+		PO_ItemView.clickHighlighter(driver, 0);
+		assertEquals(Double.parseDouble(money) - 20, Double.parseDouble(PO_NavView.money(driver)), 0.1);
+		driver.get(URL + "/home");
+		PO_NavView.logout(driver);
+		goHome("juan@email.com");
+		PO_HomeView.checkElement(driver, "text", "Gorra");
+	}
 
 	//PR38. Sobre el listado de ofertas de un usuario con menos de 20 euros de saldo, pinchar en el
 	//enlace Destacada y a continuación comprobar que se muestra el mensaje de saldo no suficiente.
+	@Test
+	public void PR38() {
+		goHome("benjamin@email.com");
+		driver.get(URL + "/home");
+		PO_NavView.navbar(driver, "mySellsDropdownMenuLink", "myList");
+		PO_ItemView.clickHighlighter(driver, 0);
+		PO_ItemView.moneyError(driver);
+	}
+
+	private void goHome(String emailp) {
+		goHome(emailp, PO_Properties.getSPANISH());
+	}
+
+	private void goHome(String emailp, int language) {
+		driver.get(URL + "/");
+		PO_NavView.login(driver);
+		PO_LoginView.fillForm(driver, emailp, "123456");
+		PO_HomeView.checkWelcome(driver, language);
+	}
 
 }

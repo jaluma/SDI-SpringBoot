@@ -17,11 +17,12 @@
 						</tr>
 						</thead>
 						<tbody>
-						<tr class="tr-static-height clickable-row" th:data-href="${'/chat/conversation/' + chat.getId()}" style="cursor: pointer;"
+						<tr id="chat" class="tr-static-height clickable-row" th:data-href="${'/chat/conversation/' + chat.getId()}"
+						    style="cursor: pointer;"
 						    th:each="chat : ${chatsList}">
 							<td th:text="${chat.getItem().getTitle()}"></td>
 							<td th:text="${chat.getUser(sender).getEmail()}"></td>
-							<td><a class="link" th:href="${'/chat/delete/' + chat.id}"><i class="material-icons">delete</i></a></td>
+							<td><a id="removeButton" class="link" th:href="${'/chat/delete/' + chat.id}"><i class="material-icons">delete</i></a></td>
 						</tr>
 						</tbody>
 					</table>

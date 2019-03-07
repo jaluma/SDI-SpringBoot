@@ -1,6 +1,7 @@
 package com.uniovi.tests.pageobjects;
 
 import com.uniovi.tests.util.SeleniumUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -8,10 +9,10 @@ import java.util.List;
 
 public class PO_View {
 
-	protected static PO_Properties p = new PO_Properties("messages");
-	protected static int timeout = 10;
+	static PO_Properties p = new PO_Properties("messages");
+	private static int timeout = 2;
 
-	public static int getTimeout() {
+	static int getTimeout() {
 		return timeout;
 	}
 
@@ -36,8 +37,7 @@ public class PO_View {
 	 * @return Se retornará la lista de elementos resultantes de la búsqueda.
 	 */
 	static public List<WebElement> checkKey(WebDriver driver, String key, int locale) {
-		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver, "text", p.getString(key, locale), getTimeout());
-		return elementos;
+		return SeleniumUtils.EsperaCargaPagina(driver, "text", p.getString(key, locale), getTimeout());
 	}
 
 	/**
@@ -49,7 +49,15 @@ public class PO_View {
 	 * @return Se retornará la lista de elementos resultantes de la búsqueda.
 	 */
 	static public List<WebElement> checkElement(WebDriver driver, String type, String text) {
-		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver, type, text, getTimeout());
-		return elementos;
+		return SeleniumUtils.EsperaCargaPagina(driver, type, text, getTimeout());
+	}
+
+	static public int checkNumberList(WebDriver driver) {
+		return driver.findElements(By.xpath("//table/tbody/tr")).size();
+	}
+
+	static public void changePage(WebDriver driver, int page) {
+		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver, "class", "page-item", getTimeout());
+		elementos.get(page).click();
 	}
 }

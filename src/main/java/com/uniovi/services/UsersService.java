@@ -30,8 +30,12 @@ public class UsersService {
 	}
 
 	public void addUser(User user) {
-		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		user.setMoney(DEFUALT_MONEY);
+		add(user);
+	}
+
+	public void add(User user) {
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		usersRepository.save(user);
 	}
 
