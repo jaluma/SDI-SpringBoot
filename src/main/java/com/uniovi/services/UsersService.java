@@ -12,6 +12,8 @@ import java.util.Optional;
 
 @Service
 public class UsersService {
+	private static final double DEFUALT_MONEY = 100.0;
+
 	private final UsersRepository usersRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -29,6 +31,7 @@ public class UsersService {
 
 	public void addUser(User user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+		user.setMoney(DEFUALT_MONEY);
 		usersRepository.save(user);
 	}
 

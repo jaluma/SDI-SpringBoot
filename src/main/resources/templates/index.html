@@ -8,18 +8,24 @@
 	<!--/*@thymesVar id="currentUser" type="com.uniovi.entities.User"*/-->
 		<div class="container" layout:fragment="content" style="text-align: center">
 			<h2 th:text="#{welcome.message}"></h2>
-			<div sec:authorize="!isAuthenticated()" class="card block card-index jumbotron jumbotron_flex">
-				<div class="card-body" style="text-align: center">
-					<h4 th:text="#{index.signup}"></h4>
-					<a href="/login" class="btn btn-primary link">Login</a>
+			<div class="col-sm-5" style="display: inline-block;" sec:authorize="!isAuthenticated()">
+				<div class="card jumbotron jumbotron_flex">
+					<div class="card-body" style="text-align: center">
+						<h4 th:text="#{index.signup}"></h4>
+						<a href="/login" class="btn btn-primary link">Login</a>
+					</div>
 				</div>
 			</div>
-			<div sec:authorize="!isAuthenticated()" class="card block card-index jumbotron jumbotron_flex">
-				<div class="card-body" style="text-align: center">
-					<h4 th:text="#{index.new}"></h4>
-					<a href="/signup" class="btn btn-primary link" th:text="#{nav.signup}"></a>
+			<div class="col-sm-5" style="display: inline-block;" sec:authorize="!isAuthenticated()">
+				<div class="card jumbotron jumbotron_flex">
+					<div class="card-body" style="text-align: center">
+						<h4 th:text="#{index.new}"></h4>
+						<a href="/signup" class="btn btn-primary link" th:text="#{nav.signup}"></a>
+					</div>
 				</div>
 			</div>
+
+			
 			<div sec:authorize="isAuthenticated()" class="card jumbotron">
 				<div class="card-body" style="text-align: center">
 					<h2 th:text="#{index.searching}"></h2>

@@ -20,7 +20,9 @@ import java.security.Principal;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 @Controller
 @RequestMapping("/chat/")
@@ -100,11 +102,9 @@ public class ChatController {
 
 		Chat chat = chatsService.findChatByUserAndItem(sender, item);
 		if(chat == null) {
-			Set<User> set = new HashSet<>();
-			set.add(sender);
-			set.add(item.getSellerUser());
-			chat = new Chat(item, set);
+			chat = chatsService.createChat(sender, item);
 		}
+
 		chatsService.addChat(chat);
 
 		return "redirect:/chat/conversation/" + chat.getId();
@@ -119,8 +119,8 @@ public class ChatController {
 		}
 
 		messagesService.deleteMessages(chat.getMessages());
-
 		chatsService.deleteChat(chat);
+
 		return "redirect:/chat/list";
 	}
 }

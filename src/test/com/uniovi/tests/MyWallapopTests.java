@@ -132,7 +132,7 @@ public class MyWallapopTests {
 	//PR06.  Inicio de sesión con datos válidos (usuario estándar).
 	@Test
 	public void PR06() {
-		String email = "javier@gmail.com";
+		String email = "javier@email.com";
 		String password = "123456";
 		PO_NavView.login(driver);
 		PO_LoginView.fillForm(driver, email, password);
@@ -152,7 +152,7 @@ public class MyWallapopTests {
 	//PR08.  Inicio de sesión con datos válidos (usuario estándar, email existente, pero contraseña incorrecta).
 	@Test
 	public void PR08() {
-		String email = "javier@gmail.com";
+		String email = "javier@email.com";
 		String password = "654321";
 		PO_NavView.login(driver);
 		PO_LoginView.fillForm(driver, email, password);
@@ -173,7 +173,7 @@ public class MyWallapopTests {
 	//de sesión (Login).
 	@Test
 	public void PR10() {
-		String email = "javier@gmail.com";
+		String email = "javier@email.com";
 		String password = "123456";
 		PO_NavView.login(driver);
 		PO_LoginView.fillForm(driver, email, password);
@@ -243,7 +243,7 @@ public class MyWallapopTests {
 	//Comprobar que la oferta sale en el listado de ofertas de dicho usuario.
 	@Test
 	public void PR16() {
-		String email = "javier@gmail.com";
+		String email = "javier@email.com";
 		String password = "123456";
 		PO_NavView.login(driver);
 		PO_LoginView.fillForm(driver, email, password);
@@ -257,7 +257,7 @@ public class MyWallapopTests {
 	//el botón Submit. Comprobar que se muestra el mensaje de campo obligatorio.
 	@Test
 	public void PR17() {
-		String email = "javier@gmail.com";
+		String email = "javier@email.com";
 		String password = "123456";
 		PO_NavView.login(driver);
 		PO_LoginView.fillForm(driver, email, password);
@@ -271,7 +271,7 @@ public class MyWallapopTests {
 	//existen para este usuario.
 	@Test
 	public void PR18() {
-		String email = "javier@gmail.com";
+		String email = "javier@email.com";
 		String password = "123456";
 		PO_NavView.login(driver);
 		PO_LoginView.fillForm(driver, email, password);
@@ -284,7 +284,7 @@ public class MyWallapopTests {
 	//que la oferta desaparece.
 	@Test
 	public void PR19() {
-		String email = "javier@gmail.com";
+		String email = "javier@email.com";
 		String password = "123456";
 		PO_NavView.login(driver);
 		PO_LoginView.fillForm(driver, email, password);
@@ -299,7 +299,7 @@ public class MyWallapopTests {
 	//que la oferta desaparece.
 	@Test
 	public void PR20() {
-		String email = "javier@gmail.com";
+		String email = "javier@email.com";
 		String password = "123456";
 		PO_NavView.login(driver);
 		PO_LoginView.fillForm(driver, email, password);
@@ -314,7 +314,7 @@ public class MyWallapopTests {
 	//corresponde con el listado de las ofertas existentes en el sistema
 	@Test
 	public void PR21() {
-		String email = "javier@gmail.com";
+		String email = "javier@email.com";
 		String password = "123456";
 		PO_NavView.login(driver);
 		PO_LoginView.fillForm(driver, email, password);
@@ -329,7 +329,7 @@ public class MyWallapopTests {
 	//muestra la página que corresponde, con la lista de ofertas vacía
 	@Test
 	public void PR22() {
-		String email = "javier@gmail.com";
+		String email = "javier@email.com";
 		String password = "123456";
 		PO_NavView.login(driver);
 		PO_LoginView.fillForm(driver, email, password);
@@ -345,7 +345,7 @@ public class MyWallapopTests {
 	//correctamente en la vista del comprador.
 	@Test
 	public void PR23() {
-		String email = "javier@gmail.com";
+		String email = "javier@email.com";
 		String password = "123456";
 		PO_NavView.login(driver);
 		PO_LoginView.fillForm(driver, email, password);
@@ -353,8 +353,8 @@ public class MyWallapopTests {
 		PO_NavView.navbar(driver, "sellsDropdownMenuLink", "list");
 		assertEquals(5, PO_ItemView.checkNumberList(driver));
 		String money = PO_NavView.money(driver);
-		PO_ItemView.searchText(driver, "User 1");
-		assertEquals(5, PO_ItemView.checkNumberList(driver));
+		PO_ItemView.searchText(driver, "User Pedro Manrrique");
+		assertEquals(4, PO_ItemView.checkNumberList(driver));
 		PO_ItemView.buyItem(driver, 1, Double.parseDouble(money));
 	}
 
@@ -363,7 +363,7 @@ public class MyWallapopTests {
 	//la vista del comprador.
 	@Test
 	public void PR24() {
-		String email = "juan@gmail.com";
+		String email = "juan@email.com";
 		String password = "123456";
 		PO_NavView.login(driver);
 		PO_LoginView.fillForm(driver, email, password);
@@ -381,7 +381,7 @@ public class MyWallapopTests {
 	//saldo no suficiente
 	@Test
 	public void PR25() {
-		String email = "juan@gmail.com";
+		String email = "juan@email.com";
 		String password = "123456";
 		PO_NavView.login(driver);
 		PO_LoginView.fillForm(driver, email, password);
@@ -397,6 +397,16 @@ public class MyWallapopTests {
 
 	//PR26. Ir a la opción de ofertas compradas del usuario y mostrar la lista. Comprobar que aparecen
 	//las ofertas que deben aparecer.
+	@Test
+	public void PR26() {
+		String email = "javier@email.com";
+		String password = "123456";
+		PO_NavView.login(driver);
+		PO_LoginView.fillForm(driver, email, password);
+		PO_HomeView.checkWelcome(driver, PO_Properties.getSPANISH());
+		PO_NavView.navbar(driver, "sellsDropdownMenuLink", "buy");
+		assertEquals(2, PO_ItemView.checkNumberList(driver));
+	}
 
 	//PR27. Visualizar al menos cuatro páginas en Español/Inglés/Español (comprobando que algunas
 	//de las etiquetas cambian al idioma correspondiente). Página principal/Opciones Principales de

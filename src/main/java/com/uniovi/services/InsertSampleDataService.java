@@ -28,65 +28,53 @@ public class InsertSampleDataService {
 
 	@PostConstruct
 	public void init() {
-		User user1 = new User("admin@email.com", "Admin", "Admin");
-		user1.setPassword("admin");
-		user1.setRole(rolesService.getRoles()[1]);
-		user1.setMoney(100);
-		User user2 = createUser("javier@gmail.com", "Javier", "Martinez");
+		// admin
+		User admin = createUser("admin@email.com", "Admin", "Admin", "admin", rolesService.getRoles()[1]);
 
-		Item item1 = new Item("Cadena de musica", "Reproductor de musica", new Date(), 100);
-		Item item2 = new Item("Gorra", "De FA.", new Date(), 0.5);
-		Item item3 = new Item("Silla", "Silla de estudio", new Date(), 100.01);
+		// user 1
+		User user1 = createUser("javier@email.com", "Javier", "Martinez");
+		Item item1 = createItem(user1, "Cadena de musica", "Reproductor de musica", 100, true);
+		Item item2 = createItem(user1, "Gorra", "De FA.", 30.59, false);
+		Item item3 = createItem(user1, "Silla", "Silla gaming de altaca calidad", 100.99, false);
 
-		item1.setHighlighter(true);
-		item2.setHighlighter(true);
+		// user 2
+		User user2 = createUser("juan@email.com", "Juán", "Mayo");
+		List<Item> items2 = generateItems(user2);
+		// user 3
+		User user3 = createUser("benjamin@email.com", "Benjamin", "Cuellas");
+		List<Item> items3 = generateItems(user3);
+		// user 4
+		User user4 = createUser("pedro@email.com", "Pedro", "Manrrique");
+		List<Item> items4 = generateItems(user4);
 
-		Association.Sell.link(user2, item1);
-		Association.Sell.link(user2, item2);
-		Association.Sell.link(user2, item3);
+		// compras
+		itemsService.buy(user1, items2.get(0));
+		itemsService.buy(user1, items3.get(0));
 
-		usersService.addUser(user1);
-		usersService.addUser(user2);
+		itemsService.buy(user2, items3.get(1));
+		itemsService.buy(user2, items4.get(1));
 
-		Set<User> set = new HashSet<>();
-		set.add(user1);
-		set.add(user2);
+		itemsService.buy(user3, items4.get(2));
+		itemsService.buy(user3, items2.get(2));
 
-		Chat chat = new Chat(item1, set);
-		chatsService.addChat(chat);
+		itemsService.buy(user4, items3.get(3));
+		itemsService.buy(user4, items4.get(3));
 
-		Message message1 = new Message("Hola", OffsetDateTime.now());
-		Association.Chats.sendMessage(user1, user2, chat, message1);
-		messagesService.addMessage(message1);
-
-		Message message2 = new Message("Buenas tardes :)", OffsetDateTime.now());
-		Association.Chats.sendMessage(user2, user1, chat, message2);
-		messagesService.addMessage(message2);
-
-		chatsService.addChat(chat);
-
-		//otros datos
-		List<User> users = new ArrayList<>();
-		users.add(createUser("pedro@gmail.com", "Pedro", "Manrrique"));
-		users.add(createUser("benjamin@gmail.com", "Benjamin", "Cuellas"));
-		users.add(createUser("juan@gmail.com", "Juán", "Mayo"));
-
-		for(int i = 0; i < users.size(); i++) {
-			for(int j = 0; j < 5; j++) {
-				Item item = new Item("Producto " + (j + 1) + " de User " + (i + 1), "Descripcion de Producto " + (j + 1), new Date(), Math.random() * 100);
-				Association.Sell.link(users.get(i), item);
-			}
-			usersService.addUser(users.get(i));
+		// chats
+		for(User user : Arrays.asList(user1, user2, user3, user4)) {
+			createChats(user, user2, items2);
+			createChats(user, user3, items3);
+			createChats(user, user4, items4);
 		}
 
-		//generamos valores para tener 20 registros
+		//generamos valores para tener 20 usuarios registrados
 		String[] names = new String[]{"Maria", "Cristina", "Elena", "Ivan", "Pedro", "Fernando"};
 		String[] lastnames = new String[]{"Perez", "Garcia", "Fernandez", "Alvarez", "Rodriguez"};
 
 		Random rd = new Random();
 
 		for(int i = 0; i < 15; i++) {
-			String email = new Generex("\\w{10}\\@uniovi\\.es").random();
+			String email = new Generex("\\w{5}\\@email\\.es").random();
 			String name = names[rd.nextInt(names.length)];
 			String lastname = lastnames[rd.nextInt(lastnames.length)];
 
@@ -96,11 +84,69 @@ public class InsertSampleDataService {
 		}
 	}
 
-	private User createUser(String email, String name, String lastname) {
+	private void createChats(User buyer, User seller, List<Item> items) {
+		for(int j = 0; j < items.size() && !buyer.equals(seller); j++) {
+			createChat(items.get(j), buyer);
+		}
+	}
+
+	private void createChat(Item item1, User user1) {
+		Set<User> set = new HashSet<>(Arrays.asList(user1, item1.getSellerUser()));
+
+		Chat chat = new Chat(item1, set);
+		chatsService.addChat(chat);
+
+		String message11 = "Hola " + item1.getSellerUser().getName();
+		String message12 = "Buenas tardes " + user1.getFullName() + " :)";
+
+		String message21 = "Me interesa mucho este producto: " + chat.getItem().getTitle();
+		String message22 = user1.getFullName() + ", esta a la venta. Solo tienes que compralo.";
+
+		createConversation(user1, item1.getSellerUser(), chat, message11, message12);
+		createConversation(user1, item1.getSellerUser(), chat, message21, message22);
+
+		chatsService.addChat(chat);
+	}
+
+	private List<Item> generateItems(User user) {
+		List<Item> list = new ArrayList<>();
+		for(int j = 0; j < 4; j++) {
+			list.add(createItem(user, "Producto " + (j + 1) + " de User " + user.getFullName(), "Descripcion de Producto " + (j + 1), Math.random() * 100, false));
+		}
+		return list;
+	}
+
+	private Item createItem(User user, String title, String description, double money, boolean highlighter) {
+		Item item = new Item(title, description, new Date(), money);
+		item.setHighlighter(highlighter);
+		itemsService.addItem(item, user);
+		return item;
+	}
+
+	private void createConversation(User user1, User user2, Chat chat, String send, String receive) {
+		Message message1 = new Message(send, OffsetDateTime.now());
+		Association.Chats.sendMessage(user1, user2, chat, message1);
+		messagesService.addMessage(message1);
+
+		Message message2 = new Message(receive, OffsetDateTime.now());
+		Association.Chats.sendMessage(user2, user1, chat, message2);
+		messagesService.addMessage(message2);
+	}
+
+	private User createUser(String email, String name, String lastname, String password, String role) {
 		User user = new User(email, name, lastname);
-		user.setPassword("123456");
+		user.setPassword(password);
 		user.setMoney(100);
-		user.setRole(rolesService.getRoles()[0]);
+		user.setRole(role);
+		usersService.addUser(user);
 		return user;
+	}
+
+	private User createUser(String email, String name, String lastname, String role) {
+		return createUser(email, name, lastname, "123456", role);
+	}
+
+	private User createUser(String email, String name, String lastname) {
+		return createUser(email, name, lastname, rolesService.getRoles()[0]);
 	}
 }

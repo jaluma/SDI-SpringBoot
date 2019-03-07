@@ -46,8 +46,23 @@ public class ItemsService {
 		return itemsRepository.findItemsbyEmail(pageable, user);
 	}
 
-	public void addItem(Item item) {
+	public void add(Item item) {
 		itemsRepository.save(item);
+	}
+
+	public void addItem(Item item, User user) {
+		// restamos 20€ si el item esta destacado
+		if(item.isHighlighter()) {
+			highlighter(item, user);
+		}
+		Association.Sell.link(user, item);
+
+		add(item);
+	}
+
+	public void highlighter(Item item, User user) {
+		user.setMoney(user.getMoney() - 20);
+		item.setHighlighter(true);
 	}
 
 	public void deleteItem(Item item) {
@@ -88,6 +103,13 @@ public class ItemsService {
 
 	public void setHighlighter(Item item) {
 		item.setHighlighter(true);
-		addItem(item);
+		add(item);
+	}
+
+	public void buy(User buyerUser, Item item) {
+		Association.Buy.link(buyerUser, item);
+
+		buyerUser.setMoney(buyerUser.getMoney() - item.getPrice());
+		add(item);
 	}
 }

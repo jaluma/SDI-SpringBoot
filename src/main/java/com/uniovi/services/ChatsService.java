@@ -10,8 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ChatsService {
@@ -52,5 +54,12 @@ public class ChatsService {
 		Association.Chats.removeMessages(chat.getUsers().get(0), chat.getUsers().get(1), chat);
 		Association.Chats.removeChat(chat);
 		chatRepository.delete(chat);
+	}
+
+	public Chat createChat(User sender, Item item) {
+		Set<User> set = new HashSet<>();
+		set.add(sender);
+		set.add(item.getSellerUser());
+		return new Chat(item, set);
 	}
 }

@@ -41,6 +41,7 @@
 						<th th:text="#{item.title}"></th>
 						<th th:text="#{item.description}"></th>
 						<th th:text="#{item.price}"></th>
+						<th></th>
 					</tr>
 					</thead>
 					<tbody>
@@ -50,13 +51,14 @@
 						<td class="clickable-row" th:data-href="${'/item/details/' + item.id}" th:text="${item.price}"></td>
 						<td><a id="delete" class="link" th:href="${'/item/delete/' + item.id}"><i class="material-icons">delete</i></a></td>
 						<td>
-							<a th:if="${item.highlighter != true}" class="hightlighter link" th:id="${'/item/highlighter/' + item.id}"
-							   data-toggle="modal" data-target="#modal" style="cursor: pointer">
+							<a th:if="${item.highlighter != true && item.getBuyerUser() == null}" class="hightlighter link"
+							   th:id="${'/item/highlighter/' + item.id}" data-toggle="modal" data-target="#modal" style="cursor: pointer">
 								<i class="material-icons">offline_bolt</i>
 							</a>
-							<a th:if="${item.highlighter == true}" class="hightlighter-disabled disabled">
+							<a th:if="${item.highlighter == true && item.getBuyerUser() == null}" class="hightlighter-disabled disabled">
 								<i class="material-icons">offline_bolt</i>
 							</a>
+							<span th:if="${item.getBuyerUser() != null}" class="btn btn-secondary link disabled" th:text="#{item.buyed}"></span>
 						</td>
 					</tr>
 					</tbody>

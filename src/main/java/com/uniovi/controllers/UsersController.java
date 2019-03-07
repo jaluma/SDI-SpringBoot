@@ -26,8 +26,6 @@ import java.security.Principal;
 
 @Controller
 public class UsersController {
-	private static final double DEFUALT_MONEY = 100.0;
-
 	private final UsersService usersService;
 	private final SecurityService securityService;
 	private final SignUpFormValidator signUpFormValidator;
@@ -59,7 +57,6 @@ public class UsersController {
 		}
 
 		user.setRole(rolesService.getRoles()[0]);
-		user.setMoney(DEFUALT_MONEY);
 		usersService.addUser(user);
 		securityService.autoLogin(user.getEmail(), user.getPasswordConfirm());
 		return "redirect:home";
@@ -76,7 +73,7 @@ public class UsersController {
 		return "user/details";
 	}
 
-	@RequestMapping("/user/bought")
+	@RequestMapping("/user/purchases")
 	public String getList(Model model, @PageableDefault(size = 5) Pageable pageable, @RequestParam(required = false) String searchText, Principal principal) {
 		User user = Utilities.getCurrentUser(principal, usersService);
 		Page<Item> items;
@@ -91,7 +88,7 @@ public class UsersController {
 		model.addAttribute("currentUser", user);
 		model.addAttribute("page", items);
 		model.addAttribute("itemsList", items.getContent());
-		return "/user/bought";
+		return "user/purchases";
 	}
 
 }

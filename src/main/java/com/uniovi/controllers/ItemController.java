@@ -1,7 +1,6 @@
 package com.uniovi.controllers;
 
 import com.uniovi.controllers.util.Utilities;
-import com.uniovi.entities.Association;
 import com.uniovi.entities.Chat;
 import com.uniovi.entities.Item;
 import com.uniovi.entities.User;
@@ -62,13 +61,7 @@ public class ItemController {
 		}
 
 		User user = Utilities.getCurrentUser(principal, usersService);
-		// restamos 20€ si el item esta destacado
-		if(item.isHighlighter()) {
-			user.setMoney(user.getMoney() - 20);
-		}
-
-		Association.Sell.link(user, item);
-		itemsService.addItem(item);
+		itemsService.addItem(item, user);
 
 		return "redirect:/item/mylist";
 	}
@@ -92,17 +85,14 @@ public class ItemController {
 			return "redirect:/item/list";
 		}
 
-		Association.Buy.link(buyerUser, item);
-
-		buyerUser.setMoney(buyerUser.getMoney() - item.getPrice());
-		itemsService.addItem(item);
+		itemsService.buy(buyerUser, item);
 		usersService.addUser(buyerUser);
 
 		return "redirect:/item/list";
 	}
 
 	@RequestMapping("/item/delete/{id}")
-	public String delete(@PathVariable Long id, Pageable pageable) {
+	public String delete(@PathVariable Long id) {
 		Item item = itemsService.getItem(id);
 
 		if(item == null) {
@@ -147,9 +137,8 @@ public class ItemController {
 			throw new IllegalStateException("Illegal");
 		}
 
-		user.setMoney(user.getMoney() - 20);
-		item.setHighlighter(true);
-		itemsService.addItem(item);
+		itemsService.highlighter(item, user);
+		itemsService.add(item);
 
 		return "redirect:/item/mylist";
 	}
