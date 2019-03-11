@@ -18,8 +18,7 @@
 						</thead>
 						<tbody>
 						<tr id="chat" class="tr-static-height clickable-row" th:data-href="${'/chat/conversation/' + chat.getId()}"
-						    style="cursor: pointer;"
-						    th:each="chat : ${chatsList}">
+						    style="cursor: pointer;" th:each="chat : ${chatsList}">
 							<td th:text="${chat.getItem().getTitle()}"></td>
 							<td th:text="${chat.getUser(sender).getEmail()}"></td>
 							<td><a id="removeButton" class="link" th:href="${'/chat/delete/' + chat.id}"><i class="material-icons">delete</i></a></td>
@@ -30,7 +29,7 @@
 					<script th:inline="javascript">
 					 /*<![CDATA[*/
                      var rows = $('#tableChats tr').length - 1;
-                     var value = 460 - (rows * 46) + 15;
+                     var value = (10 * 56) - (rows * 56) + 15;
                      document.getElementById('tableChats').style.marginBottom = value + ".px";
                      /*]]>*/
 					</script>

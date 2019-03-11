@@ -1,16 +1,26 @@
 /target/
 !.mvn/wrapper/maven-wrapper.jar
 
+# Package Files #
+*.jar
+*.war
+*.ear
+
 ### STS ###
 .apt_generated
 .factorypath
 .settings
 .springBeans
 .sts4-cache
+**/.project
+**/.classpath
 
 ### IntelliJ IDEA ###
 *.iws
 *.ipr
+**/*.iml
+**/.idea
+**/.gradle
 
 ### NetBeans ###
 /nbproject/private/
@@ -21,3 +31,5 @@
 /build/
 out/
 /data/
+
+

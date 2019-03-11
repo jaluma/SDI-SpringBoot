@@ -10,7 +10,7 @@ import java.util.List;
 public class PO_View {
 
 	static PO_Properties p = new PO_Properties("messages");
-	private static int timeout = 2;
+	private static int timeout = 4;
 
 	static int getTimeout() {
 		return timeout;
@@ -57,7 +57,7 @@ public class PO_View {
 	}
 
 	static public void changePage(WebDriver driver, int page) {
-		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver, "class", "page-item", getTimeout());
+		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver, "class", "page-link", getTimeout());
 		elementos.get(page).click();
 	}
 }

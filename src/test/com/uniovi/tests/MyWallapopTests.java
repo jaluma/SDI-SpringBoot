@@ -12,6 +12,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -59,11 +60,11 @@ public class MyWallapopTests {
 
 	@Before
 	public void setUp() {
-		initdb();
 		driver.navigate().to(URL);
 	}
 
-	private void initdb() {
+	@Transactional
+	void initdb() {
 		chatsService.deleteAll();
 		itemsService.deleteAll();
 		usersService.deleteAll();
@@ -73,6 +74,12 @@ public class MyWallapopTests {
 	@After
 	public void tearDown() {
 		driver.manage().deleteAllCookies();
+	}
+
+	//PR00. Inicializar los datos de la base de datos
+	@Test
+	public void PR00() {
+		initdb();
 	}
 
 	//PR01. Registro de Usuario con datos válidos
@@ -195,7 +202,9 @@ public class MyWallapopTests {
 		PO_AdminListView.deleteElements(driver, 6);//borramos el 6 para que no de errores los siguientes tests
 		assertEquals(10, PO_AdminListView.checkNumberList(driver));
 		PO_AdminListView.changePage(driver, 2);
-		assertEquals(9, PO_AdminListView.checkNumberList(driver));
+		assertEquals(10, PO_AdminListView.checkNumberList(driver));
+		PO_AdminListView.changePage(driver, 3);
+		assertEquals(1, PO_AdminListView.checkNumberList(driver));
 	}
 
 	//PR14. Ir a la lista de usuarios, borrar el último usuario de la lista, comprobar que la lista se actualiza
@@ -209,7 +218,7 @@ public class MyWallapopTests {
 		PO_AdminListView.deleteElements(driver, 9);
 		assertEquals(10, PO_AdminListView.checkNumberList(driver));
 		PO_AdminListView.changePage(driver, 2);
-		assertEquals(9, PO_AdminListView.checkNumberList(driver));
+		assertEquals(10, PO_AdminListView.checkNumberList(driver));
 	}
 
 	//PR14. Ir a la lista de usuarios, borrar el último usuario de la lista, comprobar que la lista se actualiza
@@ -248,27 +257,27 @@ public class MyWallapopTests {
 	//existen para este usuario.
 	@Test
 	public void PR18() {
-		goHome("javier@email.com");
+		goHome("pedro@email.com");
 		PO_NavView.navbar(driver, "mySellsDropdownMenuLink", "myList");
-		assertEquals(3, PO_ItemView.checkNumberList(driver));
+		assertEquals(4, PO_ItemView.checkNumberList(driver));
 	}
 
 	//PR19. Ir a la lista de ofertas, borrar la primera oferta de la lista, comprobar que la lista se actualiza y
 	//que la oferta desaparece.
 	@Test
 	public void PR19() {
-		goHome("javier@email.com");
+		goHome("pedro@email.com");
 		PO_NavView.navbar(driver, "mySellsDropdownMenuLink", "myList");
+		assertEquals(4, PO_ItemView.checkNumberList(driver));
+		PO_ItemView.remove(driver, 0);      // la que hemos añadido antes
 		assertEquals(3, PO_ItemView.checkNumberList(driver));
-		PO_ItemView.remove(driver, 0);
-		assertEquals(2, PO_ItemView.checkNumberList(driver));
 	}
 
 	//PR20. Ir a la lista de ofertas, borrar la última oferta de la lista, comprobar que la lista se actualiza y
 	//que la oferta desaparece.
 	@Test
 	public void PR20() {
-		goHome("javier@email.com");
+		goHome("pedro@email.com");
 		PO_NavView.navbar(driver, "mySellsDropdownMenuLink", "myList");
 		assertEquals(3, PO_ItemView.checkNumberList(driver));
 		PO_ItemView.remove(driver, 2);
@@ -306,8 +315,8 @@ public class MyWallapopTests {
 		PO_NavView.navbar(driver, "sellsDropdownMenuLink", "list");
 		assertEquals(5, PO_ItemView.checkNumberList(driver));
 		String money = PO_NavView.money(driver);
-		PO_ItemView.searchText(driver, "User Pedro Manrrique");
-		assertEquals(4, PO_ItemView.checkNumberList(driver));
+		PO_ItemView.searchText(driver, "Prueba 1");
+		assertEquals(1, PO_ItemView.checkNumberList(driver));
 		PO_ItemView.buyItem(driver, 1, Double.parseDouble(money));
 	}
 
@@ -409,7 +418,7 @@ public class MyWallapopTests {
 		goHome("juan@email.com");
 		PO_NavView.navbar(driver, "sellsDropdownMenuLink", "list");
 		assertEquals(5, PO_ItemView.checkNumberList(driver));
-		PO_ItemView.searchText(driver, "Cadena de musica");
+		PO_ItemView.searchText(driver, "Silla");
 		assertEquals(1, PO_ItemView.checkNumberList(driver));
 		PO_ItemView.chatButton(driver, 0);
 		assertEquals(0, PO_ChatView.getNumberMessages(driver));
@@ -437,7 +446,7 @@ public class MyWallapopTests {
 		PO_NavView.clickOption(driver, "/chat/list");
 		assertEquals(10, PO_ChatView.checkNumberList(driver));
 		PO_ChatView.changePage(driver, 2);
-		assertEquals(10, PO_ChatView.checkNumberList(driver));
+		assertEquals(9, PO_ChatView.checkNumberList(driver));
 	}
 
 	//PR34. Sobre el listado de conversaciones ya abiertas. Pinchar el enlace Eliminar de la primera y
@@ -449,7 +458,7 @@ public class MyWallapopTests {
 		PO_ChatView.deleteCharList(driver, 0);
 		assertEquals(10, PO_ChatView.checkNumberList(driver));
 		PO_ChatView.changePage(driver, 2);
-		assertEquals(9, PO_ChatView.checkNumberList(driver));
+		assertEquals(8, PO_ChatView.checkNumberList(driver));
 	}
 
 	//PR35. Sobre el listado de conversaciones ya abiertas. Pinchar el enlace Eliminar de la última y
@@ -460,11 +469,11 @@ public class MyWallapopTests {
 		PO_NavView.clickOption(driver, "/chat/list");
 		assertEquals(10, PO_ChatView.checkNumberList(driver));
 		PO_ChatView.changePage(driver, 2);
-		assertEquals(10, PO_ChatView.checkNumberList(driver));
-		PO_ChatView.deleteCharList(driver, 9);
+		assertEquals(8, PO_ChatView.checkNumberList(driver));
+		PO_ChatView.deleteCharList(driver, 7);
 		assertEquals(10, PO_ChatView.checkNumberList(driver));
 		PO_ChatView.changePage(driver, 2);
-		assertEquals(9, PO_ChatView.checkNumberList(driver));
+		assertEquals(7, PO_ChatView.checkNumberList(driver));
 	}
 
 	//PR36. Al crear una oferta marcar dicha oferta como destacada y a continuación comprobar: i) que
@@ -475,13 +484,13 @@ public class MyWallapopTests {
 		goHome("juan@email.com");
 		String money = PO_NavView.money(driver);
 		PO_NavView.navbar(driver, "mySellsDropdownMenuLink", "add");
-		PO_ItemView.addFillForm(driver, "Prueba 1", "Descripcion 1", "10", true);
+		PO_ItemView.addFillForm(driver, "Prueba 2", "Descripcion 2", "10", true);
 		String newMoney = PO_NavView.money(driver);
 		assertEquals(Double.parseDouble(money) - 20, Double.parseDouble(newMoney), 0.1);
 		driver.get(URL + "/home");
 		PO_NavView.logout(driver);
 		goHome("javier@email.com");
-		PO_HomeView.checkElement(driver, "text", "Prueba 1");
+		PO_HomeView.checkElement(driver, "text", "Prueba 2");
 	}
 
 	//PR37. Sobre el listado de ofertas de un usuario con más de 20 euros de saldo, pinchar en el

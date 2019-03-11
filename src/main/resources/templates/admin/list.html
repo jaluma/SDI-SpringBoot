@@ -47,8 +47,7 @@
 						</tr>
 						</thead>
 						<tbody>
-						<tr class="tr-static-height"
-						    th:each="user : ${usersList}">
+						<tr class="tr-static-height" th:each="user : ${usersList}">
 							<td class="check-box-column">
 								<label>
 									<input type="checkbox" th:name="idChecked" th:value="${user.getId()}"/>

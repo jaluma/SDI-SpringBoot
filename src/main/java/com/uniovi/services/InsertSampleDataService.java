@@ -41,7 +41,7 @@ public class InsertSampleDataService {
 		User user1 = createUser("javier@email.com", "Javier", "Martinez");
 		Item item1 = createItem(user1, "Cadena de musica", "Reproductor de musica", 100, true);
 		Item item2 = createItem(user1, "Gorra", "De FA.", 30.59, false);
-		Item item3 = createItem(user1, "Silla", "Silla gaming de altaca calidad", 100.99, false);
+		Item item3 = createItem(user1, "Silla", "Silla gaming de alta calidad", 100.99, false);
 
 		// user 2
 		User user2 = createUser("juan@email.com", "Juán", "Mayo");
@@ -54,17 +54,17 @@ public class InsertSampleDataService {
 		List<Item> items4 = generateItems(user4);
 
 		// compras
-		itemsService.buy(user1, items2.get(0));
-		itemsService.buy(user1, items3.get(0));
+		buy(user1, items2.get(0));
+		buy(user1, items3.get(0));
 
-		itemsService.buy(user2, items3.get(1));
-		itemsService.buy(user2, items4.get(1));
+		buy(user2, items3.get(1));
+		buy(user2, items4.get(1));
 
-		itemsService.buy(user3, items4.get(2));
-		itemsService.buy(user3, items2.get(2));
+		buy(user3, items4.get(2));
+		buy(user3, items2.get(2));
 
-		itemsService.buy(user4, items3.get(3));
-		itemsService.buy(user4, items4.get(3));
+		buy(user4, items3.get(3));
+		buy(user4, items4.get(3));
 
 		usersService.addAll(usersList);
 		itemsService.addAll(itemsList);
@@ -98,6 +98,33 @@ public class InsertSampleDataService {
 		usersService.addAll(usersList);
 	}
 
+	private User createUser(String email, String name, String lastname, String password, String role, double money) {
+		User user = new User(email, name, lastname);
+		user.setPassword(password);
+		user.setMoney(money);
+		user.setRole(role);
+		usersService.encryptPassword(user);
+		usersList.add(user);
+		return user;
+	}
+
+	private User createUser(String email, String name, String lastname, String role, double money) {
+		return createUser(email, name, lastname, "123456", role, money);
+	}
+
+
+	private User createUser(String email, String name, String lastname) {
+		return createUser(email, name, lastname, rolesService.getRoles()[0], 100);
+	}
+
+	private Item createItem(User user, String title, String description, double money, boolean highlighter) {
+		Item item = new Item(title, description, new Date(), money);
+		item.setHighlighter(highlighter);
+		Association.Sell.link(user, item);
+		itemsList.add(item);
+		return item;
+	}
+
 	private void createChats(User buyer, User seller, List<Item> items) {
 		for(int j = 0; j < items.size() && !buyer.equals(seller); j++) {
 			createChat(items.get(j), buyer);
@@ -121,22 +148,6 @@ public class InsertSampleDataService {
 		chatList.add(chat);
 	}
 
-	private List<Item> generateItems(User user) {
-		List<Item> list = new ArrayList<>();
-		for(int j = 0; j < 4; j++) {
-			list.add(createItem(user, "Producto " + (j + 1) + " de User " + user.getFullName(), "Descripcion de Producto " + (j + 1), Math.random() * 100, false));
-		}
-		return list;
-	}
-
-	private Item createItem(User user, String title, String description, double money, boolean highlighter) {
-		Item item = new Item(title, description, new Date(), money);
-		item.setHighlighter(highlighter);
-		Association.Sell.link(user, item);
-		itemsList.add(item);
-		return item;
-	}
-
 	private void createConversation(User user1, User user2, Chat chat, String send, String receive) {
 		Message message1 = new Message(send, OffsetDateTime.now());
 		Association.Chats.sendMessage(user1, user2, chat, message1);
@@ -147,22 +158,17 @@ public class InsertSampleDataService {
 		messagesList.add(message2);
 	}
 
-	private User createUser(String email, String name, String lastname, String password, String role, double money) {
-		User user = new User(email, name, lastname);
-		user.setPassword(password);
-		user.setMoney(money);
-		user.setRole(role);
-		usersService.encryptPassword(user);
-		usersList.add(user);
-		return user;
+	/* AUXILIARES */
+
+	public void buy(User buyerUser, Item item) {
+		Association.Buy.link(buyerUser, item);
 	}
 
-	private User createUser(String email, String name, String lastname, String role, double money) {
-		return createUser(email, name, lastname, "123456", role, money);
-	}
-
-
-	private User createUser(String email, String name, String lastname) {
-		return createUser(email, name, lastname, rolesService.getRoles()[0], 100);
+	private List<Item> generateItems(User user) {
+		List<Item> list = new ArrayList<>();
+		for(int j = 0; j < 4; j++) {
+			list.add(createItem(user, "Producto " + (j + 1) + " de User " + user.getFullName(), "Descripcion de Producto " + (j + 1), Math.random() * 100, false));
+		}
+		return list;
 	}
 }

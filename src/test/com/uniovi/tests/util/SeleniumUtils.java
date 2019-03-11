@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class SeleniumUtils {
 
@@ -33,7 +33,7 @@ public class SeleniumUtils {
 	 */
 	static public void textoNoPresentePagina(WebDriver driver, String texto) {
 		List<WebElement> list = driver.findElements(By.xpath("//*[contains(text(),'" + texto + "')]"));
-		assertTrue("Texto " + texto + " aun presente !", list.size() == 0);
+		assertEquals("Texto " + texto + " aun presente !", 0, list.size());
 	}
 
 	/**
@@ -58,12 +58,11 @@ public class SeleniumUtils {
 	 * @param timeout: el tiempo máximo que se esperará por la aparición del elemento a buscar con xpath
 	 * @return Se retornará la lista de elementos resultantes de la búsqueda con xpath.
 	 */
-	static public List<WebElement> EsperaCargaPaginaxpath(WebDriver driver, String xpath, int timeout) {
+	private static List<WebElement> EsperaCargaPaginaxpath(WebDriver driver, String xpath, int timeout) {
 		WebElement resultado = (new WebDriverWait(driver, timeout)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
-		assertTrue(resultado != null);
-		List<WebElement> elementos = driver.findElements(By.xpath(xpath));
+		assertNotNull(resultado);
 
-		return elementos;
+		return driver.findElements(By.xpath(xpath));
 	}
 
 	/**
@@ -78,16 +77,23 @@ public class SeleniumUtils {
 	 */
 	static public List<WebElement> EsperaCargaPagina(WebDriver driver, String criterio, String text, int timeout) {
 		String busqueda;
-		if(criterio.equals("id"))
-			busqueda = "//*[contains(@id,'" + text + "')]";
-		else if(criterio.equals("class"))
-			busqueda = "//*[contains(@class,'" + text + "')]";
-		else if(criterio.equals("text"))
-			busqueda = "//*[contains(text(),'" + text + "')]";
-		else if(criterio.equals("free"))
-			busqueda = text;
-		else
-			busqueda = "//*[contains(" + criterio + ",'" + text + "')]";
+		switch(criterio) {
+			case "id":
+				busqueda = "//*[contains(@id,'" + text + "')]";
+				break;
+			case "class":
+				busqueda = "//*[contains(@class,'" + text + "')]";
+				break;
+			case "text":
+				busqueda = "//*[contains(text(),'" + text + "')]";
+				break;
+			case "free":
+				busqueda = text;
+				break;
+			default:
+				busqueda = "//*[contains(" + criterio + ",'" + text + "')]";
+				break;
+		}
 
 		return EsperaCargaPaginaxpath(driver, busqueda, timeout);
 	}
