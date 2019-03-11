@@ -1,9 +1,6 @@
 package com.uniovi.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
@@ -17,12 +14,12 @@ public class Message {
 	private String message;
 	private OffsetDateTime time;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Chat chat;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private User sender;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private User receiver;
 
 	public Message(String message, OffsetDateTime time) {

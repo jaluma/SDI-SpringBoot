@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +25,7 @@ public class ChatsService {
 		this.chatRepository = chatRepository;
 	}
 
+	@Transactional
 	public void addChat(Chat chat) {
 		chatRepository.save(chat);
 	}
@@ -50,16 +52,27 @@ public class ChatsService {
 		return chat.orElse(null);
 	}
 
+	@Transactional
 	public void deleteChat(Chat chat) {
 		Association.Chats.removeMessages(chat.getUsers().get(0), chat.getUsers().get(1), chat);
 		Association.Chats.removeChat(chat);
 		chatRepository.delete(chat);
 	}
 
+	@Transactional
 	public Chat createChat(User sender, Item item) {
 		Set<User> set = new HashSet<>();
 		set.add(sender);
 		set.add(item.getSellerUser());
 		return new Chat(item, set);
+	}
+
+	@Transactional
+	public void deleteAll() {
+		chatRepository.deleteAll();
+	}
+
+	public void addAll(Iterable<Chat> chatList) {
+		chatRepository.saveAll(chatList);
 	}
 }

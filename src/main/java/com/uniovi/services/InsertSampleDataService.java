@@ -4,17 +4,24 @@ import com.mifmif.common.regex.Generex;
 import com.uniovi.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.*;
 
 @Service
+@Transactional
 public class InsertSampleDataService {
 	private final UsersService usersService;
 	private final RolesService rolesService;
 	private final ChatsService chatsService;
 	private final MessagesService messagesService;
 	private final ItemsService itemsService;
+
+	private List<Chat> chatList = new ArrayList<>();
+	private List<Message> messagesList = new ArrayList<>();
+	private List<Item> itemsList = new ArrayList<>();
+	private List<User> usersList = new ArrayList<>();
 
 	@Autowired
 	public InsertSampleDataService(UsersService usersService, RolesService rolesService, ChatsService chatsService, MessagesService messagesService, ItemsService itemsService) {
@@ -59,12 +66,20 @@ public class InsertSampleDataService {
 		itemsService.buy(user4, items3.get(3));
 		itemsService.buy(user4, items4.get(3));
 
+		usersService.addAll(usersList);
+		itemsService.addAll(itemsList);
+		usersList.clear();
+		itemsList.clear();
+
 		// chats
 		for(User user : Arrays.asList(user1, user2, user3, user4)) {
 			createChats(user, user2, items2);
 			createChats(user, user3, items3);
 			createChats(user, user4, items4);
 		}
+
+		chatsService.addAll(chatList);
+		messagesService.addAll(messagesList);
 
 		//generamos valores para tener 20 usuarios registrados
 		String[] names = new String[]{"Maria", "Cristina", "Elena", "Ivan", "Pedro", "Fernando"};
@@ -77,10 +92,10 @@ public class InsertSampleDataService {
 			String name = names[rd.nextInt(names.length)];
 			String lastname = lastnames[rd.nextInt(lastnames.length)];
 
-			User user = createUser(email, name, lastname);
-
-			usersService.addUser(user);
+			createUser(email, name, lastname);
 		}
+
+		usersService.addAll(usersList);
 	}
 
 	private void createChats(User buyer, User seller, List<Item> items) {
@@ -93,7 +108,6 @@ public class InsertSampleDataService {
 		Set<User> set = new HashSet<>(Arrays.asList(user1, item1.getSellerUser()));
 
 		Chat chat = new Chat(item1, set);
-		chatsService.addChat(chat);
 
 		String message11 = "Hola " + item1.getSellerUser().getName();
 		String message12 = "Buenas tardes " + user1.getFullName() + " :)";
@@ -104,7 +118,7 @@ public class InsertSampleDataService {
 		createConversation(user1, item1.getSellerUser(), chat, message11, message12);
 		createConversation(user1, item1.getSellerUser(), chat, message21, message22);
 
-		chatsService.addChat(chat);
+		chatList.add(chat);
 	}
 
 	private List<Item> generateItems(User user) {
@@ -118,18 +132,19 @@ public class InsertSampleDataService {
 	private Item createItem(User user, String title, String description, double money, boolean highlighter) {
 		Item item = new Item(title, description, new Date(), money);
 		item.setHighlighter(highlighter);
-		itemsService.addItem(item, user);
+		Association.Sell.link(user, item);
+		itemsList.add(item);
 		return item;
 	}
 
 	private void createConversation(User user1, User user2, Chat chat, String send, String receive) {
 		Message message1 = new Message(send, OffsetDateTime.now());
 		Association.Chats.sendMessage(user1, user2, chat, message1);
-		messagesService.addMessage(message1);
+		messagesList.add(message1);
 
 		Message message2 = new Message(receive, OffsetDateTime.now());
 		Association.Chats.sendMessage(user2, user1, chat, message2);
-		messagesService.addMessage(message2);
+		messagesList.add(message2);
 	}
 
 	private User createUser(String email, String name, String lastname, String password, String role, double money) {
@@ -137,7 +152,8 @@ public class InsertSampleDataService {
 		user.setPassword(password);
 		user.setMoney(money);
 		user.setRole(role);
-		usersService.add(user);
+		usersService.encryptPassword(user);
+		usersList.add(user);
 		return user;
 	}
 

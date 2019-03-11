@@ -1,10 +1,8 @@
 package com.uniovi.tests;
 
-import com.uniovi.repositories.ChatRepository;
-import com.uniovi.repositories.ItemsRepository;
-import com.uniovi.repositories.MessageRepository;
-import com.uniovi.repositories.UsersRepository;
+import com.uniovi.services.ChatsService;
 import com.uniovi.services.InsertSampleDataService;
+import com.uniovi.services.UsersService;
 import com.uniovi.tests.pageobjects.*;
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -13,13 +11,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@RunWith(SpringRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 public class MyWallapopTests {
 
@@ -35,22 +33,20 @@ public class MyWallapopTests {
 	static String URLremota = "http://ec2-35-180-117-233.eu-west-3.compute.amazonaws.com:8090";
 	private static final String URL = URLremota;
 
-	@Autowired
-	private InsertSampleDataService insertSampleDataService;
-	@Autowired
-	private UsersRepository usersRepository;
-	@Autowired
-	private ChatRepository chatRepository;
-	@Autowired
-	private ItemsRepository itemsRepository;
-	@Autowired
-	private MessageRepository messageRepository;
-
 	private static WebDriver getDriver(String PathFirefox, String Geckdriver) {
 		System.setProperty("webdriver.firefox.bin", PathFirefox);
 		System.setProperty("webdriver.gecko.driver", Geckdriver);
 		return new FirefoxDriver();
 	}
+
+	@Autowired
+	private ChatsService chatsService;
+	@Autowired
+	private UsersService usersService;
+	@Autowired
+	private ChatsService itemsService;
+	@Autowired
+	private InsertSampleDataService insertSampleDataService;
 
 	@BeforeClass
 	static public void begin() {
@@ -68,11 +64,9 @@ public class MyWallapopTests {
 	}
 
 	private void initdb() {
-		messageRepository.deleteAll();
-		chatRepository.deleteAll();
-		itemsRepository.deleteAll();
-		usersRepository.deleteAll();
-
+		chatsService.deleteAll();
+		itemsService.deleteAll();
+		usersService.deleteAll();
 		insertSampleDataService.init();
 	}
 

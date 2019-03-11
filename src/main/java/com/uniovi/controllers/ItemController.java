@@ -91,10 +91,15 @@ public class ItemController {
 	}
 
 	@RequestMapping("/item/delete/{id}")
-	public String delete(@PathVariable Long id) {
+	public String delete(@PathVariable Long id, Principal principal) {
 		Item item = itemsService.getItem(id);
+		User user = Utilities.getCurrentUser(principal, usersService);
 
 		if(item == null) {
+			throw new IllegalStateException("Illegal");
+		}
+
+		if(!item.getSellerUser().equals(user)) {
 			throw new IllegalStateException("Illegal");
 		}
 		// conseguir los chats y borrarlos

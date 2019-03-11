@@ -31,10 +31,10 @@ public class Item {
 	private double price;
 	private boolean highlighter = false;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private User sellerUser;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private User buyerUser;
 
 	@OneToMany(mappedBy = "item", fetch = FetchType.EAGER)
@@ -146,7 +146,7 @@ public class Item {
 		if(o == null || getClass() != o.getClass())
 			return false;
 		Item item = (Item) o;
-		return Double.compare(item.price, price) == 0 && title.equals(item.title) && description.equals(item.description);
+		return Double.compare(item.price, price) == 0 && item.title != null && title.equals(item.title) && item.description != null && description.equals(item.description);
 	}
 
 	@Override

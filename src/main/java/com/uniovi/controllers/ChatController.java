@@ -21,7 +21,6 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -63,7 +62,7 @@ public class ChatController {
 		model.addAttribute("formatter", formatter);
 
 		List<Message> messages = new ArrayList<>(chat.getMessages());
-		messages.sort(Comparator.comparing(Message::getTime));
+		//		messages.sort(Comparator.comparing(Message::getTime));
 
 		model.addAttribute("messagesList", messages);
 		return "chat/conversation";

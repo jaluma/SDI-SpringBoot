@@ -31,11 +31,11 @@ public class UsersService {
 
 	public void addUser(User user) {
 		user.setMoney(DEFUALT_MONEY);
+		encryptPassword(user);
 		add(user);
 	}
 
 	public void add(User user) {
-		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		usersRepository.save(user);
 	}
 
@@ -56,4 +56,15 @@ public class UsersService {
 		return usersRepository.findAllByUsernameAndFullName(pageable, searchText);
 	}
 
+	public void deleteAll() {
+		usersRepository.deleteAll();
+	}
+
+	public void encryptPassword(User user) {
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+	}
+
+	public void addAll(Iterable<User> usersList) {
+		usersRepository.saveAll(usersList);
+	}
 }

@@ -112,4 +112,15 @@ public class ItemsService {
 
 		add(item);
 	}
+
+	public void deleteAll() {
+		//		for(Item item: itemsRepository.findAll()) {
+		//			deleteItem(item);
+		//		}
+		itemsRepository.deleteAll();
+	}
+
+	public void addAll(Iterable<Item> itemsList) {
+		itemsRepository.saveAll(itemsList);
+	}
 }

@@ -32,4 +32,12 @@ public class MessagesService {
 			messageRepository.deleteById(message.getId());
 		}
 	}
+
+	public void deleteAll() {
+		messageRepository.deleteAll();
+	}
+
+	public void addAll(Iterable<Message> messagesList) {
+		messageRepository.saveAll(messagesList);
+	}
 }

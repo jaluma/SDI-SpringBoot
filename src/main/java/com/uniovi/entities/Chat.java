@@ -1,10 +1,7 @@
 package com.uniovi.entities;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Chat {
@@ -13,14 +10,14 @@ public class Chat {
 	@GeneratedValue
 	private long id;
 
-	@OneToMany(mappedBy = "chat", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@OrderBy("time ASC")
-	private Set<Message> messages = new HashSet<>();
+	private List<Message> messages = new ArrayList<>();
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Item item;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<User> users = new HashSet<>();
 
 	Chat() {
@@ -52,11 +49,11 @@ public class Chat {
 		return new HashSet<>(messages);
 	}
 
-	public void setMessages(Set<Message> messages) {
+	public void setMessages(List<Message> messages) {
 		this.messages = messages;
 	}
 
-	Set<Message> _getMessages() {
+	List<Message> _getMessages() {
 		return messages;
 	}
 

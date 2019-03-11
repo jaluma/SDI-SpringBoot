@@ -22,16 +22,16 @@ public class User {
 	private String role;
 	private double money;
 
-	@OneToMany(mappedBy = "buyerUser", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "buyerUser", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Item> buyerItems = new HashSet<>();
 
-	@OneToMany(mappedBy = "sellerUser", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "sellerUser", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Item> sellerItems = new HashSet<>();
 
-	@OneToMany(mappedBy = "sender", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "sender", orphanRemoval = true, fetch = FetchType.EAGER)
 	private Set<Message> senderMessages = new HashSet<>();
 
-	@OneToMany(mappedBy = "receiver", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "receiver", orphanRemoval = true, fetch = FetchType.EAGER)
 	private Set<Message> receiverMessages = new HashSet<>();
 
 	public User(String email, String name, String lastName) {
@@ -150,8 +150,12 @@ public class User {
 			return true;
 		if(o == null || getClass() != o.getClass())
 			return false;
+		if(!(o instanceof User)) {
+			return false;
+		}
 		User user = (User) o;
-		return email.equals(user.email) && name.equals(user.name) && lastName.equals(user.lastName) && role.equals(user.role);
+		return user.email != null && email.equals(user.email) && user.name != null && name.equals(user.name) && user.lastName != null && lastName.equals(user.lastName) && user.role != null && role
+				.equals(user.role);
 	}
 
 	@Override
