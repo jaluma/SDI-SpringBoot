@@ -2,6 +2,8 @@ package com.uniovi.controllers;
 
 import com.uniovi.entities.User;
 import com.uniovi.services.UsersService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,7 @@ import java.util.List;
 @Controller
 public class AdminController {
 	private final UsersService usersService;
+	private Logger logger = LoggerFactory.getLogger(AdminController.class);
 
 	@Autowired
 	public AdminController(UsersService usersService) {
@@ -44,7 +47,9 @@ public class AdminController {
 	public String remove(@RequestParam(value = "idChecked", required = false) List<String> removeList) {
 		if(removeList != null) {
 			for(String id : removeList) {
-				usersService.deleteUser(Long.parseLong(id));
+				Long idL = Long.parseLong(id);
+				logger.info(String.format("Delete user: %d", idL));
+				usersService.deleteUser(idL);
 			}
 		}
 		return "redirect:/admin/list";

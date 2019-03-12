@@ -8,6 +8,8 @@ import com.uniovi.services.RolesService;
 import com.uniovi.services.SecurityService;
 import com.uniovi.services.UsersService;
 import com.uniovi.validators.SignUpFormValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +32,8 @@ public class UsersController {
 	private final SignUpFormValidator signUpFormValidator;
 	private final RolesService rolesService;
 	private final ItemsService itemsService;
+
+	private Logger logger = LoggerFactory.getLogger(UsersController.class);
 
 	@Autowired
 	public UsersController(UsersService usersService, SecurityService securityService, SignUpFormValidator signUpFormValidator, RolesService rolesService, ItemsService itemsService) {
@@ -55,6 +59,8 @@ public class UsersController {
 
 		user.setRole(rolesService.getRoles()[0]);
 		usersService.addUser(user);
+		logger.info(String.format("Signup user %s", user.getEmail()));
+
 		securityService.autoLogin(user.getEmail(), user.getPasswordConfirm());
 		return "redirect:home";
 	}

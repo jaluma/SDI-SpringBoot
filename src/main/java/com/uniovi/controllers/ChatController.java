@@ -6,6 +6,8 @@ import com.uniovi.services.ChatsService;
 import com.uniovi.services.ItemsService;
 import com.uniovi.services.MessagesService;
 import com.uniovi.services.UsersService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +32,8 @@ public class ChatController {
 	private final UsersService usersService;
 	private final ChatsService chatsService;
 	private final MessagesService messagesService;
+
+	private Logger logger = LoggerFactory.getLogger(ChatController.class);
 
 	@Autowired
 	public ChatController(ItemsService itemsService, UsersService usersService, ChatsService chatsService, MessagesService messagesService) {
@@ -105,6 +109,7 @@ public class ChatController {
 		}
 
 		chatsService.addChat(chat);
+		logger.info(String.format("Create Chat %d", id));
 
 		return "redirect:/chat/conversation/" + chat.getId();
 	}
@@ -119,6 +124,8 @@ public class ChatController {
 
 		messagesService.deleteMessages(chat.getMessages());
 		chatsService.deleteChat(chat);
+
+		logger.info(String.format("Delete chat %d", id));
 
 		return "redirect:/chat/list";
 	}

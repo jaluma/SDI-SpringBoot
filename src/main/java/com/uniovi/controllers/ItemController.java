@@ -8,6 +8,8 @@ import com.uniovi.services.ChatsService;
 import com.uniovi.services.ItemsService;
 import com.uniovi.services.UsersService;
 import com.uniovi.validators.ItemValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +36,8 @@ public class ItemController {
 	private final ItemValidator itemValidator;
 	private final ChatsService chatsService;
 
+	private Logger logger = LoggerFactory.getLogger(ItemController.class);
+
 	@Autowired
 	public ItemController(ItemsService itemsService, UsersService usersService, ItemValidator buyedItemValidator, ChatsService chatsService) {
 		this.itemsService = itemsService;
@@ -59,6 +63,7 @@ public class ItemController {
 
 		User user = Utilities.getCurrentUser(principal, usersService);
 		itemsService.addItem(item, user);
+		logger.info(String.format("Add item %s", item.getTitle()));
 
 		return "redirect:/item/mylist";
 	}
@@ -83,6 +88,7 @@ public class ItemController {
 		}
 
 		itemsService.buy(buyerUser, item);
+		logger.info(String.format("Buy item %d by %d", id, buyerUser.getId()));
 
 		return "redirect:/item/list";
 	}
@@ -106,6 +112,8 @@ public class ItemController {
 		}
 
 		itemsService.deleteItem(item);
+
+		logger.info(String.format("Delete item %d", id));
 		return "redirect:/item/mylist";
 	}
 
@@ -141,6 +149,7 @@ public class ItemController {
 
 		itemsService.highlighter(item, user);
 		itemsService.add(item);
+		logger.info(String.format("Hightlighter item %d", id));
 
 		return "redirect:/item/mylist";
 	}
