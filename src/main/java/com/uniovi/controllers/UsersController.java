@@ -8,7 +8,6 @@ import com.uniovi.services.RolesService;
 import com.uniovi.services.SecurityService;
 import com.uniovi.services.UsersService;
 import com.uniovi.validators.SignUpFormValidator;
-import com.uniovi.validators.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,16 +28,14 @@ public class UsersController {
 	private final UsersService usersService;
 	private final SecurityService securityService;
 	private final SignUpFormValidator signUpFormValidator;
-	private final UserValidator userValidator;
 	private final RolesService rolesService;
 	private final ItemsService itemsService;
 
 	@Autowired
-	public UsersController(UsersService usersService, SecurityService securityService, SignUpFormValidator signUpFormValidator, UserValidator userValidator, RolesService rolesService, ItemsService itemsService) {
+	public UsersController(UsersService usersService, SecurityService securityService, SignUpFormValidator signUpFormValidator, RolesService rolesService, ItemsService itemsService) {
 		this.usersService = usersService;
 		this.securityService = securityService;
 		this.signUpFormValidator = signUpFormValidator;
-		this.userValidator = userValidator;
 		this.rolesService = rolesService;
 		this.itemsService = itemsService;
 	}

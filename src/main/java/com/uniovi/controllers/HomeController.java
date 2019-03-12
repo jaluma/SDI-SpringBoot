@@ -1,9 +1,12 @@
 package com.uniovi.controllers;
 
+import com.uniovi.controllers.util.Utilities;
 import com.uniovi.entities.Item;
 import com.uniovi.entities.User;
 import com.uniovi.services.ItemsService;
 import com.uniovi.services.UsersService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +22,7 @@ import java.util.List;
 public class HomeController {
 	private final ItemsService itemsService;
 	private final UsersService usersService;
+	private Logger logger = LoggerFactory.getLogger(HomeController.class);
 
 	@Autowired
 	public HomeController(ItemsService itemsService, UsersService usersService) {
@@ -33,6 +37,7 @@ public class HomeController {
 
 	@RequestMapping("/loginSuccess")
 	public String loginSuccess(Model model, Pageable pageable) {
+		logger.info(String.format("Login succesfully - User: %s", Utilities.getCurrentUser(usersService).getEmail()));
 		return "redirect:" + home(model, pageable);
 	}
 

@@ -7,7 +7,6 @@ import com.uniovi.entities.User;
 import com.uniovi.services.ChatsService;
 import com.uniovi.services.ItemsService;
 import com.uniovi.services.UsersService;
-import com.uniovi.validators.BuyItemValidator;
 import com.uniovi.validators.ItemValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,14 +30,12 @@ import java.util.List;
 @Controller
 public class ItemController {
 	private final UsersService usersService;
-	private final BuyItemValidator buyItemValidator;
 	private final ItemsService itemsService;
 	private final ItemValidator itemValidator;
 	private final ChatsService chatsService;
 
 	@Autowired
-	public ItemController(BuyItemValidator buyItemValidator, ItemsService itemsService, UsersService usersService, ItemValidator buyedItemValidator, ChatsService chatsService) {
-		this.buyItemValidator = buyItemValidator;
+	public ItemController(ItemsService itemsService, UsersService usersService, ItemValidator buyedItemValidator, ChatsService chatsService) {
 		this.itemsService = itemsService;
 		this.usersService = usersService;
 		this.itemValidator = buyedItemValidator;
