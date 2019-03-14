@@ -18,12 +18,14 @@ import java.util.Set;
 @Service
 public class ItemsService {
 	private final ItemsRepository itemsRepository;
+	private final UsersService usersService;
 	private final HttpSession httpSession;
 
 	@Autowired
-	public ItemsService(ItemsRepository itemsRepository, HttpSession httpSession) {
+	public ItemsService(ItemsRepository itemsRepository, HttpSession httpSession, UsersService usersService) {
 		this.itemsRepository = itemsRepository;
 		this.httpSession = httpSession;
+		this.usersService = usersService;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -63,11 +65,16 @@ public class ItemsService {
 	public void highlighter(Item item, User user) {
 		user.setMoney(user.getMoney() - 20);
 		item.setHighlighter(true);
+		usersService.add(user);
 	}
 
 	public void deleteItem(Item item) {
+		if(item.getBuyerUser() != null) {
+			Association.Buy.unlink(item);
+		}
 		Association.Sell.unlink(item);
-		itemsRepository.deleteById(item.getId());
+
+		itemsRepository.delete(item);
 	}
 
 	public Page<Item> searchItemsByTitleDescriptionAndUsernameByBuyerUser(Pageable pageable, String searchText, User user) {
@@ -79,22 +86,22 @@ public class ItemsService {
 		return itemsRepository.findAllBuyerUser(pageable, user);
 	}
 
+	public Page<Item> getItemsBySellerUser(Pageable pageable, User user) {
+		return itemsRepository.findAllSellerUser(pageable, user);
+	}
+
 	public Page<Item> searchItemsByTitleDescriptionAndUsernameBySellerUser(Pageable pageable, String searchText, User user) {
 		searchText = "%" + searchText + "%";
 		return itemsRepository.searchByTitleDescriptionAndUserDistintUser(pageable, searchText, user);
 	}
 
-	public Page<Item> getItemsBySellerUser(Pageable pageable, User user) {
+	public Page<Item> getItemsDistintUser(Pageable pageable, User user) {
 		return itemsRepository.findAllDistintUser(pageable, user);
 	}
 
 	public Page<Item> searchItemsByTitleDescriptionAndUsernameByUser(Pageable pageable, String searchText, User user) {
 		searchText = "%" + searchText + "%";
 		return itemsRepository.searchByTitleDescriptionAndUserByEmail(pageable, searchText, user);
-	}
-
-	public Page<Item> getItemsBySellerUser(Pageable pageable) {
-		return itemsRepository.findAll(pageable);
 	}
 
 	public List<Item> getHighlighterItems(User user) {
@@ -111,16 +118,28 @@ public class ItemsService {
 		buyerUser.setMoney(buyerUser.getMoney() - item.getPrice());
 
 		add(item);
+		usersService.add(buyerUser);
 	}
 
 	public void deleteAll() {
-		//		for(Item item: itemsRepository.findAll()) {
-		//			deleteItem(item);
-		//		}
 		itemsRepository.deleteAll();
 	}
 
-	public void addAll(Iterable<Item> itemsList) {
+	void addAll(Iterable<Item> itemsList) {
 		itemsRepository.saveAll(itemsList);
+	}
+
+	public void buyUnlink(Pageable pageable, User user) {
+		for(Item item : getItemsByBuyerUser(pageable, user).getContent()) {
+			Association.Buy.unlink(item);
+			add(item);
+		}
+	}
+
+	public void sellUnlink(Pageable pageable, User user) {
+		for(Item item : getItemsBySellerUser(pageable, user).getContent()) {
+			Association.Sell.unlink(item);
+			add(item);
+		}
 	}
 }

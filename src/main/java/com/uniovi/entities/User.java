@@ -22,17 +22,14 @@ public class User {
 	private String role;
 	private double money;
 
-	@OneToMany(mappedBy = "buyerUser", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "buyerUser", fetch = FetchType.EAGER)
 	private Set<Item> buyerItems = new HashSet<>();
 
-	@OneToMany(mappedBy = "sellerUser", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "sellerUser", orphanRemoval = true, fetch = FetchType.EAGER)
 	private Set<Item> sellerItems = new HashSet<>();
 
-	@OneToMany(mappedBy = "sender", orphanRemoval = true, fetch = FetchType.EAGER)
-	private Set<Message> senderMessages = new HashSet<>();
-
-	@OneToMany(mappedBy = "receiver", orphanRemoval = true, fetch = FetchType.EAGER)
-	private Set<Message> receiverMessages = new HashSet<>();
+	@OneToMany(mappedBy = "user", orphanRemoval = true, fetch = FetchType.EAGER)
+	private Set<Message> messages = new HashSet<>();
 
 	public User(String email, String name, String lastName) {
 		super();
@@ -136,12 +133,16 @@ public class User {
 		this.money = money;
 	}
 
-	Set<Message> _getSenderMessages() {
-		return senderMessages;
+	Set<Message> _getMessages() {
+		return messages;
 	}
 
-	Set<Message> _getReceiverMessages() {
-		return receiverMessages;
+	public Set<Message> getMessages() {
+		return new HashSet<>(messages);
+	}
+
+	public void setMessages(Set<Message> messages) {
+		this.messages = messages;
 	}
 
 	@Override

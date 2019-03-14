@@ -20,7 +20,7 @@
 						<tr id="chat" class="tr-static-height clickable-row" th:data-href="${'/chat/conversation/' + chat.getId()}"
 						    style="cursor: pointer;" th:each="chat : ${chatsList}">
 							<td th:text="${chat.getItem().getTitle()}"></td>
-							<td th:text="${chat.getUser(sender).getEmail()}"></td>
+							<td th:text="${usersService.getUsersDistintByChat(chat, user).get(0).getEmail()}"></td>
 							<td><a id="removeButton" class="link" th:href="${'/chat/delete/' + chat.id}"><i class="material-icons">delete</i></a></td>
 						</tr>
 						</tbody>

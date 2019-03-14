@@ -6,16 +6,16 @@
 	</head>
 	<body>
 		<div class="container" layout:fragment="content">
-			<h2 th:text="#{chat.conversacion(${receiver.getFullName()})}"></h2>
+			<h2 th:text="#{chat.conversacion(${chat.item.getSellerUser().getFullName()})}"></h2>
 	        <div id="chat" class="card">
 		        <ul id="messages">
 			        <li id="message" th:each="message : ${messagesList}" style="list-style: none;">
-				        <div class="message-data" th:classappend="${message.sender.equals(sender)} ? 'my-message-data' : 'other-message-data'">
-					        <span class="message-data-name" th:text="${message.sender.getFullName()}"> </span>
-					        <span class="message-data-time" th:text="${message.getTime().format(formatter)}"></span>
+				        <div class="message-data" th:classappend="${message.user.equals(user)} ? 'my-message-data' : 'other-message-data'">
+					        <span class="message-data-name" th:text="${message.user.getFullName()}"> </span>
+					        <span class="message-data-time" th:text="${formatter.format(message.getTime())}"></span>
 					    </div>
 				     
-						<div class="text_wrapper message" th:classappend="${message.sender.equals(sender)} ? 'my-message' : 'other-message'">
+						<div class="text_wrapper message" th:classappend="${message.user.equals(user)} ? 'my-message' : 'other-message'">
 							<div class="text" th:text="${message.message}"></div>
 						</div>
 					</li>
@@ -33,8 +33,39 @@
 		        </form>
 		        <script th:inline="javascript">
 				 /*<![CDATA[*/
-                 var objDiv = document.getElementById("chat");
-                 objDiv.scrollTop = objDiv.scrollHeight;
+                 function animateScroll(someElement, duration) {
+                     var start = someElement.scrollTop;
+                     var end = someElement.scrollHeight;
+                     var change = end - start;
+                     var increment = 20;
+
+                     function easeInOut(currentTime, start, change, duration) {
+                         // by Robert Penner
+                         currentTime /= duration / 2;
+                         if (currentTime < 1) {
+                             return change / 2 * currentTime * currentTime + start;
+                         }
+                         currentTime -= 1;
+                         return -change / 2 * (currentTime * (currentTime - 2) - 1) + start;
+                     }
+
+                     function animate(elapsedTime) {
+                         elapsedTime += increment;
+                         someElement.scrollTop = easeInOut(elapsedTime, start, change, duration);
+                         if (elapsedTime < duration) {
+                             setTimeout(function () {
+                                 animate(elapsedTime);
+                             }, increment)
+                         }
+                     }
+
+                     animate(0);
+                 }
+
+                 var someElement = $("#messages");
+                 var duration = 300;
+                 animateScroll(someElement, duration);
+                 $("#messageInput").focus();
                  /*]]>*/
 			 </script>
 		    </div>

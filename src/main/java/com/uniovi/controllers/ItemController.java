@@ -27,7 +27,6 @@ import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 @Controller
 public class ItemController {
@@ -106,8 +105,7 @@ public class ItemController {
 			throw new IllegalStateException("Illegal");
 		}
 		// conseguir los chats y borrarlos
-		List<Chat> chats = chatsService.getChats(item);
-		for(Chat chat : chats) {
+		for(Chat chat : chatsService.getChats(item)) {
 			chatsService.deleteChat(chat);
 		}
 
@@ -130,7 +128,7 @@ public class ItemController {
 	}
 
 	@RequestMapping("/item/highlighter/{id}")
-	public String highlighter(@PathVariable Long id, Model model, Principal principal, HttpSession session) {
+	public String highlighter(@PathVariable Long id, Principal principal, HttpSession session) {
 		Item item = itemsService.getItem(id);
 		User user = Utilities.getCurrentUser(principal, usersService);
 
@@ -167,7 +165,7 @@ public class ItemController {
 			items = itemsService.searchItemsByTitleDescriptionAndUsernameBySellerUser(pageable, searchText, user);
 			model.addAttribute("searchText", searchText);
 		} else {
-			items = itemsService.getItemsBySellerUser(pageable, user);
+			items = itemsService.getItemsDistintUser(pageable, user);
 			model.addAttribute("searchText", "");
 		}
 
@@ -197,10 +195,4 @@ public class ItemController {
 		model.addAttribute("itemsList", items.getContent());
 		return "item/mylist";
 	}
-
-	/*
-		AUXILIARES
-	 */
-
-
 }

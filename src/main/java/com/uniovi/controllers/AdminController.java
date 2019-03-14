@@ -1,6 +1,7 @@
 package com.uniovi.controllers;
 
 import com.uniovi.entities.User;
+import com.uniovi.services.ItemsService;
 import com.uniovi.services.UsersService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,21 +14,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.security.Principal;
 import java.util.List;
 
 @Controller
 public class AdminController {
 	private final UsersService usersService;
+	private final ItemsService itemsService;
 	private Logger logger = LoggerFactory.getLogger(AdminController.class);
 
 	@Autowired
-	public AdminController(UsersService usersService) {
+	public AdminController(UsersService usersService, ItemsService itemsService) {
 		this.usersService = usersService;
+		this.itemsService = itemsService;
 	}
 
 	@RequestMapping(value = "/admin/list", method = RequestMethod.GET)
-	public String getList(Model model, Pageable pageable, Principal principal, @RequestParam(required = false) String searchText) {
+	public String getList(Model model, Pageable pageable, @RequestParam(required = false) String searchText) {
 		Page<User> users; // no se inicializa, se hace abajo
 		if(searchText != null && !searchText.isEmpty()) {
 			users = usersService.searchUsers(pageable, searchText);
@@ -44,12 +46,17 @@ public class AdminController {
 	}
 
 	@RequestMapping(value = "/admin/remove", method = RequestMethod.POST)
-	public String remove(@RequestParam(value = "idChecked", required = false) List<String> removeList) {
+	public String remove(@RequestParam(value = "idChecked", required = false) List<String> removeList, Pageable pageable) {
 		if(removeList != null) {
 			for(String id : removeList) {
 				Long idL = Long.parseLong(id);
+				User user = usersService.getUser(idL);
+
+				itemsService.buyUnlink(pageable, user);
+				itemsService.sellUnlink(pageable, user);
+
+				usersService.deleteUser(user);
 				logger.info(String.format("Delete user: %d", idL));
-				usersService.deleteUser(idL);
 			}
 		}
 		return "redirect:/admin/list";

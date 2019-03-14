@@ -1,7 +1,10 @@
 package com.uniovi.controllers;
 
 import com.uniovi.controllers.util.Utilities;
-import com.uniovi.entities.*;
+import com.uniovi.entities.Chat;
+import com.uniovi.entities.Item;
+import com.uniovi.entities.Message;
+import com.uniovi.entities.User;
 import com.uniovi.services.ChatsService;
 import com.uniovi.services.ItemsService;
 import com.uniovi.services.MessagesService;
@@ -19,14 +22,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
-@RequestMapping("/chat/")
 public class ChatController {
 	private final ItemsService itemsService;
 	private final UsersService usersService;
@@ -43,69 +46,71 @@ public class ChatController {
 		this.messagesService = messagesService;
 	}
 
-	@RequestMapping("conversation/{id}")
+	@RequestMapping("/chat/conversation/{id}")
 	public String getConversation(Model model, @PathVariable Long id) {
 		Chat chat = chatsService.getChat(id);
 		if(chat == null) {
 			throw new IllegalStateException("Illegal");
 		}
 
-		User sender = Utilities.getCurrentUser(usersService);
-		User receiver = chat.getUser(sender);
+		User user = Utilities.getCurrentUser(usersService);
 
-		if(!chat.getUsers().contains(sender)) {
+		if(!chatsService.isValidUser(chat, user)) {
 			throw new IllegalStateException("Illegal");
 		}
 
-		model.addAttribute("sender", sender);
+		model.addAttribute("user", user);
 		model.addAttribute("chat", chat);
-		model.addAttribute("receiver", receiver);
 
 		//format time
 		DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
 		model.addAttribute("formatter", formatter);
 
 		List<Message> messages = new ArrayList<>(chat.getMessages());
-		//		messages.sort(Comparator.comparing(Message::getTime));
+		messages.sort(Comparator.comparing(Message::getTime));
 
 		model.addAttribute("messagesList", messages);
 		return "chat/conversation";
 	}
 
-	@RequestMapping(value = "{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/chat/{id}", method = RequestMethod.POST)
 	public String postMessage(@RequestParam("message") String message, @PathVariable Long id) {
 		Chat chat = chatsService.getChat(id);
 		User sender = Utilities.getCurrentUser(usersService);
-		User receiver = chat.getUser(sender);
 
-		Message chatMessage = new Message(message, OffsetDateTime.now());
+
+		Message chatMessage = new Message(message, LocalDateTime.now());
+		messagesService.sendMessage(sender, chat, chatMessage);
 		messagesService.addMessage(chatMessage);
-		Association.Chats.sendMessage(sender, receiver, chat, chatMessage);
 		chatsService.addChat(chat);
 
 		return "redirect:/chat/conversation/" + id;
 	}
 
-	@RequestMapping(value = "list", method = RequestMethod.GET)
+	@RequestMapping(value = "/chat/list", method = RequestMethod.GET)
 	public String getList(Model model, Pageable pageable, Principal principal) {
-		Page<Chat> chats = chatsService.getChats(pageable, Utilities.getCurrentUser(principal, usersService));
-		User sender = Utilities.getCurrentUser(usersService);
-		model.addAttribute("sender", sender);
+		Page<Chat> chats = chatsService.getListChat(pageable, Utilities.getCurrentUser(principal, usersService));
+		User user = Utilities.getCurrentUser(usersService);
+		model.addAttribute("usersService", usersService);
+		model.addAttribute("user", user);
 		model.addAttribute("page", chats);
 		model.addAttribute("chatsList", chats.getContent());
 
 		return "chat/list";
 	}
 
-	@RequestMapping(value = "create/{id}", method = RequestMethod.GET)
-	public String create(Model model, @PathVariable Long id) {
+	@RequestMapping(value = "/chat/create/{id}", method = RequestMethod.GET)
+	public String create(@PathVariable Long id) {
 		Item item = itemsService.getItem(id);
+		if(item == null) {
+			throw new IllegalStateException("Illegal");
+		}
 
 		User sender = Utilities.getCurrentUser(usersService);
 
 		Chat chat = chatsService.findChatByUserAndItem(sender, item);
 		if(chat == null) {
-			chat = chatsService.createChat(sender, item);
+			chat = chatsService.createChat(item);
 		}
 
 		chatsService.addChat(chat);
@@ -115,14 +120,13 @@ public class ChatController {
 	}
 
 
-	@RequestMapping(value = "delete/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/chat/delete/{id}", method = RequestMethod.GET)
 	public String remove(@PathVariable Long id) {
 		Chat chat = chatsService.getChat(id);
 		if(chat == null) {
 			throw new IllegalStateException("Illegal");
 		}
 
-		messagesService.deleteMessages(chat.getMessages());
 		chatsService.deleteChat(chat);
 
 		logger.info(String.format("Delete chat %d", id));

@@ -10,23 +10,19 @@ public class Chat {
 	@GeneratedValue
 	private long id;
 
-	@OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "chat", orphanRemoval = true, fetch = FetchType.EAGER)
 	@OrderBy("time ASC")
 	private List<Message> messages = new ArrayList<>();
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Item item;
-
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<User> users = new HashSet<>();
 
 	Chat() {
 	}
 
-	public Chat(Item item, Set<User> users) {
+	public Chat(Item item) {
 		this.item = item;
-		this.users = users;
-		Association.Chats.createChat(this, item, users);
+		Association.Chats.createChat(this, item);
 	}
 
 	public long getId() {
@@ -57,18 +53,6 @@ public class Chat {
 		return messages;
 	}
 
-	public ArrayList<User> getUsers() {
-		return new ArrayList<>(users);
-	}
-
-	void setUsers(Set<User> users) {
-		this.users = users;
-	}
-
-	Set<User> _getUsers() {
-		return users;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if(this == o)
@@ -82,9 +66,5 @@ public class Chat {
 	@Override
 	public int hashCode() {
 		return Objects.hash(messages, item);
-	}
-
-	public User getUser(User distint) {
-		return getUsers().get(0).equals(distint) ? getUsers().get(1) : getUsers().get(0);
 	}
 }

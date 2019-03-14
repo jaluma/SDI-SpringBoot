@@ -2,6 +2,7 @@ package com.uniovi.tests;
 
 import com.uniovi.services.ChatsService;
 import com.uniovi.services.InsertSampleDataService;
+import com.uniovi.services.ItemsService;
 import com.uniovi.services.UsersService;
 import com.uniovi.tests.pageobjects.*;
 import org.junit.*;
@@ -45,7 +46,7 @@ public class MyWallapopTests {
 	@Autowired
 	private UsersService usersService;
 	@Autowired
-	private ChatsService itemsService;
+	private ItemsService itemsService;
 	@Autowired
 	private InsertSampleDataService insertSampleDataService;
 
@@ -303,7 +304,7 @@ public class MyWallapopTests {
 		PO_NavView.navbar(driver, "sellsDropdownMenuLink", "list");
 		assertEquals(5, PO_ItemView.checkNumberList(driver));
 		PO_ItemView.searchText(driver, "aasdasdassdaa");
-		assertEquals(0, PO_ItemView.checkNumberList(driver));
+		assertEquals(0, PO_ItemView.checkNumberListWithputTimeout(driver));
 	}
 
 	//PR23. Sobre una búsqueda determinada (a elección de desarrollador), comprar una oferta que deja
@@ -339,7 +340,7 @@ public class MyWallapopTests {
 	//saldo no suficiente
 	@Test
 	public void PR25() {
-		goHome("juan@email.com");
+		goHome("pedro@email.com");
 		PO_NavView.navbar(driver, "sellsDropdownMenuLink", "list");
 		assertEquals(5, PO_ItemView.checkNumberList(driver));
 		String money = PO_NavView.money(driver);
@@ -415,15 +416,15 @@ public class MyWallapopTests {
 	//en el listado de mensajes.
 	@Test
 	public void PR31() {
-		goHome("juan@email.com");
+		goHome("javier@email.com");
 		PO_NavView.navbar(driver, "sellsDropdownMenuLink", "list");
 		assertEquals(5, PO_ItemView.checkNumberList(driver));
-		PO_ItemView.searchText(driver, "Silla");
+		PO_ItemView.searchText(driver, "Producto 2 de User Juán Mayo");
 		assertEquals(1, PO_ItemView.checkNumberList(driver));
 		PO_ItemView.chatButton(driver, 0);
-		assertEquals(0, PO_ChatView.getNumberMessages(driver));
+		assertEquals(4, PO_ChatView.getNumberMessages(driver));
 		PO_ChatView.sendMessage(driver, "Hola buen amigo!");
-		assertEquals(1, PO_ChatView.getNumberMessages(driver));
+		assertEquals(5, PO_ChatView.getNumberMessages(driver));
 	}
 
 	//PR32. Sobre el listado de conversaciones enviar un mensaje a una conversación ya abierta.
@@ -446,7 +447,7 @@ public class MyWallapopTests {
 		PO_NavView.clickOption(driver, "/chat/list");
 		assertEquals(10, PO_ChatView.checkNumberList(driver));
 		PO_ChatView.changePage(driver, 2);
-		assertEquals(9, PO_ChatView.checkNumberList(driver));
+		assertEquals(8, PO_ChatView.checkNumberList(driver));
 	}
 
 	//PR34. Sobre el listado de conversaciones ya abiertas. Pinchar el enlace Eliminar de la primera y
@@ -458,7 +459,7 @@ public class MyWallapopTests {
 		PO_ChatView.deleteCharList(driver, 0);
 		assertEquals(10, PO_ChatView.checkNumberList(driver));
 		PO_ChatView.changePage(driver, 2);
-		assertEquals(8, PO_ChatView.checkNumberList(driver));
+		assertEquals(7, PO_ChatView.checkNumberList(driver));
 	}
 
 	//PR35. Sobre el listado de conversaciones ya abiertas. Pinchar el enlace Eliminar de la última y
@@ -469,11 +470,11 @@ public class MyWallapopTests {
 		PO_NavView.clickOption(driver, "/chat/list");
 		assertEquals(10, PO_ChatView.checkNumberList(driver));
 		PO_ChatView.changePage(driver, 2);
-		assertEquals(8, PO_ChatView.checkNumberList(driver));
-		PO_ChatView.deleteCharList(driver, 7);
+		assertEquals(7, PO_ChatView.checkNumberList(driver));
+		PO_ChatView.deleteCharList(driver, 6);
 		assertEquals(10, PO_ChatView.checkNumberList(driver));
 		PO_ChatView.changePage(driver, 2);
-		assertEquals(7, PO_ChatView.checkNumberList(driver));
+		assertEquals(6, PO_ChatView.checkNumberList(driver));
 	}
 
 	//PR36. Al crear una oferta marcar dicha oferta como destacada y a continuación comprobar: i) que

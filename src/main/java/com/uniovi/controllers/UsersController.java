@@ -51,7 +51,7 @@ public class UsersController {
 	}
 
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
-	public String signup(@Validated User user, BindingResult result, Model model) {
+	public String signup(@Validated User user, BindingResult result) {
 		signUpFormValidator.validate(user, result);
 		if(result.hasErrors()) {
 			return "signup";
@@ -66,7 +66,7 @@ public class UsersController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login(Model model) {
+	public String login() {
 		return "login";
 	}
 

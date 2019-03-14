@@ -5,15 +5,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.ui.context.support.ResourceBundleThemeSource;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-import org.springframework.web.servlet.theme.CookieThemeResolver;
-import org.springframework.web.servlet.theme.ThemeChangeInterceptor;
 
 import java.util.List;
 import java.util.Locale;
@@ -47,35 +44,9 @@ public class CustomConfiguration implements WebMvcConfigurer {
 		argumentResolvers.add(resolver);
 	}
 
-	// THEME
-
-	@Bean
-	public ResourceBundleThemeSource themeSource() {
-		ResourceBundleThemeSource themeSource = new ResourceBundleThemeSource();
-		themeSource.setDefaultEncoding("UTF-8");
-		themeSource.setBasenamePrefix("/theme");
-		return themeSource;
-	}
-
-	@Bean
-	public CookieThemeResolver themeResolver() {
-		CookieThemeResolver resolver = new CookieThemeResolver();
-		resolver.setDefaultThemeName("sketchy");
-		resolver.setCookieName("my-theme-cookie");
-		return resolver;
-	}
-
-	@Bean
-	public ThemeChangeInterceptor themeChangeInterceptor() {
-		ThemeChangeInterceptor interceptor = new ThemeChangeInterceptor();
-		interceptor.setParamName("theme");
-		return interceptor;
-	}
-
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(localeChangeInterceptor());
-		registry.addInterceptor(themeChangeInterceptor());
 	}
 
 }

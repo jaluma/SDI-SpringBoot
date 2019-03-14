@@ -1,7 +1,9 @@
 package com.uniovi.services;
 
+import com.uniovi.entities.Association;
 import com.uniovi.entities.Chat;
 import com.uniovi.entities.Message;
+import com.uniovi.entities.User;
 import com.uniovi.repositories.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,7 @@ public class MessagesService {
 
 	public void deleteMessages(Set<Message> list) {
 		for(Message message : list) {
-			messageRepository.deleteById(message.getId());
+			messageRepository.delete(message);
 		}
 	}
 
@@ -37,7 +39,11 @@ public class MessagesService {
 		messageRepository.deleteAll();
 	}
 
-	public void addAll(Iterable<Message> messagesList) {
+	void addAll(Iterable<Message> messagesList) {
 		messageRepository.saveAll(messagesList);
+	}
+
+	public void sendMessage(User sender, Chat chat, Message chatMessage) {
+		Association.Chats.sendMessage(sender, chat, chatMessage);
 	}
 }

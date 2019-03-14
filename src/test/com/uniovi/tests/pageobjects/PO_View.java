@@ -4,13 +4,14 @@ import com.uniovi.tests.util.SeleniumUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
 public class PO_View {
 
 	static PO_Properties p = new PO_Properties("messages");
-	private static int timeout = 4;
+	private static int timeout = 8;
 
 	static int getTimeout() {
 		return timeout;
@@ -53,6 +54,11 @@ public class PO_View {
 	}
 
 	static public int checkNumberList(WebDriver driver) {
+		new WebDriverWait(driver, timeout);
+		return checkNumberListWithputTimeout(driver);
+	}
+
+	static public int checkNumberListWithputTimeout(WebDriver driver) {
 		return driver.findElements(By.xpath("//table/tbody/tr")).size();
 	}
 

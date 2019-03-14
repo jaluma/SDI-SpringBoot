@@ -1,7 +1,7 @@
 package com.uniovi.entities;
 
 import javax.persistence.*;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -12,17 +12,15 @@ public class Message {
 	private long id;
 
 	private String message;
-	private OffsetDateTime time;
+	private LocalDateTime time;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Chat chat;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	private User sender;
-	@ManyToOne(fetch = FetchType.EAGER)
-	private User receiver;
+	private User user;
 
-	public Message(String message, OffsetDateTime time) {
+	public Message(String message, LocalDateTime time) {
 		setMessage(message);
 		setTime(time);
 	}
@@ -46,11 +44,11 @@ public class Message {
 		this.message = message;
 	}
 
-	public OffsetDateTime getTime() {
+	public LocalDateTime getTime() {
 		return time;
 	}
 
-	public void setTime(OffsetDateTime time) {
+	public void setTime(LocalDateTime time) {
 		this.time = time;
 	}
 
@@ -62,20 +60,12 @@ public class Message {
 		this.chat = chat;
 	}
 
-	public User getSender() {
-		return sender;
+	public User getUser() {
+		return user;
 	}
 
-	public User getReceiver() {
-		return receiver;
-	}
-
-	void setSender(User sender) {
-		this.sender = sender;
-	}
-
-	void setReceiver(User receiver) {
-		this.receiver = receiver;
+	void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override

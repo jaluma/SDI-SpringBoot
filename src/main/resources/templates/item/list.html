@@ -7,33 +7,7 @@
 		<div class="container" layout:fragment="content">
 			<h2 th:text="#{sell.list.header}"></h2>
 			
-			<div class="bmd-form-group bmd-collapse-inline pull-xs-right">
-				<label for="searchText"></label>
-				<input class="form-control" type="text" id="searchText" th:placeholder="#{placeholder.search.item}" th:value="${searchText}"/>
-				<button class="btn bmd-btn-icon" id="searchButton">
-					<i class="material-icons">search</i>
-				</button>
-				<button class="btn bmd-btn-icon" id="clearButton">
-					<i class="material-icons">clear</i>
-				</button>
-			</div>
-			
-			<script th:inline="javascript">
-				 /*<![CDATA[*/
-                 $("#searchButton").click(function () {
-                     var searchParams = new URLSearchParams(window.location.search);
-                     var value = $("#searchText").val();
-                     searchParams.set("searchText", value);
-                     window.location.search = searchParams.toString();
-                     $().load(url);
-                 });
-                 $('#clearButton').click(function () {
-                     var searchParams = new URLSearchParams(window.location.search);
-                     searchParams.delete("searchText");
-                     window.location.search = searchParams.toString();
-                 })
-                 /*]]>*/
-			 </script>
+			<div th:replace="fragments/search"></div>
 			<div class="table-responsive" th:fragment="tableItems">
 				<table id="tableItems" class="table table-hover">
 					<thead>

@@ -11,18 +11,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class ChatsService {
 	private final ChatRepository chatRepository;
+	private final UsersService usersService;
 
 	@Autowired
-	public ChatsService(ChatRepository chatRepository) {
+	public ChatsService(ChatRepository chatRepository, UsersService usersService) {
 		this.chatRepository = chatRepository;
+		this.usersService = usersService;
 	}
 
 	@Transactional
@@ -32,14 +32,6 @@ public class ChatsService {
 
 	public List<Chat> getChats(Item item) {
 		return chatRepository.findAll(item);
-	}
-
-	public Page<Chat> getChats(Pageable pageable, User user) {
-		return chatRepository.findAll(pageable, user);
-	}
-
-	public List<Chat> getChat(User user, Item item) {
-		return chatRepository.getChat(user, item);
 	}
 
 	public Chat getChat(Long id) {
@@ -54,17 +46,14 @@ public class ChatsService {
 
 	@Transactional
 	public void deleteChat(Chat chat) {
-		Association.Chats.removeMessages(chat.getUsers().get(0), chat.getUsers().get(1), chat);
+		Association.Chats.removeMessages(chat);
 		Association.Chats.removeChat(chat);
-		chatRepository.delete(chat);
+		chatRepository.save(chat);
 	}
 
 	@Transactional
-	public Chat createChat(User sender, Item item) {
-		Set<User> set = new HashSet<>();
-		set.add(sender);
-		set.add(item.getSellerUser());
-		return new Chat(item, set);
+	public Chat createChat(Item item) {
+		return new Chat(item);
 	}
 
 	@Transactional
@@ -72,7 +61,23 @@ public class ChatsService {
 		chatRepository.deleteAll();
 	}
 
-	public void addAll(Iterable<Chat> chatList) {
+	void addAll(Iterable<Chat> chatList) {
 		chatRepository.saveAll(chatList);
+	}
+
+	public boolean isValidUser(Chat chat, User user) {
+		List<User> lista = usersService.getUsers(chat);
+		if(lista.contains(user)) {
+			return true;
+		}
+		if(chat.getItem().getSellerUser().equals(user)) {
+			return true;
+		}
+		return lista.size() + 1 <= 2;
+
+	}
+
+	public Page<Chat> getListChat(Pageable pageable, User user) {
+		return chatRepository.findAllList(pageable, user);
 	}
 }

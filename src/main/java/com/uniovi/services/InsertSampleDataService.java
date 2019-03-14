@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Service
@@ -32,7 +33,42 @@ public class InsertSampleDataService {
 		this.itemsService = itemsService;
 	}
 
-	//@PostConstruct
+	private LocalDateTime time = LocalDateTime.now().minus(1, ChronoUnit.DAYS);
+
+	private User createUser(String email, String name, String lastname, String password, String role, double money) {
+		User user = new User(email, name, lastname);
+		user.setPassword(password);
+		user.setMoney(money);
+		user.setRole(role);
+		usersService.encryptPassword(user);
+		usersList.add(user);
+		return user;
+	}
+
+	private User createUser(String email, String name, String lastname, String role, double money) {
+		return createUser(email, name, lastname, "123456", role, money);
+	}
+
+
+	private User createUser(String email, String name, String lastname) {
+		return createUser(email, name, lastname, rolesService.getRoles()[0], 100);
+	}
+
+	private Item createItem(User user, String title, String description, double money, boolean highlighter) {
+		Item item = new Item(title, description, new Date(), money);
+		item.setHighlighter(highlighter);
+		Association.Sell.link(user, item);
+		itemsList.add(item);
+		return item;
+	}
+
+	private void createChats(User buyer, User seller, List<Item> items) {
+		for(int j = 0; j < items.size() && !buyer.equals(seller); j++) {
+			createChat(items.get(j), buyer);
+		}
+	}
+
+	//	@PostConstruct
 	public void init() {
 		// admin
 		User admin = createUser("admin@email.com", "Admin", "Admin", "admin", rolesService.getRoles()[1], 100);
@@ -98,43 +134,8 @@ public class InsertSampleDataService {
 		usersService.addAll(usersList);
 	}
 
-	private User createUser(String email, String name, String lastname, String password, String role, double money) {
-		User user = new User(email, name, lastname);
-		user.setPassword(password);
-		user.setMoney(money);
-		user.setRole(role);
-		usersService.encryptPassword(user);
-		usersList.add(user);
-		return user;
-	}
-
-	private User createUser(String email, String name, String lastname, String role, double money) {
-		return createUser(email, name, lastname, "123456", role, money);
-	}
-
-
-	private User createUser(String email, String name, String lastname) {
-		return createUser(email, name, lastname, rolesService.getRoles()[0], 100);
-	}
-
-	private Item createItem(User user, String title, String description, double money, boolean highlighter) {
-		Item item = new Item(title, description, new Date(), money);
-		item.setHighlighter(highlighter);
-		Association.Sell.link(user, item);
-		itemsList.add(item);
-		return item;
-	}
-
-	private void createChats(User buyer, User seller, List<Item> items) {
-		for(int j = 0; j < items.size() && !buyer.equals(seller); j++) {
-			createChat(items.get(j), buyer);
-		}
-	}
-
 	private void createChat(Item item1, User user1) {
-		Set<User> set = new HashSet<>(Arrays.asList(user1, item1.getSellerUser()));
-
-		Chat chat = new Chat(item1, set);
+		Chat chat = new Chat(item1);
 
 		String message11 = "Hola " + item1.getSellerUser().getName();
 		String message12 = "Buenas tardes " + user1.getFullName() + " :)";
@@ -149,13 +150,17 @@ public class InsertSampleDataService {
 	}
 
 	private void createConversation(User user1, User user2, Chat chat, String send, String receive) {
-		Message message1 = new Message(send, OffsetDateTime.now());
-		Association.Chats.sendMessage(user1, user2, chat, message1);
+		Message message1 = new Message(send, getTime());
+		Association.Chats.sendMessage(user1, chat, message1);
 		messagesList.add(message1);
 
-		Message message2 = new Message(receive, OffsetDateTime.now());
-		Association.Chats.sendMessage(user2, user1, chat, message2);
+		Message message2 = new Message(receive, getTime());
+		Association.Chats.sendMessage(user2, chat, message2);
 		messagesList.add(message2);
+	}
+
+	private LocalDateTime getTime() {
+		return time = time.plus(30, ChronoUnit.SECONDS);
 	}
 
 	/* AUXILIARES */

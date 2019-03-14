@@ -1,5 +1,6 @@
 package com.uniovi.services;
 
+import com.uniovi.entities.Chat;
 import com.uniovi.entities.User;
 import com.uniovi.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -44,8 +46,8 @@ public class UsersService {
 	}
 
 
-	public void deleteUser(Long id) {
-		usersRepository.deleteById(id);
+	public void deleteUser(User user) {
+		usersRepository.delete(user);
 	}
 
 	public Page<User> getUsers(Pageable pageable) {
@@ -60,11 +62,19 @@ public class UsersService {
 		usersRepository.deleteAll();
 	}
 
-	public void encryptPassword(User user) {
+	void encryptPassword(User user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 	}
 
-	public void addAll(Iterable<User> usersList) {
+	void addAll(Iterable<User> usersList) {
 		usersRepository.saveAll(usersList);
+	}
+
+	public List<User> getUsers(Chat chat) {
+		return usersRepository.getUsersByChat(chat);
+	}
+
+	public List<User> getUsersDistintByChat(Chat chat, User user) {
+		return usersRepository.getUsersDistintByChat(chat, user);
 	}
 }
