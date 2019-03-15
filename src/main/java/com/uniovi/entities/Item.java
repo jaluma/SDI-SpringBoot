@@ -37,8 +37,8 @@ public class Item {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private User buyerUser;
 
-	@OneToMany(mappedBy = "item", fetch = FetchType.EAGER)
-	private Set<Chat> itemChats = new HashSet<>();
+	@OneToMany(mappedBy = "item", orphanRemoval = true, fetch = FetchType.EAGER)
+	private Set<Chat> chats = new HashSet<>();
 
 	public Item(String title, String description, Date date, double price) {
 		setTitle(title);
@@ -123,16 +123,16 @@ public class Item {
 		this.highlighter = highlighter;
 	}
 
-	Set<Chat> _getItemChats() {
-		return itemChats;
+	Set<Chat> _getChats() {
+		return chats;
 	}
 
-	public Set<Chat> getItemChats() {
-		return new HashSet<>(itemChats);
+	public Set<Chat> getChats() {
+		return new HashSet<>(chats);
 	}
 
-	public void setItemChats(Set<Chat> itemChats) {
-		this.itemChats = itemChats;
+	public void setChats(Set<Chat> itemChats) {
+		this.chats = itemChats;
 	}
 
 	private Date asDate(LocalDate localDate) {

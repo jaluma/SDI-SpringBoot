@@ -199,6 +199,8 @@ public class MyWallapopTests {
 		assertEquals(10, PO_AdminListView.checkNumberList(driver));
 		PO_AdminListView.changePage(driver, 2);
 		assertEquals(10, PO_AdminListView.checkNumberList(driver));
+		PO_AdminListView.changePage(driver, 3);
+		assertEquals(2, PO_AdminListView.checkNumberList(driver));
 		PO_AdminListView.changePage(driver, 1);
 		PO_AdminListView.deleteElements(driver, 6);//borramos el 6 para que no de errores los siguientes tests
 		assertEquals(10, PO_AdminListView.checkNumberList(driver));
@@ -216,7 +218,9 @@ public class MyWallapopTests {
 		assertEquals(10, PO_AdminListView.checkNumberList(driver));
 		PO_AdminListView.changePage(driver, 2);
 		assertEquals(10, PO_AdminListView.checkNumberList(driver));
-		PO_AdminListView.deleteElements(driver, 9);
+		PO_AdminListView.changePage(driver, 3);
+		assertEquals(1, PO_AdminListView.checkNumberList(driver));
+		PO_AdminListView.deleteElements(driver, 1);
 		assertEquals(10, PO_AdminListView.checkNumberList(driver));
 		PO_AdminListView.changePage(driver, 2);
 		assertEquals(10, PO_AdminListView.checkNumberList(driver));

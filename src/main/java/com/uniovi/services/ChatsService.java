@@ -48,7 +48,7 @@ public class ChatsService {
 	public void deleteChat(Chat chat) {
 		Association.Chats.removeMessages(chat);
 		Association.Chats.removeChat(chat);
-		chatRepository.save(chat);
+		chatRepository.delete(chat);
 	}
 
 	@Transactional

@@ -1,7 +1,6 @@
 package com.uniovi.controllers;
 
 import com.uniovi.controllers.util.Utilities;
-import com.uniovi.entities.Chat;
 import com.uniovi.entities.Item;
 import com.uniovi.entities.User;
 import com.uniovi.services.ChatsService;
@@ -103,10 +102,6 @@ public class ItemController {
 
 		if(!item.getSellerUser().equals(user)) {
 			throw new IllegalStateException("Illegal");
-		}
-		// conseguir los chats y borrarlos
-		for(Chat chat : chatsService.getChats(item)) {
-			chatsService.deleteChat(chat);
 		}
 
 		itemsService.deleteItem(item);

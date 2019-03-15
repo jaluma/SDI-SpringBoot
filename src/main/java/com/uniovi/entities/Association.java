@@ -29,11 +29,11 @@ public class Association {
 	public static class Chats {
 		static void createChat(Chat chat, Item item) {
 			chat.setItem(item);
-			item._getItemChats().add(chat);
+			item._getChats().add(chat);
 		}
 
 		public static void removeChat(Chat chat) {
-			chat.getItem()._getItemChats().remove(chat);
+			chat.getItem()._getChats().remove(chat);
 			chat.setItem(null);
 		}
 

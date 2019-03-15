@@ -53,9 +53,8 @@ public class AdminController {
 				User user = usersService.getUser(idL);
 
 				itemsService.buyUnlink(pageable, user);
-				itemsService.sellUnlink(pageable, user);
-
 				usersService.deleteUser(user);
+
 				logger.info(String.format("Delete user: %d", idL));
 			}
 		}
