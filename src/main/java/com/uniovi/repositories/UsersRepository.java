@@ -22,6 +22,6 @@ public interface UsersRepository extends CrudRepository<User, Long> {
 	@Query("SELECT m.user FROM Chat c join c.messages m WHERE c = ?1")
 	List<User> getUsersByChat(Chat chat);
 
-	@Query("SELECT m.user FROM Chat c join c.messages m WHERE c = ?1 and m.user <> ?1")
+	@Query("SELECT DISTINCT m.user FROM Chat c join c.messages m WHERE c = ?1 and m.user <> ?2")
 	List<User> getUsersDistintByChat(Chat chat, User user);
 }
