@@ -6,59 +6,51 @@
 </head>
 <body>
 	<!--/*@thymesVar id="currentUser" type="com.uniovi.entities.User"*/-->
-	<div class="mx-auto row container" layout:fragment="content">
-		<div id="personal-area" class="col-sm-3">
-			<div class="card card-home">
-				<div class="card-body text-center">
-					<img class="card-img-top rounded-circle z-depth-0" th:src="#{url.defaut.ico}" alt="Card image cap" src="">
-					<h2 class="card-title" th:text="#{welcome.message}"></h2>
-					<h3 th:text="${currentUser.getFullName()}"></h3>
-					<a th:href="${'/user/details/' + currentUser.getId()}" class="btn btn-primary link" th:text="#{home.user.personal}"></a>
+	<div class="container" layout:fragment="content">
+		<div class="row text-center">
+			<div id="personal-area" class="col-sm-5 mb-3">
+				<div class="card" style="height: 100%">
+					<div class="card-body text-center">
+						<img class="card-img-top rounded-circle z-depth-0" style="max-width: 200px" th:src="#{url.defaut.ico}" alt="Card image cap"
+						     src="">
+						<h2 class="card-title card-title-pro" th:text="#{welcome.message}"></h2>
+						<h3 th:text="${currentUser.getFullName()}"></h3>
+						<a th:href="${'/user/details/' + currentUser.getId()}" class="btn btn-primary link" th:text="#{home.user.personal}"></a>
+					</div>
+				</div>
+			</div>
+			
+			<div id="highlighter_table" class="col-sm-7 mb-3" sec:authorize="hasRole('ROLE_STANDARD')">
+				<div class="card" style="width: 100%; height: 100%" th:if="${highlighterItems.size() > 0}">
+					<h2 class="card-title card-title-pro" th:text="#{home.highlighter}"></h2>
+					<table id="tableItems" class="table table-hover">
+						<thead>
+						<tr>
+							<th th:text="#{item.title}"></th>
+							<th th:text="#{item.description}"></th>
+							<th th:text="#{item.price}"></th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr class="tr-static-height" th:each="item : ${highlighterItems}">
+							<td class="clickable-row" th:data-href="${'/item/details/' + item.id}" th:text="${item.title}"></td>
+							<td class="clickable-row" th:data-href="${'/item/details/' + item.id}" th:text="${item.description}"></td>
+							<td class="clickable-row" th:data-href="${'/item/details/' + item.id}" th:text="${item.price}"></td>
+						</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
 		
-		<div id="highlighter_table" class="col-sm-9">
-			<div class="card block card-home" style="width: 100%" th:if="${highlighterItems.size() > 0}" sec:authorize="hasRole('ROLE_STANDARD')">
-				<h2 class="card-title card-title-pro" th:text="#{home.highlighter}"></h2>
-				<table id="tableItems" class="table table-hover">
-					<thead>
-					<tr>
-						<th th:text="#{item.title}"></th>
-						<th th:text="#{item.description}"></th>
-						<th th:text="#{item.price}"></th>
-					</tr>
-					</thead>
-					<tbody>
-					<tr class="tr-static-height" th:each="item : ${highlighterItems}">
-						<td class="clickable-row" th:data-href="${'/item/details/' + item.id}" th:text="${item.title}"></td>
-						<td class="clickable-row" th:data-href="${'/item/details/' + item.id}" th:text="${item.description}"></td>
-						<td class="clickable-row" th:data-href="${'/item/details/' + item.id}" th:text="${item.price}"></td>
-					</tr>
-					</tbody>
-				</table>
+		<div class="mb-3 text-center">
+			<div class="col-sm-12" sec:authorize="hasRole('ROLE_STANDARD')">
+				<div class="card" style="height: 100%">
+					<h2 class="card-title card-title-pro" th:text="#{nav.sales.mySales}"></h2>
+					<div th:replace="item/mylist :: tableItems" class="card block"></div>
+				</div>
 			</div>
 		</div>
-		
-		<div class="col-sm-12">
-			<div class="card block card-home" style="width: 100%; min-width: 400px;" sec:authorize="hasRole('ROLE_STANDARD')">
-				<h2 class="card-title card-title-pro" th:text="#{nav.sales.mySales}"></h2>
-				<div th:replace="item/mylist :: tableItems" class="card block"></div>
-			</div>
-		</div>
-		
-		<script th:inline="javascript">
-			 /*<![CDATA[*/
-             var heightPersonal = $("#personal-area");
-             var highlighter = $("#highlighter_table");
-
-             if (heightPersonal.height > highlighter.height) {
-                 highlighter.height = heightPersonal;
-             } else {
-                 personalbar.height = highlighter;
-             }
-             /*]]>*/
-		 </script>
 	</div>
 </body>
 </html>

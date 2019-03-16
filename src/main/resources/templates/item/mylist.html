@@ -26,7 +26,8 @@
 						<td><a id="delete" class="link" th:href="${'/item/delete/' + item.id}"><i class="material-icons">delete</i></a></td>
 						<td>
 							<a th:if="${item.highlighter != true && item.getBuyerUser() == null}" class="hightlighter link"
-							   th:id="${'/item/highlighter/' + item.id}" data-toggle="modal" data-target="#modal" style="cursor: pointer">
+							   th:id="${'/item/highlighter/' + item.id}" data-toggle="modal" data-target="#modal" th:title="#{tooltip.hightlighter}"
+							   style="cursor: pointer">
 								<i class="material-icons">offline_bolt</i>
 							</a>
 							<a th:if="${item.highlighter == true && item.getBuyerUser() == null}" class="hightlighter-disabled disabled">

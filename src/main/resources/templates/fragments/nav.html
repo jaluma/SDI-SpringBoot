@@ -88,8 +88,15 @@
 							<a sec:authorize="!isAuthenticated()" class="dropdown-item login" href="/login" th:text="#{nav.login}"></a>
 							<!--/*@thymesVar id="currentUser" type="com.uniovi.entities.User"*/-->
 							<a sec:authorize="isAuthenticated()" class="dropdown-item login" th:href="${'/user/details/' + currentUser.getId()}">
-								<p id="email" th:text="#{nav.user.name(${currentUser.getEmail()})}"></p>
-								<p id="money" th:text="#{nav.user.money(${currentUser.getMoney()})}"></p>
+								<aside class="profile-card">
+									<header>
+										<h6 id="email" style="font-weight: bold; text-align: center"
+										    th:text="#{nav.user.name(${currentUser.getFullName()})}"></h6>
+										<h6 style="text-align: center" th:text="#{nav.user.name(${currentUser.getEmail()})}"></h6>
+										<h6 id="money" style="font-weight: bold; font-size: 24px; text-align: center;"
+										    th:text="#{nav.user.money(${currentUser.getMoney()})}"></h6>
+									</header>
+								</aside>
 							</a>
 							<a sec:authorize="isAuthenticated()" class="dropdown-item logout" href="/logout" th:text="#{user.signout}"></a>
 						</div>
