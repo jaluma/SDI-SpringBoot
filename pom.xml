@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.uniovi</groupId>
     <artifactId>mywallapop</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.3-SNAPSHOT</version>
     <name>MyWallapop</name>
     <description>Aplicación para compra/venta de objetos</description>
 
