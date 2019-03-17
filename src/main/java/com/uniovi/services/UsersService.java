@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,6 +76,8 @@ public class UsersService {
 	}
 
 	public List<User> getUsersDistintByChat(Chat chat, User user) {
-		return usersRepository.getUsersDistintByChat(chat, user);
+		List<User> list = usersRepository.getUsersDistintByChat(chat, user);
+
+		return list.size() == 0 ? Collections.singletonList(chat.getItem().getSellerUser()) : list;
 	}
 }
